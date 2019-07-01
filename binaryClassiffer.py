@@ -8,7 +8,10 @@ root_dir="datasets"
 datasetDir='cats_and_dogs'
 base_dir = os.path.join(root_dir,datasetDir)
 labels=["cats","dogs"]
-path_test="test_images_cats_and_dogs"
+labels.sort()
+path_test=os.path.join(root_dir,"test_images_cats_and_dogs")
+numberOfEpochs=5
+
 
 
 train_dir = os.path.join(base_dir, 'train')
@@ -26,7 +29,6 @@ validation_label2_dir = os.path.join(validation_dir, labels[1])
 
 train_label1_fnames = os.listdir( train_label1_dir )
 train_label2_fnames = os.listdir( train_label2_dir )
-numberOfEpochs=5
 
 print(train_label1_fnames[:10])
 print(train_label2_fnames[:10])
@@ -204,11 +206,11 @@ from keras.preprocessing import image
 for file in os.listdir(path_test):
  
   # predicting images
-  path=os.path.join(path,file)
+  imgPath=os.path.join(path_test,file)
 
-  if (".DS_Store") in path:
+  if (".DS_Store") in imgPath:
     continue
-  img=image.load_img(path, target_size=(150, 150))
+  img=image.load_img(imgPath, target_size=(150, 150))
   
   x=image.img_to_array(img)
   x=np.expand_dims(x, axis=0)
@@ -217,13 +219,12 @@ for file in os.listdir(path_test):
   print(type(classes))  
   
   print(classes[0])
-  model.save("catVsDog.keras")
   
-  if classes[0]>0:     #1  is a dog
-    print(fn + " is a dog")
+  if classes[0]>0:     #1  is a labels[1]
+    print(file + " is a {}".format(labels[1]))
     
   else:
-    print(fn + " is a cat")
+    print(file + " is a {}".format(labels[0]))
 
 
 ### Evaluating Accuracy and Loss for the Model
