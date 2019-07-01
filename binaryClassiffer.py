@@ -5,11 +5,20 @@ import os
 
 
 root_dir="datasets"
+
 datasetDir='cats_and_dogs'
-base_dir = os.path.join(root_dir,datasetDir)
 labels=["cats","dogs"]
+testDir="test_images_cats_and_dogs"
+
+datasetDir="horse-or-human"
+labels=["horses","humans"]  #todo read them from directory names
+testDir="test_horses_or_Human"
+
+
+
+base_dir = os.path.join(root_dir,datasetDir)
 labels.sort()
-path_test=os.path.join(root_dir,"test_images_cats_and_dogs")
+path_test=os.path.join(root_dir,testDir)
 numberOfEpochs=5
 
 
@@ -195,7 +204,7 @@ Let's now take a look at actually running a prediction using the model. This cod
 """
 
 
-model.save("{}_{}binaryClassifier.keras2".format(labels[0],labels[1]))
+model.save("{}_{}_binaryClassifier.keras2".format(labels[0],labels[1]))
 
 
 import numpy as np
@@ -221,10 +230,10 @@ for file in os.listdir(path_test):
   print(classes[0])
   
   if classes[0]>0:     #1  is a labels[1]
-    print(file + " is a {}".format(labels[1]))
+    print(file + " belongs to {}".format(labels[1]))
     
   else:
-    print(file + " is a {}".format(labels[0]))
+    print(file + " belongs to  {}".format(labels[0]))
 
 
 ### Evaluating Accuracy and Loss for the Model
