@@ -1,6 +1,17 @@
 
 
 import os
+from imutils import paths
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.metrics import classification_report
+from  modelsRepo import modelsFactory
+
+
+BS = 20
+numberOfEpochs=15
+imgSize=(300,300)
 
 
 
@@ -10,16 +21,18 @@ datasetDir='cats_and_dogs'
 labels=["cats","dogs"]
 testDir="test_images_cats_and_dogs"
 
+'''
 datasetDir="horse-or-human"
 labels=["horses","humans"]  #todo read them from directory names
 testDir="test_horses_or_Human"
-
+'''
 
 
 base_dir = os.path.join(root_dir,datasetDir)
 labels.sort()
 path_test=os.path.join(root_dir,testDir)
-numberOfEpochs=5
+totalTest = len(list(paths.list_images(path_test)))
+print('[INFO] Total images in test  dataset '+path_test+ 'images :', totalTest)
 
 
 
@@ -59,8 +72,7 @@ Now let's take a look at a few pictures to get a better sense of what the cat an
 
 # %matplotlib inline
 
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
+
 
 # Parameters for our graph; we'll output images in a 4x4 configuration
 nrows = 4
@@ -94,18 +106,7 @@ for i, img_path in enumerate(next_label1_pix+next_label2_pix):
 
 plt.show()
 
-"""It may not be obvious from looking at the images in this grid, but an important note here, and a significant difference from the previous lesson is that these images come in all shapes and sizes. When you did the handwriting recognition example, you had 28x28 greyscale images to work with. These are color and in a variety of shapes. Before training a Neural network with them you'll need to tweak the images. You'll see that in the next section.
 
-Ok, now that you have an idea for what your data looks like, the next step is to define the model that will be trained to recognize cats or dogs from these images
-
-## Building a Small Model from Scratch to Get to ~72% Accuracy
-
-In the previous section you saw that the images were in a variety of shapes and sizes. In order to train a neural network to handle them you'll need them to be in a uniform size. We've chosen 150x150 for this, and you'll see the code that preprocesses the images to that shape shortly. 
-
-But before we continue, let's start defining the model:
-
-Step 1 will be to import tensorflow.
-"""
 
 import tensorflow as tf
 
@@ -118,25 +119,12 @@ Finally we add the densely connected layers.
 Note that because we are facing a two-class classification problem, i.e. a *binary classification problem*, we will end our network with a [*sigmoid* activation](https://wikipedia.org/wiki/Sigmoid_function), so that the output of our network will be a single scalar between 0 and 1, encoding the probability that the current image is class 1 (as opposed to class 0).
 """
 
-model = tf.keras.models.Sequential([
-    # Note the input shape is the desired size of the image 150x150 with 3 bytes color
-    tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(150, 150, 3)),
-    tf.keras.layers.MaxPooling2D(2,2),
-    tf.keras.layers.Conv2D(32, (3,3), activation='relu'),
-    tf.keras.layers.MaxPooling2D(2,2), 
-    tf.keras.layers.Conv2D(64, (3,3), activation='relu'), 
-    tf.keras.layers.MaxPooling2D(2,2),
-    # Flatten the results to feed into a DNN
-    tf.keras.layers.Flatten(), 
-    # 512 neuron hidden layer
-    tf.keras.layers.Dense(512, activation='relu'), 
-    # Only 1 output neuron. It will contain a value from 0-1 where 0 for 1 class ('cats') and 1 for the other ('dogs')
-    tf.keras.layers.Dense(1, activation='sigmoid')  
-])
-
+model=modelsFactory.ModelCreator("HoursedVsHumanModel",imgSize).model
 """The model.summary() method call prints a summary of the NN"""
 
 model.summary()
+
+
 
 """The "output shape" column shows how the size of your feature map evolves in each successive layer. The convolution layers reduce the size of the feature maps by a bit due to padding, and each pooling layer halves the dimensions.
 
@@ -172,14 +160,14 @@ test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 train_generator = train_datagen.flow_from_directory(train_dir,
                                                     batch_size=20,
                                                     class_mode='binary',
-                                                    target_size=(150, 150))     
+                                                    target_size=imgSize)     
 # --------------------
 # Flow validation images in batches of 20 using test_datagen generator
 # --------------------
 validation_generator =  test_datagen.flow_from_directory(validation_dir,
                                                          batch_size=20,
                                                          class_mode  = 'binary',
-                                                         target_size = (150, 150))
+                                                         target_size=imgSize)
 
 """### Training
 Let's train on all 2,000 images available, for 15 epochs, and validate on all 1,000 test images. (This may take a few minutes to run.)
@@ -190,6 +178,14 @@ You'll see 4 values per epoch -- Loss, Accuracy, Validation Loss and Validation 
 
 The Loss and Accuracy are a great indication of progress of training. It's making a guess as to the classification of the training data, and then measuring it against the known label, calculating the result. Accuracy is the portion of correct guesses. The Validation accuracy is the measurement with the data that has not been used in training. As expected this would be a bit lower. You'll learn about why this occurs in the section on overfitting later in this course.
 """
+
+
+# initialize the testing generator
+test_generator = test_datagen.flow_from_directory(
+  path_test,
+  class_mode="binary",
+  target_size=imgSize,
+  batch_size=20)
 
 history = model.fit_generator(train_generator,
                               validation_data=validation_generator,
@@ -207,6 +203,40 @@ Let's now take a look at actually running a prediction using the model. This cod
 model.save("{}_{}_binaryClassifier.keras2".format(labels[0],labels[1]))
 
 
+
+
+
+# reset the testing generator and then use our trained model to
+# make predictions on the data
+print("[INFO] evaluating network...")
+test_generator.reset()
+predIdxs = model.predict_generator(test_generator,steps=(totalTest // BS) + 1)
+
+predictedLabels=[]
+
+
+# for each image in the testing set we need to find the index of the
+# label with corresponding largest predicted probability
+for  predIdx in predIdxs:
+
+  if predIdx>0.5:     #1  is a labels[1]
+      print(" belongs to {}".format(labels[1]))
+      predictedLabels.append(1)
+      
+  else:
+      print( " belongs to  {}".format(labels[0]))
+      predictedLabels.append(0)
+
+
+
+
+
+# show a nicely formatted classification report
+print(classification_report(test_generator.classes, predictedLabels,target_names=test_generator.class_indices.keys()))
+#exit()
+
+
+'''
 import numpy as np
 
 from keras.preprocessing import image
@@ -219,6 +249,7 @@ for file in os.listdir(path_test):
 
   if (".DS_Store") in imgPath:
     continue
+  print(imgPath)
   img=image.load_img(imgPath, target_size=(150, 150))
   
   x=image.img_to_array(img)
@@ -234,6 +265,9 @@ for file in os.listdir(path_test):
     
   else:
     print(file + " belongs to  {}".format(labels[0]))
+
+
+'''
 
 
 ### Evaluating Accuracy and Loss for the Model
@@ -255,9 +289,16 @@ epochs   = range(len(acc)) # Get number of epochs
 #------------------------------------------------
 # Plot training and validation accuracy per epoch
 #------------------------------------------------
-plt.plot  ( epochs,     acc )
-plt.plot  ( epochs, val_acc )
+plt.plot  ( epochs,     acc ,label="train_acc")
+plt.plot  ( epochs, val_acc, label="val_acc" )
 plt.title ('Training and validation accuracy')
+plt.xlabel("Epoch #")
+plt.ylabel("Accuracy")
+plt.savefig("plot_acc.png")
+plt.legend(loc="upper left")
+
+
+
 plt.show()
 
 plt.figure()
@@ -265,21 +306,16 @@ plt.figure()
 #------------------------------------------------
 # Plot training and validation loss per epoch
 #------------------------------------------------
-plt.plot  ( epochs,     loss )
-plt.plot  ( epochs, val_loss )
+plt.plot  ( epochs,     loss ,label="train_loss")
+plt.plot  ( epochs, val_loss ,label="val_loss")
 plt.title ('Training and validation loss'   )
+plt.xlabel("Epoch #")
+plt.ylabel("Loss")
+plt.savefig("plot_loss.png")
+plt.legend(loc="upper left")
+
+
 plt.show()
 
-"""As you can see, we are **overfitting** like it's getting out of fashion. Our training accuracy (in blue) gets close to 100% (!) while our validation accuracy (in green) stalls as 70%. Our validation loss reaches its minimum after only five epochs.
 
-Since we have a relatively small number of training examples (2000), overfitting should be our number one concern. Overfitting happens when a model exposed to too few examples learns patterns that do not generalize to new data, i.e. when the model starts using irrelevant features for making predictions. For instance, if you, as a human, only see three images of people who are lumberjacks, and three images of people who are sailors, and among them the only person wearing a cap is a lumberjack, you might start thinking that wearing a cap is a sign of being a lumberjack as opposed to a sailor. You would then make a pretty lousy lumberjack/sailor classifier.
-
-Overfitting is the central problem in machine learning: given that we are fitting the parameters of our model to a given dataset, how can we make sure that the representations learned by the model will be applicable to data never seen before? How do we avoid learning things that are specific to the training data?
-
-In the next exercise, we'll look at ways to prevent overfitting in the cat vs. dog classification model.
-
-## Clean Up
-
-Before running the next exercise, run the following cell to terminate the kernel and free memory resources:
-"""
 
