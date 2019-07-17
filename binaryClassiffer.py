@@ -1,31 +1,45 @@
 
 
+
+
+
 import os
 from imutils import paths
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import classification_report
-from  modelsRepo import modelsFactory
+from modelsRepo import modelsFactory
 
+
+NNTitle="HoursedVsHumanModel"
+NNTitle="CatsvsDogsModel"
 
 BS = 20
-numberOfEpochs=15
-imgSize=(300,300)
+numberOfEpochs=100
+#numberOfEpochs=2
+
+
+
 
 
 
 root_dir="datasets"
 
-datasetDir='cats_and_dogs'
-labels=["cats","dogs"]
-testDir="test_images_cats_and_dogs"
+if(NNTitle=="CatsvsDogsModel"):
+  datasetDir='cats_and_dogs'
+  labels=["cats","dogs"]
+  testDir="test_images_cats_and_dogs"
+  input_shape=150,150    #width,height
 
-'''
-datasetDir="horse-or-human"
-labels=["horses","humans"]  #todo read them from directory names
-testDir="test_horses_or_Human"
-'''
+if(NNTitle=="HoursedVsHumanModel"):
+  datasetDir="horse-or-human"
+  labels=["horses","humans"]  #todo read them from directory names
+  testDir="test_horses_or_Human"
+  input_shape=300,300    #width,height
+
+
+
 
 
 base_dir = os.path.join(root_dir,datasetDir)
@@ -34,7 +48,13 @@ path_test=os.path.join(root_dir,testDir)
 totalTest = len(list(paths.list_images(path_test)))
 print('[INFO] Total images in test  dataset '+path_test+ 'images :', totalTest)
 
+testFilesFullPathList=[]
 
+
+for root, dirs, files in os.walk(path_test):
+   for name in files:
+      print(os.path.join(root, name))
+      testFilesFullPathList.append(os.path.join(root, name))
 
 train_dir = os.path.join(base_dir, 'train')
 validation_dir = os.path.join(base_dir, 'validation')
@@ -61,9 +81,17 @@ print('[INFO] Total images in dataset '+datasetDir+ 'images :', totalImages)
 
 print('[INFO] Total training '+labels[0]+ ' images :', len(os.listdir(train_label1_dir ) ))
 print('[INFO] Total training ' + labels[1]+ ' images :', len(os.listdir(train_label2_dir ) ))
+NUM_TRAIN_IMAGES= len(os.listdir(train_label1_dir ))+len(os.listdir(train_label2_dir ) )
 
 print('[INFO] Total validation '+labels[0]+ ' images :', len(os.listdir( validation_label1_dir ) ))
 print('[INFO] Total validation '+ labels[1]+ ' images :', len(os.listdir( validation_label2_dir ) ))
+NUM_TEST_IMAGES=len(os.listdir( validation_label1_dir ) )+len(os.listdir( validation_label2_dir ) )
+
+print('[INFO] Total  training images in dataset: {} '.format(NUM_TRAIN_IMAGES))
+print('[INFO] Total validation images in dataset  {}'.format( NUM_TEST_IMAGES))
+
+
+
 
 """For both cats and dogs, we have 1,000 training images and 500 validation images.
 
@@ -119,12 +147,13 @@ Finally we add the densely connected layers.
 Note that because we are facing a two-class classification problem, i.e. a *binary classification problem*, we will end our network with a [*sigmoid* activation](https://wikipedia.org/wiki/Sigmoid_function), so that the output of our network will be a single scalar between 0 and 1, encoding the probability that the current image is class 1 (as opposed to class 0).
 """
 
-model=modelsFactory.ModelCreator("HoursedVsHumanModel",imgSize).model
+
 """The model.summary() method call prints a summary of the NN"""
 
+
+model=modelsFactory.ModelCreator(NNTitle,input_shape).model
+
 model.summary()
-
-
 
 """The "output shape" column shows how the size of your feature map evolves in each successive layer. The convolution layers reduce the size of the feature maps by a bit due to padding, and each pooling layer halves the dimensions.
 
@@ -151,23 +180,40 @@ In Keras this can be done via the `keras.preprocessing.image.ImageDataGenerator`
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # All images will be rescaled by 1./255.
-train_datagen = ImageDataGenerator( rescale = 1.0/255. )
+#train_datagen = ImageDataGenerator( rescale = 1.0/255. )
+
+
+train_datagen = ImageDataGenerator(
+      rescale=1./255,
+      rotation_range=40,
+      width_shift_range=0.2,
+      height_shift_range=0.2,
+      shear_range=0.2,
+      zoom_range=0.2,
+      horizontal_flip=True,
+      fill_mode='nearest')
+
+
 test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 
 # --------------------
 # Flow training images in batches of 20 using train_datagen generator
 # --------------------
 train_generator = train_datagen.flow_from_directory(train_dir,
-                                                    batch_size=20,
+                                                    batch_size=BS,
                                                     class_mode='binary',
-                                                    target_size=imgSize)     
+                                                    target_size=input_shape)     
+
+
+
+
 # --------------------
 # Flow validation images in batches of 20 using test_datagen generator
 # --------------------
 validation_generator =  test_datagen.flow_from_directory(validation_dir,
-                                                         batch_size=20,
+                                                         batch_size=BS,
                                                          class_mode  = 'binary',
-                                                         target_size=imgSize)
+                                                         target_size = input_shape)
 
 """### Training
 Let's train on all 2,000 images available, for 15 epochs, and validate on all 1,000 test images. (This may take a few minutes to run.)
@@ -184,14 +230,14 @@ The Loss and Accuracy are a great indication of progress of training. It's makin
 test_generator = test_datagen.flow_from_directory(
   path_test,
   class_mode="binary",
-  target_size=imgSize,
-  batch_size=20)
+  target_size=input_shape,
+  batch_size=BS)
 
 history = model.fit_generator(train_generator,
                               validation_data=validation_generator,
-                              steps_per_epoch=100,
+                              steps_per_epoch=NUM_TRAIN_IMAGES // BS,   ## 2000 images = batch_size * steps-----steps=images/batch_size
                               epochs=numberOfEpochs,
-                              validation_steps=50,
+                              validation_steps=NUM_TEST_IMAGES // BS,
                               verbose=2)
 
 """###Running the Model
@@ -199,8 +245,9 @@ history = model.fit_generator(train_generator,
 Let's now take a look at actually running a prediction using the model. This code will allow you to choose 1 or more files from your file system, it will then upload them, and run them through the model, giving an indication of whether the object is a dog or a cat.
 """
 
+fileNameToSaveModel="{}_{}_binaryClassifier.keras2".format(labels[0],labels[1])
+model.save(os.path.join("Results",fileNameToSaveModel))
 
-model.save("{}_{}_binaryClassifier.keras2".format(labels[0],labels[1]))
 
 
 
@@ -208,67 +255,135 @@ model.save("{}_{}_binaryClassifier.keras2".format(labels[0],labels[1]))
 
 # reset the testing generator and then use our trained model to
 # make predictions on the data
-print("[INFO] evaluating network...")
-test_generator.reset()
+print("[INFO] Evaluating  Classiffication Report 1")
+
+#test_generator.reset()
 predIdxs = model.predict_generator(test_generator,steps=(totalTest // BS) + 1)
 
 predictedLabels=[]
 
 
-# for each image in the testing set we need to find the index of the
-# label with corresponding largest predicted probability
+
 for  predIdx in predIdxs:
 
   if predIdx>0.5:     #1  is a labels[1]
-      print(" belongs to {}".format(labels[1]))
+      #print(" belongs to {}".format(labels[1]))
       predictedLabels.append(1)
       
   else:
-      print( " belongs to  {}".format(labels[0]))
+      #print( " belongs to  {}".format(labels[0]))
       predictedLabels.append(0)
-
 
 
 
 
 # show a nicely formatted classification report
 print(classification_report(test_generator.classes, predictedLabels,target_names=test_generator.class_indices.keys()))
+print("*************************************************************************************************************")
 #exit()
 
 
-'''
+print("[INFO] Evaluating  Classiffication Report 2")
+
 import numpy as np
 
 from keras.preprocessing import image
+TP_LABEL1=0   #labels[0]
+FP_LABEL1=0
+TP_LABEL2=0   #labels[1]
+FP_LABEL2=0
 
+TN_LABEL1=0   #labels[0]
+FN_LABEL1=0
+TN_LABEL2=0   #labels[1]
+FN_LABEL2=0
 
-for file in os.listdir(path_test):
+for imgPath in testFilesFullPathList:
  
-  # predicting images
-  imgPath=os.path.join(path_test,file)
+
 
   if (".DS_Store") in imgPath:
     continue
-  print(imgPath)
-  img=image.load_img(imgPath, target_size=(150, 150))
+  #print(imgPath)
+  folderName=(imgPath).split("/")[-2:-1][0]
+  img=image.load_img(imgPath, target_size=input_shape)
   
   x=image.img_to_array(img)
+  x=x/255   #rescale image
   x=np.expand_dims(x, axis=0)
   images = np.vstack([x])
-  classes = model.predict(images, batch_size=10)
-  print(type(classes))  
+
+  classes = model.predict(images, batch_size=BS)
+  #print(type(classes))     <class 'numpy.ndarray'>
   
-  print(classes[0])
+  #print(classes)
+
+  #print(classes[0])
   
-  if classes[0]>0:     #1  is a labels[1]
-    print(file + " belongs to {}".format(labels[1]))
+  if classes[0]>0.5:     #1  is a labels[1]
+    #print(imgPath  + " belongs to {}".format(labels[1]))
+   
+    if(labels[1] in folderName  ):
+      TP_LABEL2=TP_LABEL2+1
+      TN_LABEL1=TN_LABEL1+1
+      #print("True Prediction")
+
+    else:
+      FP_LABEL2=FP_LABEL2+1  
+      FN_LABEL1=FN_LABEL1+1
+      #print("False Prediction")
     
   else:
-    print(file + " belongs to  {}".format(labels[0]))
+    #print(imgPath + " belongs to  {}".format(labels[0]))
+    if(labels[0] in folderName):
+      TP_LABEL1=TP_LABEL1+1
+      TN_LABEL2=TN_LABEL2+1
+      #print("True Prediction")
+    else:
+      FP_LABEL1=FP_LABEL1+1  
+      FN_LABEL2=FN_LABEL2+1
+      #print("False Prediction")
+
+  '''
+  datasets/test_images_cats_and_dogs/cats/cat.585.jpg belongs to dogs
+  Class cats  TP=40,FP=0,TN=1951,FN=0
+  Class dogs  TP=1951,FP=0,TN=40,FN=0
+  '''
+
+  #print("Class {}  TP={},FP={},TN={},FN={}".format(labels[0],TP_LABEL1,FP_LABEL1,TN_LABEL1,FN_LABEL1))
+  #print("Class {}  TP={},FP={},TN={},FN={}".format(labels[1],TP_LABEL2,FP_LABEL2,TN_LABEL2,FN_LABEL2))
+  #input("Press any key")
 
 
-'''
 
+
+accuracy_LABEL1=(TP_LABEL1+TN_LABEL1)/(TP_LABEL1+FP_LABEL1+TN_LABEL1+FN_LABEL1)
+precision_LABEL1=TP_LABEL1/(TP_LABEL1+FP_LABEL1)
+recall_LABEL1=TP_LABEL1/(TP_LABEL1+FN_LABEL1)
+accuracy_LABEL2=(TP_LABEL2+TN_LABEL2)/(TP_LABEL2+FP_LABEL2+TN_LABEL2+FN_LABEL2)
+precision_LABEL2=TP_LABEL2/(TP_LABEL2+FP_LABEL2)
+recall_LABEL2=TP_LABEL2/(TP_LABEL2+FN_LABEL2)
+
+
+print("Class {}  TP={},FP={},TN={},FN={}".format(labels[0],TP_LABEL1,FP_LABEL1,TN_LABEL1,FN_LABEL1))
+print("Class {}  TP={},FP={},TN={},FN={}".format(labels[1],TP_LABEL2,FP_LABEL2,TN_LABEL2,FN_LABEL2))
+
+
+
+
+print("Class {}  Accuracy={:.2f},Precision={:.2f},Recall={:.2f}".format(labels[0],accuracy_LABEL1,precision_LABEL1,recall_LABEL1))
+
+
+
+
+
+print("Class {}  Accuracy={:.2f},Precision={:.2f},Recall={:.2f}".format(labels[1],accuracy_LABEL2,precision_LABEL2,recall_LABEL2))
+
+print("*************************************************************************************************************")
+
+
+
+exit()
 
 ### Evaluating Accuracy and Loss for the Model
 
@@ -294,7 +409,7 @@ plt.plot  ( epochs, val_acc, label="val_acc" )
 plt.title ('Training and validation accuracy')
 plt.xlabel("Epoch #")
 plt.ylabel("Accuracy")
-plt.savefig("plot_acc.png")
+plt.savefig(os.path.join("Results","plot_acc.png"))
 plt.legend(loc="upper left")
 
 
@@ -311,7 +426,7 @@ plt.plot  ( epochs, val_loss ,label="val_loss")
 plt.title ('Training and validation loss'   )
 plt.xlabel("Epoch #")
 plt.ylabel("Loss")
-plt.savefig("plot_loss.png")
+plt.savefig(os.path.join("Results","plot_loss.png"))
 plt.legend(loc="upper left")
 
 
