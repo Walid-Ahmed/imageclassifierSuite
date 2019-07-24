@@ -106,7 +106,7 @@ class   ModelEvaluator:
 		  if (".DS_Store") in imgPath:
 		    continue
 		  #print(imgPath)
-		  folderName=(imgPath).split("/")[-2:-1][0]
+		  folderName=(imgPath).split(os.sep)[-2:-1][0]
 		  img=keras.preprocessing.image.load_img(imgPath, target_size=self.input_shape)
 		  
 		  x=keras.preprocessing.image.img_to_array(img)
@@ -172,7 +172,7 @@ class   ModelEvaluator:
 
 
 
-		#print("Class {}  Accuracy={:.2f},Precision={:.2f},Recall={:.2f}".format(labels[0],accuracy_LABEL1,precision_LABEL1,recall_LABEL1))
+		print("Class {}  Accuracy={:.2f},Precision={:.2f},Recall={:.2f}".format(labels[0],accuracy_LABEL1,precision_LABEL1,recall_LABEL1))
 
 
 
@@ -187,13 +187,19 @@ class   ModelEvaluator:
 
 		test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 	# initialize the testing generator
-		test_generator = test_datagen.flow_from_directory(self.path_test,class_mode="binary",target_size=self.input_shape,batch_size=BS)
+		test_generator = test_datagen.flow_from_directory(self.path_test,
+			class_mode="binary",
+			target_size=self.input_shape,
+			color_mode="rgb",
+			shuffle = False,
+			batch_size=1)
+
 			# reset the testing generator and then use our trained model to
 		# make predictions on the data
 		print("[INFO] Evaluating  Classiffication Report 1")
 
-		#test_generator.reset()
-		predIdxs = self.model.predict_generator(test_generator,steps=(self.totalTest // BS) + 1)
+		test_generator.reset()
+		predIdxs = self.model.predict_generator(test_generator,steps=self.totalTest) 
 
 		predictedLabels=[]
 
@@ -201,7 +207,8 @@ class   ModelEvaluator:
 
 		for  predIdx in predIdxs:
 
-		  if predIdx>0.5:     #1  is a labels[1]
+
+		  if predIdx[0]>0.5:     #1  is a labels[1]
 		      #print(" belongs to {}".format(labels[1]))
 		      predictedLabels.append(1)
 		      
@@ -213,7 +220,7 @@ class   ModelEvaluator:
 		print("*************************************************************************************************************")      
 
 if __name__ == '__main__':
-	modelFile="/Users/walidahmed/Google Drive/code/imageclassifierSuite/results/cats_dogs_binaryClassifier.keras2"
+	modelFile="results/cats_dogs_binaryClassifier.keras2"
 
 
 
