@@ -15,11 +15,11 @@ BS=32
 class   ModelEvaluator:
 
 
-	def __init__(self, model,labels,path_test,mode=1):
+	def __init__(self, model,labels,input_shape,path_test,mode=1):
 		self.model=tf.keras.models.load_model(model)
 
 		self.testFilesFullPathList=[]
-		self.input_shape=150,150
+		self.input_shape=input_shape
 		self.labels=labels
 
 		self.labels.sort()
@@ -38,7 +38,6 @@ class   ModelEvaluator:
 		print("[INFO] Evaluating  Classiffication Report 3")
 		y_pred=[]
 		y_true=[]
-		input_shape=150,150    #width,height
 
 
 
@@ -57,7 +56,7 @@ class   ModelEvaluator:
 
 
 
-		  img=keras.preprocessing.image.load_img(imgPath, target_size=input_shape)
+		  img=keras.preprocessing.image.load_img(imgPath, target_size=self.input_shape)
 		  
 		  x=keras.preprocessing.image.img_to_array(img)
 		  x=x/255   #rescale image

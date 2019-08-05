@@ -6,11 +6,16 @@ class  ModelCreator:
 	def __init__(self, NNTitle):
 		#self.imgWidth,self.imgHeight=imgSize
 		if (NNTitle)=="HoursedVsHumanModel":
+			self.imgWidth=300
+			self.imgHeight=300
 			self.model=self.defineHoursedVsHumanModel()
+			print("[INFO]  HoursedVsHuman Model created")
 		elif (NNTitle)=="CatsvsDogsModel":
+			self.imgWidth=150
+			self.imgHeight=150
 			self.model=self.defineCatsvsDogsModel()
+			print("[INFO]  CatsvsDogs Model created")
 		elif NNTitle=="LenetModel":
-
 			self.imgWidth=28
 			self.imgHeight=28
 			self.model=self.defineLenetModel()
