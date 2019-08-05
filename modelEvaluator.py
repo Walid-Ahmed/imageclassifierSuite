@@ -15,19 +15,15 @@ BS=32
 class   ModelEvaluator:
 
 
-	def __init__(self, model,mode=1):
+	def __init__(self, model,labels,path_test,mode=1):
 		self.model=tf.keras.models.load_model(model)
 
 		self.testFilesFullPathList=[]
-		root_dir="datasets"
-		datasetDir='cats_and_dogs'
-		testDir="test_images_cats_and_dogs"
 		self.input_shape=150,150
-		base_dir = os.path.join(root_dir,datasetDir)
-		self.labels=["cats","dogs"]
+		self.labels=labels
 
 		self.labels.sort()
-		self.path_test=os.path.join(root_dir,testDir)
+		self.path_test=path_test
 		self.totalTest = len(list(paths.list_images(self.path_test)))
 		print('[INFO] Total images in test  dataset '+self.path_test+ 'images :', self.totalTest)
 
@@ -220,11 +216,16 @@ class   ModelEvaluator:
 		print("*************************************************************************************************************")      
 
 if __name__ == '__main__':
+
 	modelFile="results/cats_dogs_binaryClassifier.keras2"
+	labels=["cats","dogs"]
+	root_dir="TestImages"
+	testDir="test_images_cats_and_dogs"
+
+	path_test=os.path.join(root_dir,testDir)
 
 
-
-	modelEvaluator=ModelEvaluator(modelFile)
+	modelEvaluator=ModelEvaluator(modelFile,labels,path_test)
 	modelEvaluator.evaluate1()
 	modelEvaluator.evaluate2()
 	modelEvaluator.evaluate3()

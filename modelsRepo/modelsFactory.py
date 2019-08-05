@@ -3,14 +3,41 @@ import tensorflow as tf
 class  ModelCreator:
 
 
-	def __init__(self, NNTitle,imgSize):
-		self.imgWidth,self.imgHeight=imgSize
+	def __init__(self, NNTitle):
+		#self.imgWidth,self.imgHeight=imgSize
 		if (NNTitle)=="HoursedVsHumanModel":
 			self.model=self.defineHoursedVsHumanModel()
 		elif (NNTitle)=="CatsvsDogsModel":
 			self.model=self.defineCatsvsDogsModel()
+		elif NNTitle=="LenetModel":
+
+			self.imgWidth=28
+			self.imgHeight=28
+			self.model=self.defineLenetModel()
+			print("[INFO]  Lenet created")
+
+	def defineLenetModel(self):
+		model = tf.keras.models.Sequential()
+
+		# first set of CONV => RELU => POOL layers
+		model.add(tf.keras.layers.Conv2D(20, (5, 5),  activation='relu',padding="same",input_shape=(self.imgWidth,self.imgHeight, 3)))
+		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+		# second set of CONV => RELU => POOL layers
+		model.add(tf.keras.layers.Conv2D(50, (5, 5),   activation='relu',padding="same"))
+		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+		# first (and only) set of FC => RELU layers
+		model.add(tf.keras.layers.Flatten())
+		model.add(tf.keras.layers.Dense(500,activation='relu'))
+
+		# sigmoid classifier
+		model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 
 
+
+		# return the constructed network architecture
+		return model
 
 	def defineHoursedVsHumanModel(self):
 		model = tf.keras.models.Sequential([
