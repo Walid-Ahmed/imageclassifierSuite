@@ -1,4 +1,4 @@
-# imageclassifierSuite
+# image classifier Suite
 
 The Repo already include these dataset
 
