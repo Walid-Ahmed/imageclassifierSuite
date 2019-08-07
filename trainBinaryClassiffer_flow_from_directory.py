@@ -1,7 +1,7 @@
 
 
 
-
+#usage python trainBinaryClassiffer_flow_from_directory.py
 
 import os
 from imutils import paths
@@ -14,10 +14,10 @@ from modelEvaluator import ModelEvaluator
 from  util import  plotUtil
 
 NNTitle="HoursedVsHumanModel"
-#NNTitle="CatsvsDogsModel"
+NNTitle="CatsvsDogsModel"
 
 BS = 20
-numberOfEpochs=50
+numberOfEpochs=100
 #numberOfEpochs=2
 
 

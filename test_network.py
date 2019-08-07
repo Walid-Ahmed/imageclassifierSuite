@@ -1,6 +1,9 @@
 # USAGE
-# python test_network.py --model santa_not_santa.model --image images/examples/santa_01.png
+# python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png
+# python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/night_sky.png
+#python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat.964.jpg
 
+#python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog.3.jpg
 # import the necessary packages
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
@@ -8,6 +11,11 @@ import numpy as np
 import argparse
 import imutils
 import cv2
+import tensorflow as tf 
+
+width,height=150,150
+labels=["Cats","Dogs"]
+
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -22,21 +30,27 @@ image = cv2.imread(args["image"])
 orig = image.copy()
 
 # pre-process the image for classification
-image = cv2.resize(image, (28, 28))
+image = cv2.resize(image, (width,height))
 image = image.astype("float") / 255.0
 image = img_to_array(image)
 image = np.expand_dims(image, axis=0)
 
 # load the trained convolutional neural network
 print("[INFO] loading network...")
-model = load_model(args["model"])
+model = tf.keras.models.load_model(args["model"])
+print("[INFO] Model loaded succesfully from {}".format(args["model"]))
 
 # classify the input image
-(notSanta, santa) = model.predict(image)[0]
+
+
+prediction= (model.predict(image)[0])[0]
+print(prediction)
 
 # build the label
-label = "Santa" if santa > notSanta else "Not Santa"
-proba = santa if santa > notSanta else notSanta
+label = labels[1] if prediction > 0.5 else labels[0] 
+proba = prediction if (prediction > 0.5) else (1-prediction)
+
+
 label = "{}: {:.2f}%".format(label, proba * 100)
 
 # draw the label on the image
