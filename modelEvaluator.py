@@ -7,7 +7,13 @@ import numpy as np
 from tensorflow import keras
 import tensorflow as tf 
 from keras.preprocessing.image import ImageDataGenerator
+from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score
+import matplotlib.pyplot as plt
+import scikitplot.plotters as skplt
 
+	  
 
 
 BS=32
@@ -214,17 +220,85 @@ class   ModelEvaluator:
 		print(classification_report(test_generator.classes, predictedLabels,target_names=test_generator.class_indices.keys()))
 		print("*************************************************************************************************************")      
 
+
+
+
+	def ROC_Calculate(self):
+		print("[INFO] Evaluating  ROC")
+		y_pred=[]
+		y_true=[]
+		probs=[]
+
+
+
+		#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False)
+
+		for imgPath in self.testFilesFullPathList:
+
+		  if (".DS_Store") in imgPath:
+		    continue
+		  #print(imgPath)
+		  folderName=(imgPath).split("/")[-2:-1][0]
+		  if(self.labels[0] in folderName  ):
+		    y_true.append(0)
+		  elif (self.labels[1] in folderName ):  
+		    y_true.append(1)
+
+
+
+		  img=keras.preprocessing.image.load_img(imgPath, target_size=self.input_shape)
+		  
+		  x=keras.preprocessing.image.img_to_array(img)
+		  x=x/255   #rescale image
+		  x=np.expand_dims(x, axis=0)
+		  image = np.vstack([x])
+
+		  classes = self.model.predict(image)
+		  probs.append(classes[0])
+		  #print(type(classes))     <class 'numpy.ndarray'>
+		  
+		  #print(classes)
+
+		  #print(classes[0])
+		  
+		  if classes[0]>0.5:     #1  is a labels[1]
+		    y_pred.append(1)
+		  else:
+		    y_pred.append(0)
+		# calculate roc curve
+		fpr, tpr, thresholds = roc_curve(y_true, probs)
+		# calculate AUC
+		roc_auc = roc_auc_score(y_true, probs)
+		print('AUC: %.3f' % roc_auc) 
+		#plot_roc_curve(y_true, probs)
+
+
+		plt.title('Receiver Operating Characteristic')
+		plt.plot(fpr, tpr, 'b',label='AUC = %0.2f'% roc_auc)
+		plt.legend(loc='lower right')
+		plt.plot([0,1],[0,1],'r--')
+		plt.xlim([-0.1,1.2])
+		plt.ylim([-0.1,1.2])
+		plt.ylabel('True Positive Rate')
+		plt.xlabel('False Positive Rate')
+		plt.show()
+
+
 if __name__ == '__main__':
 
 	modelFile="results/cats_dogs_binaryClassifier.keras2"
 	labels=["cats","dogs"]
 	root_dir="TestImages"
 	testDir="test_images_cats_and_dogs"
+	input_shape=150,150    #width,height
+
 
 	path_test=os.path.join(root_dir,testDir)
 
 
-	modelEvaluator=ModelEvaluator(modelFile,labels,path_test)
+	modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,path_test)
+	modelEvaluator.ROC_Calculate()
+	exit()
 	modelEvaluator.evaluate1()
 	modelEvaluator.evaluate2()
 	modelEvaluator.evaluate3()
