@@ -11,14 +11,23 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_auc_score
 import matplotlib.pyplot as plt
-import scikitplot.plotters as skplt
-
-	  
+from sklearn.metrics import average_precision_score
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import precision_score
+from sklearn.metrics import f1_score
+import pickle	  
 
 
 BS=32
 
 class   ModelEvaluator:
+
+
+	def probToOneOrZero(x,threshold):
+		if x>=threshold:
+			return 1
+		else:
+			return 0	
 
 
 	def __init__(self, model,labels,input_shape,path_test,mode=1):
@@ -39,6 +48,109 @@ class   ModelEvaluator:
 		      print(os.path.join(root, name))
 		      self.testFilesFullPathList.append(os.path.join(root, name))
 
+
+	def PrecisionRecall(self):
+		print("[INFO] Evaluating  Precision-Recall curve")
+		y_pred=[]
+		y_true=[]
+		probs=[]
+
+
+
+		#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False)
+
+		for imgPath in self.testFilesFullPathList:
+
+		  if (".DS_Store") in imgPath:
+		    continue
+		  #print(imgPath)
+		  folderName=(imgPath).split("/")[-2:-1][0]
+		  if(self.labels[0] in folderName  ):
+		    y_true.append(0)
+		  elif (self.labels[1] in folderName ):  
+		    y_true.append(1)
+
+
+
+		  img=keras.preprocessing.image.load_img(imgPath, target_size=self.input_shape)
+		  
+		  x=keras.preprocessing.image.img_to_array(img)
+		  x=x/255   #rescale image
+		  x=np.expand_dims(x, axis=0)
+		  image = np.vstack([x])
+
+		  classes = self.model.predict(image)
+		  probs.append(classes[0])
+		  #print(type(classes))     <class 'numpy.ndarray'>
+		  
+		  #print(classes)
+
+		  #print(classes[0])
+		  
+		  if classes[0]>0.5:     #1  is a labels[1]
+		    y_pred.append(1)
+		  else:
+		    y_pred.append(0)
+
+
+		precision, recall, thresholds = precision_recall_curve(y_true, probs) #y_score    probabilities between 0 and 1
+
+		#print(precision)
+		#print(recall)
+
+
+
+		# calculate 
+		F1 = f1_score(y_true, y_pred)  # vcalculated for a certian threshold used to calculate  y_pred
+		print("[INFO] F1 score at threshold 0.5=" +str(F1) )
+
+	
+		F1=[]
+		for i in range(len(thresholds)):
+			F1.append( 2 * (precision[i] * recall[i]) / (precision[i] + recall[i]))
+			#print("Perciosion = {0} and Recall={1} at Threshold={2} and F1-Score={3}".format(precision[i], recall[i],thresholds[i],F1[i]) )
+		F1_Max=max(F1)
+		index=F1.index(F1_Max)
+		print("The Highest F1_Score is {0}  with Precision {1} and recall {2} at Threshold {3}".format(F1_Max,precision[index] , recall[index],thresholds[index]))
+			
+
+		average_precision = average_precision_score(y_true, probs)
+
+
+		#predictions = [numpy.round(x) for x in predictions]    #0 or 1 
+
+		precision_value=precision_score(y_true, y_pred, average='macro')  
+
+		print(precision_value)
+		print("[INFO] precision_value at threshold 0.5=" +str(precision_value) )
+
+
+		plt.step(recall, precision, color='b', alpha=0.2, where='post')
+		plt.fill_between(recall, precision, step='post', alpha=0.2,color='b')
+		plt.xlabel('Recall')
+		plt.ylabel('Precision')
+		plt.ylim([0.0, 1.05])
+		plt.xlim([0.0, 1.0])
+		plt.title('Class Precision-Recall curve for class {0}'.format(self.labels[1] +" vs " +  self.labels[0]))
+		fileName="Precision_Recall_curve_"+self.labels[1]+".png"
+		plt.savefig(fileName)
+		plt.show()
+
+		          
+
+		plt.plot(thresholds, F1, 'ro')
+		plt.ylim([0.0, 1.05])
+		plt.xlim([0.0, 1.05])
+		plt.xlabel('Threshold')
+		plt.ylabel('F1-Score')
+		plt.title('F1-Score Vs Threshold for  class {0}'.format(self.labels[1] +" vs " +  self.labels[0]))
+		fileName="F1_Vs Threshold_"+self.labels[1] +" vs " +  self.labels[0]+".png"
+		plt.savefig(fileName)
+		plt.show()
+
+
+
+ 	
 
 	def evaluate3(self):
 		print("[INFO] Evaluating  Classiffication Report 3")
@@ -297,6 +409,8 @@ if __name__ == '__main__':
 
 
 	modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,path_test)
+	modelEvaluator.PrecisionRecall()
+	exit()
 	modelEvaluator.ROC_Calculate()
 	exit()
 	modelEvaluator.evaluate1()

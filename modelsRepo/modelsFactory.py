@@ -1,27 +1,46 @@
 import tensorflow as tf
+from  tensorflow.keras.applications import  ResNet50
+
 
 class  ModelCreator:
 
 
-	def __init__(self, NNTitle):
+	def __init__(self, numOfOutputs,width,height,NNTitle="default"):
+
 		#self.imgWidth,self.imgHeight=imgSize
+		self.numOfOutputs=numOfOutputs
+		self.imgWidth=width
+		self.imgHeight=height
+		
+		if(self.numOfOutputs>1):
+			self.finalActivation='softmax'
+		else:
+			self.finalActivation='sigmoid'
+
+
 		if (NNTitle)=="HoursedVsHumanModel":
-			self.imgWidth=300
-			self.imgHeight=300
-			self.model=self.defineHoursedVsHumanModel()
+			self.model=self.defineNet1()
 			print("[INFO]  HoursedVsHuman Model created")
+
 		elif (NNTitle)=="CatsvsDogsModel":
 			self.imgWidth=150
 			self.imgHeight=150
-			self.model=self.defineCatsvsDogsModel()
+			self.model=self.defineNet2()
 			print("[INFO]  CatsvsDogs Model created")
+
 		elif NNTitle=="LenetModel":
-			self.imgWidth=28
-			self.imgHeight=28
+
 			self.model=self.defineLenetModel()
 			print("[INFO]  Lenet created")
 
-	def defineLenetModel(self):
+
+		elif NNTitle=="Resnet50":
+			self.imgWidth=224
+			self.imgHeight=224
+			self.model=self.defineResnet50()
+			print("[INFO]  Resnet50 created")	
+
+	def defineLenetModel(self):   #can work with 28*28 
 		model = tf.keras.models.Sequential()
 
 		# first set of CONV => RELU => POOL layers
@@ -37,14 +56,14 @@ class  ModelCreator:
 		model.add(tf.keras.layers.Dense(500,activation='relu'))
 
 		# sigmoid classifier
-		model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+		model.add(tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation))
 
 
 
 		# return the constructed network architecture
 		return model
 
-	def defineHoursedVsHumanModel(self):
+	def defineNet1(self):   #suitable for HoursedVsHumanModel
 		model = tf.keras.models.Sequential([
 		# Note the input shape is the desired size of the image 300x300 with 3 bytes color
 		# This is the first convolution
@@ -67,14 +86,14 @@ class  ModelCreator:
 		# 512 neuron hidden layer
 		tf.keras.layers.Dense(512, activation='relu'),
 		# Only 1 output neuron. It will contain a value from 0-1 where 0 for 1 class ('horses') and 1 for the other ('humans')
-		tf.keras.layers.Dense(1, activation='sigmoid')])
+		tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)])
 		return model
 
 
 
 
 
-	def defineCatsvsDogsModel(self):
+	def defineNet2(self):   #suitable for catsvsdogs
 
 		model = tf.keras.models.Sequential([
 	    # Note the input shape is the desired size of the image 150x150 with 3 bytes color
@@ -89,5 +108,25 @@ class  ModelCreator:
 	    # 512 neuron hidden layer
 	    tf.keras.layers.Dense(512, activation='relu'), 
 	    # Only 1 output neuron. It will contain a value from 0-1 where 0 for 1 class ('cats') and 1 for the other ('dogs')
-	    tf.keras.layers.Dense(1, activation='sigmoid')  ])
+	    tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)  ])
 		return model
+
+
+
+	def defineResnet50(self):
+		baseModel = ResNet50(weights="imagenet", include_top=False,input_tensor=tf.keras.layers.Input(shape=(self.imgWidth,self.imgHeight, 3)))
+		# construct the head of the model that will be placed on top of the
+		# the base model
+		headModel = baseModel.output
+		headModel = tf.keras.layers.AveragePooling2D(pool_size=(7, 7))(headModel)
+		headModel = tf.keras.layers.Flatten(name="flatten")(headModel)
+		headModel = tf.keras.layers.Dense(512, activation="relu")(headModel)
+		headModel = tf.keras.layers.Dropout(0.5)(headModel)
+		headModel = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(headModel)
+
+		# place the head FC model on top of the base model (this will become
+		# the actual model we will train)
+		model = tf.keras.models.Model(inputs=baseModel.input, outputs=headModel)
+		return model
+
+	
