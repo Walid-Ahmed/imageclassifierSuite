@@ -1,6 +1,6 @@
 # USAGE
-# python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png
-# python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/night_sky.png
+# python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
+# python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/night_sky.png --labelPKL Results/labels.pkl
 #python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat.964.jpg
 
 #python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog.6.jpg
@@ -12,9 +12,12 @@ import argparse
 import imutils
 import cv2
 import tensorflow as tf 
+import pickle
 
-width,height=150,150
-labels=["Cats","Dogs"]
+
+width,height=28,28
+
+
 
 
 # construct the argument parse and parse the arguments
@@ -23,7 +26,12 @@ ap.add_argument("-m", "--model", required=True,
 	help="path to trained model model")
 ap.add_argument("-i", "--image", required=True,
 	help="path to input image")
+ap.add_argument("-lbpkl", "--labelPKL", required=True,
+	help="path to label list as picklw file")
 args = vars(ap.parse_args())
+
+
+labels = pickle.loads(open(args["labelPKL"], "rb").read())
 
 # load the image
 image = cv2.imread(args["image"])

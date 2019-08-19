@@ -11,7 +11,7 @@ class  ModelCreator:
 		self.numOfOutputs=numOfOutputs
 		self.imgWidth=width
 		self.imgHeight=height
-		
+
 		if(self.numOfOutputs>1):
 			self.finalActivation='softmax'
 		else:
@@ -29,14 +29,15 @@ class  ModelCreator:
 			print("[INFO]  CatsvsDogs Model created")
 
 		elif NNTitle=="LenetModel":
-
+			self.imgWidth=width
+			self.imgHeight=height
 			self.model=self.defineLenetModel()
 			print("[INFO]  Lenet created")
 
 
 		elif NNTitle=="Resnet50":
-			self.imgWidth=224
-			self.imgHeight=224
+			self.imgWidth=width
+			self.imgHeight=height
 			self.model=self.defineResnet50()
 			print("[INFO]  Resnet50 created")	
 

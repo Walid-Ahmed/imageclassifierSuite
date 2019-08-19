@@ -7,7 +7,7 @@
 
 import tensorflow as tf
 
-
+import pickle
 from  util import  plotUtil
 from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
@@ -37,6 +37,10 @@ datasetDir='SportsClassification'
 imgWidth=224
 imgHeight=224
 
+datasetDir='Santa'
+imgWidth=28
+imgHeight=28
+EPOCHS = 25
 
 
 base_dir = os.path.join(root_dir,datasetDir)
@@ -50,7 +54,7 @@ def get_immediate_subdirectories(a_dir):
 
 # initialize the number of epochs to train for, initia learning rate,
 # and batch size
-EPOCHS = 25
+
 INIT_LR = 1e-3
 BS = 32
 
@@ -75,19 +79,22 @@ random.shuffle(imagePaths)
 
 # loop over the input images
 for imagePath in imagePaths:
-	# load the image, pre-process it, and store it in the data list
-	print("[INFO] Reading image from path: {}".format(imagePath))
-	image = cv2.imread(imagePath)
-	image = cv2.resize(image, (imgWidth,imgHeight))
-	image = img_to_array(image)
+
 
 
 	# extract the class label from the image path and update the
 	# labels list
 	label = imagePath.split(os.path.sep)[-2]
 
-	if label not in LABELS:
-		continue
+	#if label not in LABELS:
+		#continue
+
+
+	# load the image, pre-process it, and store it in the data list
+	print("[INFO] Reading image from path: {}".format(imagePath))
+	image = cv2.imread(imagePath)
+	image = cv2.resize(image, (imgWidth,imgHeight))
+	image = img_to_array(image)	
 	labels.append(label)
 	data.append(image)
 
@@ -98,7 +105,7 @@ labels = np.array(labels)
 
 
 
-
+#lb.classes_  will be  the labels with the same order in one hot vector--->. label = lb.classes_[i]
 lb = LabelBinarizer()
 labels = lb.fit_transform(labels)
 numOfOutputs=len(lb.classes_)
@@ -107,8 +114,12 @@ numOfOutputs=len(lb.classes_)
 if (numOfOutputs==2):  #Binary problem
 	numOfOutputs=1  # use only 1 neuron in last layer
 
-print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))
-#exit()
+print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   #['football' 'tennis' 'weight_lifting']
+
+#print(lb.get_params())   #{'neg_label': 0, 'pos_label': 1, 'sparse_output': False}. not very usefull
+
+
+
 	#labels = to_categorical(labels) # convert the labels from integers to vectors
 	# perform one-hot encoding on the labels
 
@@ -133,7 +144,9 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 # initialize the model
 print("[INFO] compiling model...")
 #model = LeNet.build(width=28, height=28, depth=3, classes=1)
-model=modelsFactory.ModelCreator(numOfOutputs,imgWidth,imgHeight,"Resnet50").model
+#model=modelsFactory.ModelCreator(numOfOutputs,imgWidth,imgHeight,"Resnet50").model
+model=modelsFactory.ModelCreator(numOfOutputs,imgWidth,imgHeight,"LenetModel").model
+
 
 model.summary()
 
@@ -153,12 +166,20 @@ history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 	epochs=EPOCHS, verbose=1)
 
 # save the model to disk
-fileNameToSaveModel="{}_{}_binaryClassifier.keras2".format(folders[0],folders[1])
+fileNameToSaveModel="{}_binaryClassifier.keras2".format(datasetDir)
 fileNameToSaveModel=os.path.join("Results",fileNameToSaveModel)
 model.save(fileNameToSaveModel)
 print("[INFO] Model saved  to file {}".format(fileNameToSaveModel))
 
+# serialize the label binarizer to disk
+fileNameToSaveLabels=datasetDir+"_labels.pkl"
+fileNameToSaveLabels=os.path.join("Results",fileNameToSaveLabels)
+f = open(fileNameToSaveLabels, "wb")
+f.write(pickle.dumps(lb.classes_))
+f.close()
 
+
+print("[INFO] Labels saved  to file {}".format(fileNameToSaveLabels))
 
 plotUtil.plotAccuracyAndLossesonSameCurve(history)
 plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
