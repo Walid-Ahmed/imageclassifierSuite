@@ -181,6 +181,16 @@ f.close()
 
 print("[INFO] Labels saved  to file {}".format(fileNameToSaveLabels))
 
+
+
+#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False)
+# evaluate the network
+print("[INFO] evaluating network...")
+predictions = model.predict(testX, batch_size=32)
+y_true=testY.argmax(axis=1)
+y_pred=predictions.argmax(axis=1)
+print(classification_report(y_true,y_pred, target_names=lb.classes_))
+
 plotUtil.plotAccuracyAndLossesonSameCurve(history)
 plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
 
