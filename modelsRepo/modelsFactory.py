@@ -5,12 +5,13 @@ from  tensorflow.keras.applications import  ResNet50
 class  ModelCreator:
 
 
-	def __init__(self, numOfOutputs,width,height,NNTitle="default"):
+	def __init__(self, numOfOutputs,width,height,channels=3,NNTitle="default"):
 
 		#self.imgWidth,self.imgHeight=imgSize
 		self.numOfOutputs=numOfOutputs
 		self.imgWidth=width
 		self.imgHeight=height
+		self.channels=channels
 
 		if(self.numOfOutputs>1):
 			self.finalActivation='softmax'
@@ -45,7 +46,7 @@ class  ModelCreator:
 		model = tf.keras.models.Sequential()
 
 		# first set of CONV => RELU => POOL layers
-		model.add(tf.keras.layers.Conv2D(20, (5, 5),  activation='relu',padding="same",input_shape=(self.imgWidth,self.imgHeight, 3)))
+		model.add(tf.keras.layers.Conv2D(20, (5, 5),  activation='relu',padding="same",input_shape=(self.imgWidth,self.imgHeight, self.channels)))
 		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
 		# second set of CONV => RELU => POOL layers
