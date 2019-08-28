@@ -1,6 +1,6 @@
 # USAGE
-# python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
-# python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/night_sky.png --labelPKL Results/Santa_labels.pkl
+# python test_network_multiClassifier.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
+# python test_network_binary.py  --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/night_sky.png --labelPKL Results/Santa_labels.pkl
 #python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat.964.jpg
 
 #python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog.6.jpg
@@ -51,11 +51,11 @@ print("[INFO] Model loaded succesfully from {}".format(args["model"]))
 # classify the input image
 
 
-prediction= (model.predict(image)[0])[0]
-print(prediction)
+prediction= (model.predict(image)[0])[0] #probabilty
+y_pred=prediction.argmax(axis=1)
 
 # build the label
-label = labels[1] if prediction > 0.5 else labels[0] 
+label = labels[y_pred]
 proba = prediction if (prediction > 0.5) else (1-prediction)
 
 

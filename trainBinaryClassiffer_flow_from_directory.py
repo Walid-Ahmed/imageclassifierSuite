@@ -197,6 +197,8 @@ if __name__ == '__main__':
 
     path_test=os.path.join(root_dir,testDir)
 
+
+   #evaluate on a seperate yest dataset
     modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,path_test)
     modelEvaluator.evaluate1()  #using sklearn & testGenerator
     modelEvaluator.evaluate2()  #without using sklearn & testGenerator

@@ -27,7 +27,7 @@ class  ModelCreator:
 			self.imgWidth=150
 			self.imgHeight=150
 			self.model=self.defineNet2()
-			print("[INFO]  CatsvsDogs Model created")
+			print("[INFO]  Net2 Model created")
 
 		elif NNTitle=="LenetModel":
 			self.imgWidth=width
@@ -41,6 +41,20 @@ class  ModelCreator:
 			self.imgHeight=height
 			self.model=self.defineResnet50()
 			print("[INFO]  Resnet50 created")	
+
+		elif NNTitle=="net3":
+			self.model=self.defineNet3()
+			print("[INFO]  Net3 created")		
+
+
+		elif NNTitle=="MiniVGG":
+			self.model=self.defineMiniVGG()
+			print("[INFO]  MiniVGG Model created")
+
+		elif NNTitle=="net4":
+			self.model=self.defineNet4()
+			print("[INFO]  Net4 created")	
+
 
 	def defineLenetModel(self):   #can work with 28*28 
 		model = tf.keras.models.Sequential()
@@ -69,7 +83,7 @@ class  ModelCreator:
 		model = tf.keras.models.Sequential([
 		# Note the input shape is the desired size of the image 300x300 with 3 bytes color
 		# This is the first convolution
-		tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(self.imgWidth,self.imgHeight, 3)),
+		tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(self.imgWidth,self.imgHeight, self.channels)),
 		tf.keras.layers.MaxPooling2D(2, 2),
 		# The second convolution
 		tf.keras.layers.Conv2D(32, (3,3), activation='relu'),
@@ -99,7 +113,7 @@ class  ModelCreator:
 
 		model = tf.keras.models.Sequential([
 	    # Note the input shape is the desired size of the image 150x150 with 3 bytes color
-	    tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(self.imgWidth,self.imgHeight, 3)),
+	    tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(self.imgWidth,self.imgHeight, self.channels)),
 	    tf.keras.layers.MaxPooling2D(2,2),
 	    tf.keras.layers.Conv2D(32, (3,3), activation='relu'),
 	    tf.keras.layers.MaxPooling2D(2,2), 
@@ -115,8 +129,8 @@ class  ModelCreator:
 
 
 
-	def defineResnet50(self):
-		baseModel = ResNet50(weights="imagenet", include_top=False,input_tensor=tf.keras.layers.Input(shape=(self.imgWidth,self.imgHeight, 3)))
+	def defineResnet50(self):   #https://www.pyimagesearch.com/2019/07/15/video-classification-with-keras-and-deep-learning/
+		baseModel = ResNet50(weights="imagenet", include_top=False,input_tensor=tf.keras.layers.Input(shape=(self.imgWidth,self.imgHeight, self.channels)))
 		# construct the head of the model that will be placed on top of the
 		# the base model
 		headModel = baseModel.output
@@ -131,4 +145,134 @@ class  ModelCreator:
 		model = tf.keras.models.Model(inputs=baseModel.input, outputs=headModel)
 		return model
 
+
+	def defineNet3(self):  #should be suitable with CIFAR10.  https://ermlab.com/en/blog/nlp/cifar-10-classification-using-keras-tutorial/
+		model = tf.keras.models.Sequential()
+		 
+		model.add(tf.keras.layers.Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=(self.imgWidth,self.imgHeight, self.channels)))
+		model.add(tf.keras.layers.Dropout(0.2))
+		 
+		model.add(tf.keras.layers.Conv2D(32,(3,3),padding='same', activation='relu'))
+		model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))
+		 
+		model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activation='relu'))
+		model.add(tf.keras.layers.Dropout(0.2))
+		 
+		model.add(tf.keras.layers.Conv2D(64,(3,3),padding='same',activation='relu'))
+		model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))
+		 
+		model.add(tf.keras.layers.Conv2D(128,(3,3),padding='same',activation='relu'))
+		model.add(tf.keras.layers.Dropout(0.2))
+		 
+		model.add(tf.keras.layers.Conv2D(128,(3,3),padding='same',activation='relu'))
+		model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))
+		 
+		model.add(tf.keras.layers.Flatten())
+		model.add(tf.keras.layers.Dropout(0.2))
+		model.add(tf.keras.layers.Dense(1024,activation='relu',kernel_constraint=tf.keras.constraints.MaxNorm(3)))
+		model.add(tf.keras.layers.Dropout(0.2))
+		model.add(tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation))	
+		return model
+
+
+	def defineMiniVGG(self): #src https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning. #Fashionmnist
+		# first CONV => RELU => CONV => RELU => POOL layer set
+		model = tf.keras.models.Sequential()
+		model.add(tf.keras.layers.Conv2D(32, (3, 3), padding="same",input_shape=(self.imgWidth,self.imgHeight, self.channels)))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Conv2D(32, (3, 3), padding="same"))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.MaxPool2D(pool_size=(2, 2)))
+		model.add(tf.keras.layers.Dropout(0.25))
+
+		# second CONV => RELU => CONV => RELU => POOL layer set
+		model.add(tf.keras.layers.Conv2D(64, (3, 3), padding="same"))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Conv2D(64, (3, 3), padding="same"))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.MaxPool2D(pool_size=(2, 2)))
+		model.add(tf.keras.layers.Dropout(0.25))
+ 
+		# first (and only) set of FC => RELU layers
+		model.add(tf.keras.layers.Flatten())
+		model.add(tf.keras.layers.Dense(512))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Dropout(0.5))
+ 
+		# softmax classifier
+		model.add(tf.keras.layers.Dense(self.numOfOutputs))
+		model.add(tf.keras.layers.Activation(self.finalActivation))
+ 
+		# return the constructed network architecture
+		return model 
+
+	def defineNet4(self):     #src https://github.com/dribnet/kerosene/blob/master/examples/cifar100.py	   #CIFAR100
+		model = tf.keras.models.Sequential()
+
+		model.add(tf.keras.layers.Convolution2D(32, 3, 3, border_mode='same',
+		                        input_shape=(self.imgWidth,self.imgHeight, self.channels)))
+		model.add(tf.keras.layers.Activation('relu'))
+		model.add(tf.keras.layers.Convolution2D(32, 3, 3))
+		model.add(tf.keras.layers.Activation('relu'))
+		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+		model.add(tf.keras.layers.Dropout(0.25))
+
+		model.add(tf.keras.layers.Convolution2D(64, 3, 3, border_mode='same'))
+		model.add(tf.keras.layers.Activation('relu'))
+		model.add(tf.keras.layers.Convolution2D(64, 3, 3))
+		model.add(tf.keras.layers.Activation('relu'))
+		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+		model.add(tf.keras.layers.Dropout(0.25))
+
+		model.add(tf.keras.layers.Flatten())
+		model.add(tf.keras.layers.Dense(512))
+		model.add(tf.keras.layers.Activation('relu'))
+		model.add(tf.keras.layers.Dropout(0.5))
+		model.add(tf.keras.layers.Dense(nb_classes))
+		model.add(tf.keras.layers.Activation(self.finalActivation))
+
+		# return the constructed network architecture
+		return model 
+
+	def defineNet5(self):   #Cifar10.    #https://appliedmachinelearning.blog/2018/03/24/achieving-90-accuracy-in-object-recognition-task-on-cifar-10-dataset-with-keras-convolutional-neural-networks/
+
+		model = tf.keras.models.Sequential()
+		model.add(tf.keras.layers.Conv2D(32, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay), input_shape=(self.imgWidth,self.imgHeight, self.channels)))
+		model.add(tf.keras.layers.Activation('elu'))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Conv2D(32, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Activation('elu'))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
+		model.add(tf.keras.layers.Dropout(0.2))
+		 
+		model.add(tf.keras.layers.Conv2D(64, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Activation('elu'))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Conv2D(64, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Activation('elu'))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
+		model.add(tf.keras.layers.Dropout(0.3))
+		 
+		model.add(tf.keras.layers.Conv2D(128, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Activation('elu'))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Conv2D(128, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Activation('elu'))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
+		model.add(tf.keras.layers.Dropout(0.4))
+		 
+		model.add(tf.keras.layers.Flatten())
+		model.add(tf.keras.layers.Dense(num_classes, activation=self.finalActivation))
+
+		# return the constructed network architecture
+		return model 
+		 
 	

@@ -410,9 +410,9 @@ if __name__ == '__main__':
 
 	modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,path_test)
 	modelEvaluator.PrecisionRecall()
-	exit()
+
 	modelEvaluator.ROC_Calculate()
-	exit()
+
 	modelEvaluator.evaluate1()
 	modelEvaluator.evaluate2()
 	modelEvaluator.evaluate3()

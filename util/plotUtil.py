@@ -6,11 +6,11 @@ import matplotlib
 
 matplotlib.use("Qt5Agg")
 print("[INFO] matplotlib BACKEND IS {}".format(matplotlib.get_backend())) #[INFO] matplotlib BACKEND IS agg
+info=""
 
+def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
 
-def plotAccuracyAndLossesonSDifferentCurves(history):
-
-
+  info=""
     #Let's plot the training/validation accuracy and loss as collected during training:
   plt.style.use("ggplot")
 
@@ -31,10 +31,12 @@ def plotAccuracyAndLossesonSDifferentCurves(history):
   #------------------------------------------------
   plt.plot  ( epochs,     acc ,label="train_acc")
   plt.plot  ( epochs, val_acc, label="val_acc" )
-  plt.title ('Training and validation accuracy')
+  plt.title (title+'Training and validation accuracy')
   plt.xlabel("Epoch #")
   plt.ylabel("Accuracy")
-  plt.savefig(os.path.join("Results","plot_acc.png"))
+  fileToSaveAccuracyCurve=os.path.join("Results",title+"plot_acc.png")
+  plt.savefig(fileToSaveAccuracyCurve)
+  info=info+"[INFO] Accuracy curve saved to {}".format(fileToSaveAccuracyCurve)
   plt.legend(loc="upper left")
 
 
@@ -48,21 +50,23 @@ def plotAccuracyAndLossesonSDifferentCurves(history):
   #------------------------------------------------
   plt.plot  ( epochs,     loss ,label="train_loss")
   plt.plot  ( epochs, val_loss ,label="val_loss")
-  plt.title ('Training and validation loss'   )
+  plt.title (title+'Training and validation loss'   )
   plt.xlabel("Epoch #")
   plt.ylabel("Loss")
+  fileToSaveLossCurve=os.path.join("Results",title+"plot_loss.png")
+  info=info+"[INFO] Loss curve saved to {}\n".format(fileToSaveLossCurve)
   plt.savefig(os.path.join("Results","plot_loss.png"))
   plt.legend(loc="upper left")
 
-
+  return info
   plt.show()
 
 
-def plotAccuracyAndLossesonSameCurve(history):
+def plotAccuracyAndLossesonSameCurve(history,title=""):
 
     # construct a plot that plots and saves the training history
 
- 
+  info=""
     #-----------------------------------------------------------
   acc      = history.history[     'acc' ]
   val_acc  = history.history[ 'val_acc' ]
@@ -76,18 +80,21 @@ def plotAccuracyAndLossesonSameCurve(history):
   plt.plot(epochs, val_loss, label="val_loss")
   plt.plot(epochs, acc, label="train_acc")
   plt.plot(epochs, val_acc, label="val_acc")
-  plt.title("Training Loss and Accuracy")
+  plt.title(title+"Training Loss and Accuracy")
   plt.xlabel("Epoch #")
   plt.ylabel("Loss/Accuracy")
   plt.legend(loc="lower left")
-  plt.savefig(os.path.join("Results","plot_loss_accu.png"))
+  fileToSaveLossAccCurve=os.path.join("Results",title+"plot_loss_accu.png")
+  info=info+"[INFO] Loss curve saved to {}\n".format(fileToSaveLossAccCurve)
+  plt.savefig(fileToSaveLossAccCurve)
   plt.show()
+  return info
 
    
 
 def drarwGridOfImages(train_label1_dir,train_label2_dir):
 
-
+  info=""
   train_label1_fnames = os.listdir( train_label1_dir )
   train_label2_fnames = os.listdir( train_label2_dir )
 
@@ -124,7 +131,9 @@ def drarwGridOfImages(train_label1_dir,train_label2_dir):
 
     img = mpimg.imread(img_path)
     plt.imshow(img)
-
+ 
   plt.show()
+  return info
+
 
 
