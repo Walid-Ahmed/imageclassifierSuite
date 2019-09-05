@@ -1,13 +1,48 @@
 
-#usage python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 1
-#usage python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 1
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net3 --EPOCHS 1
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID net4  --EPOCHS 1
+#usage python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20
+#usage python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25
 
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net3 --EPOCHS 25 
+'''
+Epoch 25/25
+10000/10000 [==============================] - 53s 5ms/sample - loss: 0.7507 - acc: 0.8041
+1563/1563 [==============================] - 1379s 882ms/step - loss: 0.1689 - acc: 0.9401 - val_loss: 0.7506 - val_acc: 0.8041
+'''
+
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25
+
+
+
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID net3 --EPOCHS 25
+'''
+not good
+'''
+
+
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID net4  --EPOCHS 25
+'''
+not good
+'''
+
+
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25
+'''
+Epoch 25/25
+10000/10000 [==============================] - 2076s 208ms/sample - loss: 1.8991 - acc: 0.5397
+1563/1563 [==============================] - 5750s 4s/step - loss: 0.7722 - acc: 0.7620 - val_loss: 1.8982 - val_acc: 0.5397
+'''
+
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID net5  --EPOCHS 25
+
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID VGG16  --EPOCHS 25
 
 
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
+import matplotlib.pyplot as plt
+
+from sklearn.utils.multiclass import unique_labels
+
 
 from tensorflow.keras.datasets import mnist
 
@@ -28,6 +63,8 @@ from keras.datasets import fashion_mnist
 from keras.datasets import cifar100
 from keras.datasets import mnist
 
+from sklearn.metrics import confusion_matrix
+
 import argparse
 
 
@@ -37,6 +74,66 @@ import numpy as np
 import pickle
 import os
 from imutils import build_montages
+
+
+def plot_confusion_matrix(y_true, y_pred, classes,dataset,
+                          normalize=False,
+                          title=None,
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    if not title:
+        if normalize:
+            title = 'Normalized confusion matrix'
+        else:
+            title = 'Confusion matrix, without normalization'
+
+    # Compute confusion matrix
+    cm = confusion_matrix(y_true, y_pred)
+    # Only use the labels that appear in the data
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+    ax.figure.colorbar(im, ax=ax)
+    # We want to show all ticks...
+    ax.set(xticks=np.arange(cm.shape[1]),
+           yticks=np.arange(cm.shape[0]),
+           # ... and label them with the respective list entries
+           xticklabels=labels, yticklabels=labels,
+           title=title,
+           ylabel='True label',
+           xlabel='Predicted label')
+
+    # Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+             rotation_mode="anchor")
+
+    # Loop over data dimensions and create text annotations.
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j], fmt),
+                    ha="center", va="center",
+                    color="white" if cm[i, j] > thresh else "black")
+    fig.tight_layout()
+    fileToSaveConfusionMatrix=os.path.join("Results",dataset+'_Confusion Matrix.png')
+    plt.savefig(fileToSaveConfusionMatrix)
+    print("[INFO] Confusion matrix   saved to {}".format(fileNameToSaveLabels))
+
+    plt.show()
+
+
+    return ax
 
 
 if __name__ == '__main__':
@@ -170,9 +267,7 @@ if __name__ == '__main__':
 	aug = ImageDataGenerator()
 
 
-	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
-	validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
-	epochs=EPOCHS, verbose=1)
+	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
 
 
 	
@@ -198,7 +293,7 @@ if __name__ == '__main__':
 
 
 	print(type(lb.classes_))
-	print(classification_report(y_true,y_pred, target_names=lb.classes_))
+	print(classification_report(y_true,y_pred, target_names=labels))
 
 	
 
@@ -240,11 +335,11 @@ if __name__ == '__main__':
 		# resize the image from a 28 x 28 image to a 96 x 96 image so we
 		# can better see it
 		#imgDisplay = cv2.resize(imgDisplay, (96, 96), interpolation=cv2.INTER_LINEAR)
-		y_pred=predictions.argmax(axis=1)
-		predictedLabel=labels[y_pred[0]]
+		y_pred_img=predictions.argmax(axis=1)
+		predictedLabel=labels[y_pred_img[0]]
 		actualLabel=labels[np.argmax(testY[imageIndex])]
 
-		cv2.putText(imgDisplay, str(predictedLabel), (5, 20),cv2.FONT_HERSHEY_SIMPLEX, 0.25, (0, 255, 0), 1)
+		cv2.putText(imgDisplay, str(predictedLabel), (5, 20),cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
 		images.append(imgDisplay)
 		print("[INFO] Predicted: {}, Actual: {}".format(predictedLabel,actualLabel))
 		#cv2.imshow("Digit", imgDisplay)
@@ -254,5 +349,16 @@ if __name__ == '__main__':
 	cv2.imshow("Sample prediction  from {} testing  dataset".format(dataset), montage[0])
 	fileToSaveResults=os.path.join("Results",dataset+"_result.png")
 	cv2.imwrite(fileToSaveResults,montage[0])
-	cv2.waitKey(0)	
+	cv2.waitKey(1000)	
+	print("[INFO] Sample results   saved to {}".format(fileToSaveResults))
+
+
+	# Plot non-normalized confusion matrix
+	plot_confusion_matrix(y_true, y_pred, classes=labels,dataset=dataset,title=dataset+ '_Confusion matrix, without normalization') 
+
+	# Plot normalized confusion matrix
+	#plot_confusion_matrix(y_true, y_pred, classes=labels, dataset=dataset,normalize=True, title=dataset+'_Normalized confusion matrix')
+
+	#plt.show()
+
 

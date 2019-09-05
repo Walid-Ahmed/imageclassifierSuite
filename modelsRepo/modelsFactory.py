@@ -1,6 +1,6 @@
 import tensorflow as tf
 from  tensorflow.keras.applications import  ResNet50
-
+from tensorflow.keras.applications.vgg16 import VGG16
 
 class  ModelCreator:
 
@@ -55,6 +55,13 @@ class  ModelCreator:
 			self.model=self.defineNet4()
 			print("[INFO]  Net4 created")	
 
+		elif NNTitle=="net5":
+			self.model=self.defineNet5()
+			print("[INFO]  Net5 created")	
+
+		elif NNTitle=="VGG16":
+			self.model=self.defineVGG16()
+			print("[INFO]  VGG16 created")	
 
 	def defineLenetModel(self):   #can work with 28*28 
 		model = tf.keras.models.Sequential()
@@ -214,17 +221,16 @@ class  ModelCreator:
 	def defineNet4(self):     #src https://github.com/dribnet/kerosene/blob/master/examples/cifar100.py	   #CIFAR100
 		model = tf.keras.models.Sequential()
 
-		model.add(tf.keras.layers.Convolution2D(32, 3, 3, border_mode='same',
-		                        input_shape=(self.imgWidth,self.imgHeight, self.channels)))
+		model.add(tf.keras.layers.Conv2D(32, (3,3), padding='same', input_shape=(self.imgWidth,self.imgHeight, self.channels)))
 		model.add(tf.keras.layers.Activation('relu'))
-		model.add(tf.keras.layers.Convolution2D(32, 3, 3))
+		model.add(tf.keras.layers.Convolution2D(32, (3, 3)))
 		model.add(tf.keras.layers.Activation('relu'))
 		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
 		model.add(tf.keras.layers.Dropout(0.25))
 
-		model.add(tf.keras.layers.Convolution2D(64, 3, 3, border_mode='same'))
+		model.add(tf.keras.layers.Convolution2D(64, 3, 3, padding='same'))
 		model.add(tf.keras.layers.Activation('relu'))
-		model.add(tf.keras.layers.Convolution2D(64, 3, 3))
+		model.add(tf.keras.layers.Convolution2D(64, 3, 3,padding='same'))
 		model.add(tf.keras.layers.Activation('relu'))
 		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
 		model.add(tf.keras.layers.Dropout(0.25))
@@ -233,46 +239,65 @@ class  ModelCreator:
 		model.add(tf.keras.layers.Dense(512))
 		model.add(tf.keras.layers.Activation('relu'))
 		model.add(tf.keras.layers.Dropout(0.5))
-		model.add(tf.keras.layers.Dense(nb_classes))
+		model.add(tf.keras.layers.Dense(self.numOfOutputs))
 		model.add(tf.keras.layers.Activation(self.finalActivation))
 
 		# return the constructed network architecture
 		return model 
 
 	def defineNet5(self):   #Cifar10.    #https://appliedmachinelearning.blog/2018/03/24/achieving-90-accuracy-in-object-recognition-task-on-cifar-10-dataset-with-keras-convolutional-neural-networks/
+		weight_decay = 1e-4
 
 		model = tf.keras.models.Sequential()
-		model.add(tf.keras.layers.Conv2D(32, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay), input_shape=(self.imgWidth,self.imgHeight, self.channels)))
+		model.add(tf.keras.layers.Conv2D(32, (3,3), padding='same', kernel_regularizer=tf.keras.regularizers.l2(weight_decay), input_shape=(self.imgWidth,self.imgHeight, self.channels)))
 		model.add(tf.keras.layers.Activation('elu'))
 		model.add(tf.keras.layers.BatchNormalization())
-		model.add(tf.keras.layers.Conv2D(32, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Conv2D(32, (3,3), padding='same', kernel_regularizer=tf.keras.regularizers.l2(weight_decay)))
 		model.add(tf.keras.layers.Activation('elu'))
 		model.add(tf.keras.layers.BatchNormalization())
 		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
 		model.add(tf.keras.layers.Dropout(0.2))
 		 
-		model.add(tf.keras.layers.Conv2D(64, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Conv2D(64, (3,3), padding='same', kernel_regularizer=tf.keras.regularizers.l2(weight_decay)))
 		model.add(tf.keras.layers.Activation('elu'))
 		model.add(tf.keras.layers.BatchNormalization())
-		model.add(tf.keras.layers.Conv2D(64, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Conv2D(64, (3,3), padding='same', kernel_regularizer=tf.keras.regularizers.l2(weight_decay)))
 		model.add(tf.keras.layers.Activation('elu'))
 		model.add(tf.keras.layers.BatchNormalization())
 		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
 		model.add(tf.keras.layers.Dropout(0.3))
 		 
-		model.add(tf.keras.layers.Conv2D(128, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Conv2D(128, (3,3), padding='same', kernel_regularizer=tf.keras.regularizers.l2(weight_decay)))
 		model.add(tf.keras.layers.Activation('elu'))
 		model.add(tf.keras.layers.BatchNormalization())
-		model.add(tf.keras.layers.Conv2D(128, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+		model.add(tf.keras.layers.Conv2D(128, (3,3), padding='same', kernel_regularizer=tf.keras.regularizers.l2(weight_decay)))
 		model.add(tf.keras.layers.Activation('elu'))
 		model.add(tf.keras.layers.BatchNormalization())
 		model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
 		model.add(tf.keras.layers.Dropout(0.4))
 		 
 		model.add(tf.keras.layers.Flatten())
-		model.add(tf.keras.layers.Dense(num_classes, activation=self.finalActivation))
+		model.add(tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation))
 
 		# return the constructed network architecture
 		return model 
-		 
+
+
+	 
+	
+	def defineVGG16(self):
+		# load model
+		model = VGG16(include_top=False, input_shape=(self.imgWidth,self.imgHeight, self.channels))  #224,224,3
+		# mark loaded layers as not trainable
+		for layer in model.layers:
+			layer.trainable = False
+		# add new classifier layers
+		flat1 = tf.keras.layers.Flatten()(model.layers[-1].output)
+		class1 = tf.keras.layers.Dense(128, activation='relu', kernel_initializer='he_uniform')(flat1)
+		output = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(class1)
+		# define new model
+		model = tf.keras.models.Model(inputs=model.inputs, outputs=output)
+
+		return model	
+			 
 	
