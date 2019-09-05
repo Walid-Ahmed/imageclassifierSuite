@@ -1,6 +1,6 @@
 # image classifier Suite
 
-This Repo can be used to train standatd keras dataset with different network structures
+This Repo can be used to train standard keras dataset with different network structures
 
 python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20 .  <br />
 python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25  <br />
