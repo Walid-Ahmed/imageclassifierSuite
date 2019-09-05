@@ -1,40 +1,8 @@
 
 #usage python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20
 #usage python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25
-
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net3 --EPOCHS 25 
-'''
-Epoch 25/25
-10000/10000 [==============================] - 53s 5ms/sample - loss: 0.7507 - acc: 0.8041
-1563/1563 [==============================] - 1379s 882ms/step - loss: 0.1689 - acc: 0.9401 - val_loss: 0.7506 - val_acc: 0.8041
-'''
-
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25
-
-
-
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID net3 --EPOCHS 25
-'''
-not good
-'''
-
-
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID net4  --EPOCHS 25
-'''
-not good
-'''
-
-
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25
-'''
-Epoch 25/25
-10000/10000 [==============================] - 2076s 208ms/sample - loss: 1.8991 - acc: 0.5397
-1563/1563 [==============================] - 5750s 4s/step - loss: 0.7722 - acc: 0.7620 - val_loss: 1.8982 - val_acc: 0.5397
-'''
-
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID net5  --EPOCHS 25
-
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID VGG16  --EPOCHS 25
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    #val_acc: 0.8553
+#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25  #val_acc: 0.5397
 
 
 from sklearn.model_selection import train_test_split
