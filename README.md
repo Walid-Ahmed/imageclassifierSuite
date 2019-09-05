@@ -2,10 +2,10 @@
 
 This Repo can be used to train standatd keras dataset with different network structures
 
-python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20
-python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25
-python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    #val_acc: 0.8553
-python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25  #val_acc: 0.5397
+python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20 .  <br />
+python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25  <br />
+python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    #val_acc: 0.8553  <br />
+python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25  #val_acc: 0.5397  <br />
 
 
 The Repo already include these dataset
