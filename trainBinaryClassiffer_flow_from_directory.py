@@ -2,6 +2,7 @@
 
 
 #usage python trainBinaryClassiffer_flow_from_directory.py
+#The final layer will have only 1 neuron
 
 import os
 from imutils import paths
@@ -20,20 +21,27 @@ if __name__ == '__main__':
 
     NNTitle="HoursedVsHumanModel"
     NNTitle="CatsvsDogsModel"
+    numOfOutputs=1
 
     BS = 20
-    numberOfEpochs=100
+    numberOfEpochs=2
     #numberOfEpochs=2
-
-
 
     root_dir="datasets"
 
-    if(NNTitle=="CatsvsDogsModel"):
-      datasetDir='cats_and_dogs'
-      labels=["cats","dogs"]
-      input_shape=150,150    #width,height
-      testDir="test_images_cats_and_dogs"
+    NNTitle="net2"
+    datasetDir='cats_and_dogs'
+    input_shape=150,150    #width,height
+    width,height=input_shape
+    testDir="test_images_cats_and_dogs"
+    labels=["cats","dogs"]
+
+
+
+
+      
+ 
+
 
 
     if(NNTitle=="HoursedVsHumanModel"):
@@ -69,8 +77,8 @@ if __name__ == '__main__':
     train_label1_fnames = os.listdir( train_label1_dir )
     train_label2_fnames = os.listdir( train_label2_dir )
 
-    print(train_label1_fnames[:10])
-    print(train_label2_fnames[:10])
+    #print(train_label1_fnames[:10])
+    #print(train_label2_fnames[:10])
 
     """Let's find out the total number of cat and dog images in the `train` and `validation` directories:"""
     totalImages = len(os.listdir(train_label1_dir ) )+ len(os.listdir(train_label2_dir ) )+len(os.listdir( validation_label1_dir ) )+len(os.listdir( validation_label2_dir ) )
@@ -98,7 +106,7 @@ if __name__ == '__main__':
 
 
 
-    model=modelsFactory.ModelCreator(NNTitle).model
+    model=modelsFactory.ModelCreator(numOfOutputs,width,height,NNTitle=NNTitle).model
 
     model.summary()
 
@@ -139,12 +147,13 @@ if __name__ == '__main__':
 
 
 
-    #Write   labels encoding to pickle file,thwy are sorted by defaukt alphabetically
+    #Write   labels encoding to pickle file,thwy are sorted by default alphabetically
     labeles_dictionary = train_generator.class_indices
-    print("[INFO]  Class labels encoded  as follows {}".format(labeles_dictionary))  
+    print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
     f_pickle=os.path.join("Results","labels.pkl")
     pickle.dump(labeles_dictionary, open(f_pickle, 'wb'))
     print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
+    input("Press any key to continue")
 
 
 

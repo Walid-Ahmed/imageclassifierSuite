@@ -23,9 +23,9 @@ class  ModelCreator:
 			self.model=self.defineNet1()
 			print("[INFO]  HoursedVsHuman Model created")
 
-		elif (NNTitle)=="CatsvsDogsModel":
-			self.imgWidth=150
-			self.imgHeight=150
+		elif (NNTitle)=="net2":
+			self.imgWidth=width
+			self.imgHeight=height
 			self.model=self.defineNet2()
 			print("[INFO]  Net2 Model created")
 
