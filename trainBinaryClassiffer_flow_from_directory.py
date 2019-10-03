@@ -1,7 +1,9 @@
 
 
+#python trainBinaryClassiffer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 100  --width  150 --height  150 --testDir test_images_cats_and_dogs
 
-#usage python trainBinaryClassiffer_flow_from_directory.py
+#python trainBinaryClassiffer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
+
 #The final layer will have only 1 neuron
 
 import os
@@ -14,27 +16,45 @@ from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
 from  util import  plotUtil
 import pickle
+import argparse
+from util import paths
 
 
 
 if __name__ == '__main__':
 
-    NNTitle="HoursedVsHumanModel"
-    NNTitle="CatsvsDogsModel"
+
     numOfOutputs=1
 
     BS = 20
-    numberOfEpochs=2
     #numberOfEpochs=2
 
     root_dir="datasets"
 
-    NNTitle="net2"
-    datasetDir='cats_and_dogs'
-    input_shape=150,150    #width,height
-    width,height=input_shape
-    testDir="test_images_cats_and_dogs"
-    labels=["cats","dogs"]
+
+
+
+
+
+      # construct the argument parse and parse the arguments
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--datasetDir", required=True, help="datasetDir")
+    ap.add_argument("--testDir", required=True, help="testDir")
+    ap.add_argument("--networkID", required=True, help="I.D. of the network")
+    ap.add_argument("--EPOCHS", required=True, help="name of the network")
+    ap.add_argument("--width", required=True, help="width of image")
+    ap.add_argument("--height", required=True, help="height of image")
+
+
+    args = vars(ap.parse_args())
+    datasetDir=args["datasetDir"]
+    networkID=args["networkID"]
+    EPOCHS=int(args["EPOCHS"])
+    width=int(args["width"])
+    height=int(args["height"])
+    testDir=args["testDir"]
+    input_shape=width,height
+
 
 
 
@@ -44,11 +64,7 @@ if __name__ == '__main__':
 
 
 
-    if(NNTitle=="HoursedVsHumanModel"):
-      datasetDir="horse-or-human"
-      labels=["horses","humans"]  #todo read them from directory names
-      input_shape=300,300    #width,height
-      testDir="test_horses_or_Human"
+    
 
 
 
@@ -56,7 +72,6 @@ if __name__ == '__main__':
 
 
     base_dir = os.path.join(root_dir,datasetDir)
-    labels.sort()
 
 
        
@@ -64,38 +79,18 @@ if __name__ == '__main__':
     train_dir = os.path.join(base_dir, 'train')
     validation_dir = os.path.join(base_dir, 'validation')
 
-    # Directory with our training cat/dog pictures
+    labels=paths.get_immediate_subdirectories(train_dir)
+    labels.sort()
+
+    # Directory with our training cpictures
+
+
+
+    NUM_TRAIN_IMAGES,NUM_TEST_IMAGES=paths.getTrainStatistics(datasetDir,train_dir,validation_dir)
+
+
     train_label1_dir = os.path.join(train_dir, labels[0])
     train_label2_dir = os.path.join(train_dir, labels[1])
-
-    # Directory with our validation cat/dog pictures
-    validation_label1_dir = os.path.join(validation_dir, labels[0])
-    validation_label2_dir = os.path.join(validation_dir, labels[1])
-
-    """Now, let's see what the filenames look like in the `cats` and `dogs` `train` directories (file naming conventions are the same in the `validation` directory):"""
-
-    train_label1_fnames = os.listdir( train_label1_dir )
-    train_label2_fnames = os.listdir( train_label2_dir )
-
-    #print(train_label1_fnames[:10])
-    #print(train_label2_fnames[:10])
-
-    """Let's find out the total number of cat and dog images in the `train` and `validation` directories:"""
-    totalImages = len(os.listdir(train_label1_dir ) )+ len(os.listdir(train_label2_dir ) )+len(os.listdir( validation_label1_dir ) )+len(os.listdir( validation_label2_dir ) )
-    print('[INFO] Total images in dataset '+datasetDir+ 'images :', totalImages)
-
-    print('[INFO] Total training '+labels[0]+ ' images :', len(os.listdir(train_label1_dir ) ))
-    print('[INFO] Total training ' + labels[1]+ ' images :', len(os.listdir(train_label2_dir ) ))
-    NUM_TRAIN_IMAGES= len(os.listdir(train_label1_dir ))+len(os.listdir(train_label2_dir ) )
-
-    print('[INFO] Total validation '+labels[0]+ ' images :', len(os.listdir( validation_label1_dir ) ))
-    print('[INFO] Total validation '+ labels[1]+ ' images :', len(os.listdir( validation_label2_dir ) ))
-    NUM_TEST_IMAGES=len(os.listdir( validation_label1_dir ) )+len(os.listdir( validation_label2_dir ) )
-
-    print('[INFO] Total  training images in dataset: {} '.format(NUM_TRAIN_IMAGES))
-    print('[INFO] Total validation images in dataset  {}'.format( NUM_TEST_IMAGES))
-
-
 
     plotUtil.drarwGridOfImages(train_label1_dir,train_label2_dir)
 
@@ -106,7 +101,7 @@ if __name__ == '__main__':
 
 
 
-    model=modelsFactory.ModelCreator(numOfOutputs,width,height,NNTitle=NNTitle).model
+    model=modelsFactory.ModelCreator(numOfOutputs,width,height,NNTitle=networkID).model
 
     model.summary()
 
@@ -146,14 +141,18 @@ if __name__ == '__main__':
 
 
 
+    print("*************************************************************************************************************")      
 
-    #Write   labels encoding to pickle file,thwy are sorted by default alphabetically
+    #Write   labels encoding to pickle file,they are sorted by default alphabetically
     labeles_dictionary = train_generator.class_indices
     print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
+
     f_pickle=os.path.join("Results","labels.pkl")
     pickle.dump(labeles_dictionary, open(f_pickle, 'wb'))
     print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
-    input("Press any key to continue")
+    print("*************************************************************************************************************")      
+
+    input("Press any key to start Training ")
 
 
 
@@ -173,7 +172,7 @@ if __name__ == '__main__':
     history = model.fit_generator(train_generator,
                                   validation_data=validation_generator,
                                   steps_per_epoch=NUM_TRAIN_IMAGES // BS,   ## 2000 images = batch_size * steps-----steps=images/batch_size
-                                  epochs=numberOfEpochs,
+                                  epochs=EPOCHS,
                                   validation_steps=NUM_TEST_IMAGES // BS,
                                   verbose=2)
 
@@ -196,8 +195,12 @@ if __name__ == '__main__':
 
 
 
-    plotUtil.plotAccuracyAndLossesonSameCurve(history)
-    plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
+    info1=plotUtil.plotAccuracyAndLossesonSameCurve(history)
+    info2=plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
+    print("*************************************************************************************************************")      
+    print(info1)
+    print(info2)
+    print("*************************************************************************************************************")      
 
 
     modelFile=fileNameToSaveModel

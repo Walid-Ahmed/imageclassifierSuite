@@ -54,7 +54,7 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
   plt.xlabel("Epoch #")
   plt.ylabel("Loss")
   fileToSaveLossCurve=os.path.join("Results",title+"plot_loss.png")
-  info=info+"[INFO] Loss curve saved to {}\n".format(fileToSaveLossCurve)
+  info=info+"[INFO] Loss curve saved to {}".format(fileToSaveLossCurve)
   plt.savefig(os.path.join("Results","plot_loss.png"))
   plt.legend(loc="upper left")
 
@@ -85,7 +85,7 @@ def plotAccuracyAndLossesonSameCurve(history,title=""):
   plt.ylabel("Loss/Accuracy")
   plt.legend(loc="lower left")
   fileToSaveLossAccCurve=os.path.join("Results",title+"plot_loss_accu.png")
-  info=info+"[INFO] Loss curve saved to {}\n".format(fileToSaveLossAccCurve)
+  info=info+"[INFO] Loss curve saved to {}".format(fileToSaveLossAccCurve)
   plt.savefig(fileToSaveLossAccCurve)
   plt.show()
   return info
@@ -98,8 +98,8 @@ def drarwGridOfImages(train_label1_dir,train_label2_dir):
   train_label1_fnames = os.listdir( train_label1_dir )
   train_label2_fnames = os.listdir( train_label2_dir )
 
-  print(train_label1_fnames[:10])
-  print(train_label2_fnames[:10])
+  #print(train_label1_fnames[:10])
+  #print(train_label2_fnames[:10])
 
 
   # Parameters for our graph; we'll output images in a 4x4 configuration

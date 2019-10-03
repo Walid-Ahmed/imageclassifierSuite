@@ -19,9 +19,9 @@ class  ModelCreator:
 			self.finalActivation='sigmoid'
 
 
-		if (NNTitle)=="HoursedVsHumanModel":
+		if (NNTitle)=="net1":
 			self.model=self.defineNet1()
-			print("[INFO]  HoursedVsHuman Model created")
+			print("[INFO]  Net1 Model created")
 
 		elif (NNTitle)=="net2":
 			self.imgWidth=width
