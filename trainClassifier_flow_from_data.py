@@ -1,7 +1,11 @@
-#Baseline for code from https://www.pyimagesearch.com/2017/12/11/image-classification-with-keras-and-deep-learning/
+#Baseline for code from https://www.pyimagesearch.com/2017/12/11/image-classification-with-keras-and-deep-learning/. 
+
+
 
 # USAGE
-# python train_network.py 
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --datasetDir Santa
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --datasetDir SportsClassification
+
 
 
 
@@ -37,10 +41,31 @@ datasetDir='SportsClassification'
 imgWidth=224
 imgHeight=224
 
-datasetDir='Santa'
-imgWidth=28
-imgHeight=28
-EPOCHS = 25
+
+
+
+# construct the argument parse and parse the arguments
+ap = argparse.ArgumentParser()
+
+ap.add_argument("--width",  required=True,
+	help="path to label list as pickle file")
+ap.add_argument("--height",  required=True,
+	help="path to label list as pickle file")
+ap.add_argument("--EPOCHS",  required=True,
+	help="path to label list as pickle file")
+ap.add_argument("--datasetDir",  required=True,
+	help="path to label list as pickle file")
+
+args = vars(ap.parse_args())
+
+width=int(args["width"])
+height=int(args["height"])
+EPOCHS =int(args["EPOCHS"])
+datasetDir=args["datasetDir"]
+
+
+
+
 
 
 base_dir = os.path.join(root_dir,datasetDir)
@@ -93,7 +118,7 @@ for imagePath in imagePaths:
 	# load the image, pre-process it, and store it in the data list
 	print("[INFO] Reading image from path: {}".format(imagePath))
 	image = cv2.imread(imagePath)
-	image = cv2.resize(image, (imgWidth,imgHeight))
+	image = cv2.resize(image, (width,height))
 	image = img_to_array(image)	
 	labels.append(label)
 	data.append(image)

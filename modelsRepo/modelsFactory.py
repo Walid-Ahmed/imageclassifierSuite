@@ -81,7 +81,7 @@ class  ModelCreator:
 		# sigmoid classifier
 		model.add(tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation))
 
-
+        input("press")
 
 		# return the constructed network architecture
 		return model

@@ -1,8 +1,8 @@
 
-#usage python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20
-#usage python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    #val_acc: 0.8553
-#usage python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25  #val_acc: 0.5397
+#usage python trainStandardDatasetMulticlass.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20
+#usage python trainStandardDatasetMulticlass.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25
+#usage python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    
+#usage python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25  
 
 
 from sklearn.model_selection import train_test_split
@@ -190,7 +190,7 @@ if __name__ == '__main__':
 	
 	montage = build_montages(images, (128, 128), (3, 3))
 	cv2.imshow("Sample images from {} training dataset".format(dataset), montage[0])
-	cv2.waitKey(1000)
+	cv2.waitKey(0)
 
 	trainX = trainX.astype("float32") / 255.0
 	testX = testX.astype("float32") / 255.0

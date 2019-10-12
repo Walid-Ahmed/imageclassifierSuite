@@ -1,5 +1,5 @@
 # USAGE
-# python test_network_binary.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
+# python test_network_binary.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl --width  28 --height 28
 # python test_network_binary.py  --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/night_sky.png --labelPKL Results/Santa_labels.pkl
 #python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat.964.jpg
 
@@ -15,7 +15,6 @@ import tensorflow as tf
 import pickle
 
 
-width,height=28,28
 
 
 
@@ -29,6 +28,9 @@ ap.add_argument("-i", "--image", required=True,
 ap.add_argument("-lbpkl", "--labelPKL", required=True,
 	help="path to label list as picklw file")
 args = vars(ap.parse_args())
+
+width=args["width"]
+height=args["height"]
 
 
 labels = pickle.loads(open(args["labelPKL"], "rb").read())
@@ -63,8 +65,7 @@ label = "{}: {:.2f}%".format(label, proba * 100)
 
 # draw the label on the image
 output = imutils.resize(orig, width=400)
-cv2.putText(output, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,
-	0.7, (0, 255, 0), 2)
+cv2.putText(output, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,0.7, (0, 255, 0), 2)
 
 # show the output image
 cv2.imshow("Output", output)
