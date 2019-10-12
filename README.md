@@ -8,17 +8,18 @@ The repo comes loaded with following datasets (all in folder datasets):
 2-Dogs/Cats
 3-Human/Horses
 
-A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. This newworks include 
+A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. This networks include 
 
  - Resnet50   
  - Lenet
  - VGG16  
  - miniVGG as defined  in this [link](https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning)
-
-**I-Train a binary image classiffier using flow from directory **
+Besides these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
+More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
+# I-Train a binary image classiffier using flow from directory
 
 The 
-trainBinaryClassifer_flow_from_directory builds a neural network with final layer of one neuron
+trainBinaryClassifer_flow_from_directory builds a neural network with final layer of one neuron that is suitable for binary classification.
 
 To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
 
@@ -28,10 +29,17 @@ To start  training  using this file on "cats and dogs" dataset you can run the f
 
 python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
 
-When the training starts it will show sample of images and print some statistics about the dataser. after finishing, loss and accuracy curves  together with the model are saved in the results folder 
+When the training starts it will show sample of images and print some statistics about the dataset. after finishing, the following files are automatically saved to the "Results" folder
 
-**II-Train a binary image classiffier using flow from directory **
+ 1. Loss curve
+ 2. Accuracy curve
+ 3. Loss and accuracy curves
+ 4. The model as a .keras2 file
+ 5. The labels in dictionary stored as a pickle file
 
+
+
+# II-Train a binary image classiffier using satandad dataset
 
 python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20 .  <br />
 python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25  <br />
