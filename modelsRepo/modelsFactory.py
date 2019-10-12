@@ -5,7 +5,7 @@ from tensorflow.keras.applications.vgg16 import VGG16
 class  ModelCreator:
 
 
-	def __init__(self, numOfOutputs,width,height,channels=3,NNTitle="default"):
+	def __init__(self, numOfOutputs,width,height,channels=3,networkID="default"):
 
 		#self.imgWidth,self.imgHeight=imgSize
 		self.numOfOutputs=numOfOutputs
@@ -19,47 +19,47 @@ class  ModelCreator:
 			self.finalActivation='sigmoid'
 
 
-		if (NNTitle)=="net1":
+		if (networkID)=="net1":
 			self.model=self.defineNet1()
 			print("[INFO]  Net1 Model created")
 
-		elif (NNTitle)=="net2":
+		elif (networkID)=="net2":
 			self.imgWidth=width
 			self.imgHeight=height
 			self.model=self.defineNet2()
 			print("[INFO]  Net2 Model created")
 
-		elif NNTitle=="LenetModel":
+		elif networkID=="LenetModel":
 			self.imgWidth=width
 			self.imgHeight=height
 			self.model=self.defineLenetModel()
 			print("[INFO]  Lenet created")
 
 
-		elif NNTitle=="Resnet50":
+		elif networkID=="Resnet50":
 			self.imgWidth=width
 			self.imgHeight=height
 			self.model=self.defineResnet50()
 			print("[INFO]  Resnet50 created")	
 
-		elif NNTitle=="net3":
+		elif networkID=="net3":
 			self.model=self.defineNet3()
 			print("[INFO]  Net3 created")		
 
 
-		elif NNTitle=="MiniVGG":
+		elif networkID=="MiniVGG":
 			self.model=self.defineMiniVGG()
 			print("[INFO]  MiniVGG Model created")
 
-		elif NNTitle=="net4":
+		elif networkID=="net4":
 			self.model=self.defineNet4()
 			print("[INFO]  Net4 created")	
 
-		elif NNTitle=="net5":
+		elif networkID=="net5":
 			self.model=self.defineNet5()
 			print("[INFO]  Net5 created")	
 
-		elif NNTitle=="VGG16":
+		elif networkID=="VGG16":
 			self.model=self.defineVGG16()
 			print("[INFO]  VGG16 created")	
 

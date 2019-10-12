@@ -18,6 +18,10 @@ from sklearn.metrics import f1_score
 import pickle
 
 
+#modelEvaluator.evaluate1()  #using sklearn & testGenerator
+#modelEvaluator.evaluate2()  #without using sklearn & testGenerator
+#modelEvaluator.evaluate3()  #using sklearn
+
 BS=32
 
 class   ModelEvaluator:
@@ -64,7 +68,7 @@ class   ModelEvaluator:
 		  if (".DS_Store") in imgPath:
 		    continue
 		  #print(imgPath)
-		  folderName=(imgPath).split("/")[-2:-1][0]
+		  folderName=(imgPath).split(os.sep)[-2:-1][0]
 		  if(self.labels[0] in folderName  ):
 		    y_true.append(0)
 		  elif (self.labels[1] in folderName ):  
@@ -167,15 +171,14 @@ class   ModelEvaluator:
 		    continue
 		  #print(imgPath)
 		  folderName=(imgPath).split("/")[-2:-1][0]
-		  if(self.labels[0] in folderName  ):
+		  if(self.labels[0] in folderName  ):   #The folder name is the label
 		    y_true.append(0)
-		  elif (self.labels[1] in folderName ):  
+		  elif (self.labels[1] in folderName ):  #The folder name is the label
 		    y_true.append(1)
 
 
 
 		  img=keras.preprocessing.image.load_img(imgPath, target_size=self.input_shape)
-		  
 		  x=keras.preprocessing.image.img_to_array(img)
 		  x=x/255   #rescale image
 		  x=np.expand_dims(x, axis=0)
