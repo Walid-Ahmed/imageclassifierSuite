@@ -48,7 +48,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 
 
-![Sample curve outpyt from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
 
 
 # II-Train a multiclass image classiffier using satandard dataset
@@ -71,12 +71,18 @@ python trainStandardDatasetMulticlass.py  --dataset fashion_mnist --networkID Mi
 python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    
 python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
 
+when training starts, it will show a thumbnail image  for sample images from training dataset like the following ones:
+
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_MNIST.png)
 
 
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_fashion_mnist.png)
 
+Each training will save the follwoing files in the "Results" folder
 
-
-
+ 1. a thumbnail image including sample images from the training dtataset
+ 2. the trained mode as a .keras2 file
+ 3. 
 
 # III-Train a multiclass image classiffier using flow_from_data
 
