@@ -69,7 +69,7 @@ python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --
 python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
 
 
-![Sample curve outpyt from training cats vs dogs dataset](https://drive.google.com/open?id=1z395EnHB7wSTfFEjs-2tnCe7rnv3eAdd)
+![Sample curve outpyt from training cats vs dogs dataset](sampleimages/plot_loss_accu.png)
 
 
 
