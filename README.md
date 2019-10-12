@@ -46,7 +46,7 @@ Your folder of images  should have two sub folders "train" and "eval".In each of
  
 A probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
-# II-Train a binary image classiffier using satandad dataset
+# II-Train a multiclass image classiffier using satandard dataset
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are builtin in Keras.
@@ -70,11 +70,11 @@ python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG
 
 
 
-
+# III-Train a multiclass image classiffier using flow_from_data
 
 
 python train_BinaryClassiffer_flow_from_data.py
 python trainBinaryClassiffer_flow_from_directory.py.   
 
-
+# III-Test Model
 python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
