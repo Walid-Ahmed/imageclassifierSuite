@@ -99,6 +99,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,dataset,
     print("[INFO] Confusion matrix   saved to {}".format(fileNameToSaveLabels))
 
     plt.show()
+    plt.savefig('books_read.png')
 
 
     return ax
@@ -190,6 +191,12 @@ if __name__ == '__main__':
 	
 	montage = build_montages(images, (128, 128), (3, 3))
 	cv2.imshow("Sample images from {} training dataset".format(dataset), montage[0])
+	sampleImage=montage[0]
+	fileToSaveSampleImage=os.path.join("Results","sample_"+dataset+".png")
+	cv2.imwrite(fileToSaveSampleImage,sampleImage)
+	print("[INFO] Sample  image of standard dataset:{} is saved at {}".format(dataset,fileToSaveSampleImage))
+	print("[INFO] Press anykey to start training")
+
 	cv2.waitKey(0)
 
 	trainX = trainX.astype("float32") / 255.0
@@ -201,8 +208,7 @@ if __name__ == '__main__':
 	# where the index of the label is set to `1` and all other entries
 	# to `0`; in the case of MNIST, there are 10 class labels
 	
-	#trainY = np_utils.to_categorical(trainLabels, 10)
-	#testY = np_utils.to_categorical(testLabels, 10)
+
 
 	trainLabels=trainLabels.astype(str)
 	testLabels=testLabels.astype(str)
