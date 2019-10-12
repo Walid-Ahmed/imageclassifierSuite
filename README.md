@@ -47,6 +47,8 @@ Your folder of images  should have two sub folders "train" and "eval".In each of
 A probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
 
+![Sample curve outpyt from training cats vs dogs dataset](https://drive.google.com/open?id=1z395EnHB7wSTfFEjs-2tnCe7rnv3eAdd)
+
 
 # II-Train a multiclass image classiffier using satandard dataset
 
@@ -69,7 +71,7 @@ python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --
 python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
 
 
-![Sample curve outpyt from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
+
 
 
 
