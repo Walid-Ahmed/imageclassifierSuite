@@ -3,7 +3,7 @@
 
 This Repo can be used to train standard keras dataset  or used defined dataser with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
-The repo comes loaded with following datasets (all in folder datasets):
+The repo comes loaded with following datasets (all in folder "datasets"):
 1-Santa/NoSanta     (initially collected  by  Adrian Rosebrock) 
 2-Dogs/Cats
 3-Human/Horses
@@ -38,16 +38,18 @@ When the training starts it will show sample of images and print some statistics
  5. The labels in dictionary stored as a pickle file
 
 
+To train your dataset, it is is super easy just add the folder of your images to the folder "datasets".
+Your folder of images  should have two sub folders "train" and "eval".In each of the "train" and "eval" folder, you should have 2 subfolders, each labeled with the name of the class. 
+ 
 
 # II-Train a binary image classiffier using satandad dataset
 
-python trainStandardDatasetLeNet.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20 .  <br />
-python trainStandardDatasetLeNet.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25  <br />
-python trainStandardDatasetLeNet.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    #val_acc: 0.8553  <br />
-python trainStandardDatasetLeNet.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25  #val_acc: 0.5397  <br />
+python trainStandardDatasetMulticlass.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20 .  
+python trainStandardDatasetMulticlass.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25  
+python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    #val_acc: 0.8553  
+python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25  #val_acc: 0.5397  <br />
 
 
-The Repo already include these dataset
 
 
 
