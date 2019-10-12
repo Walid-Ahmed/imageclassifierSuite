@@ -48,7 +48,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 
 
-![Sample curve outpyt from training cats vs dogs dataset(https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
+![Sample curve outpyt from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
 
 
 # II-Train a multiclass image classiffier using satandard dataset
