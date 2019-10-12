@@ -16,10 +16,13 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
  - miniVGG as defined  in this [link](https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning)
 Besides these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
+
+
+
 # I-Train a binary image classiffier using flow from directory
 
 The 
-trainBinaryClassifer_flow_from_directory builds a neural network with final layer of one neuron that is suitable for binary classification.
+trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
 
 To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
 
@@ -38,23 +41,36 @@ When the training starts it will show sample of images and print some statistics
  5. The labels in dictionary stored as a pickle file
 
 
-To train your dataset, it is is super easy just add the folder of your images to the folder "datasets".
+To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
 Your folder of images  should have two sub folders "train" and "eval".In each of the "train" and "eval" folder, you should have 2 subfolders, each labeled with the name of the class. 
  
+A probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
 # II-Train a binary image classiffier using satandad dataset
 
+
+The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are builtin in Keras.
+
+Some of these standard dataset are:
+ 1. MNIST
+ 2. Fashion_mnist
+ 3. CIFAR10
+ 4. CIFAR100
+
+All what you have to do is to pass the i.d. of the dataset, together with the i.d. of the neural network you want to use in training. The network is build to have the last layer with the correct number of neurons to fit  the dataset.
+
+Some of the sample commands you can run are:
+
 python trainStandardDatasetMulticlass.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20 .  
 python trainStandardDatasetMulticlass.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25  
-python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    #val_acc: 0.8553  
-python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25  #val_acc: 0.5397  <br />
+python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    
+python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
 
 
 
 
 
 
-The prediction model have only one neuron at last layer. A probabilty more than 0.5 means that the output is the first class(Santa/Dogs/Human) otherwise it is the second class (No Santa/Cats/Horse)
 
 
 python train_BinaryClassiffer_flow_from_data.py
