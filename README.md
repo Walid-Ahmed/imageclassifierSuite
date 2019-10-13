@@ -7,19 +7,28 @@ The repo comes loaded with following datasets (all in folder "datasets"):
 1-Santa/NoSanta     (initially collected  by  Adrian Rosebrock) 
 2-Dogs/Cats
 3-Human/Horses
+4-SportsClassification (originally from this [link])(https://github.com/anubhavmaity/Sports-Type-Classifier)
 
-A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. This networks include 
+The following tree structure represents the current datasets structure in repo 
+
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
+
+A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. These  networks include 
 
  - Resnet50   
  - Lenet
  - VGG16  
  - miniVGG as defined  in this [link](https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning)
+ 
 Besides these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
+# I-Train a CIFAR10
 
+you can start by testing your environment by running python trainCIFAR10.py. This code will download the CIFAR10 dataset and start training using a deep convloution neural network. when it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb"
+ 
 
-# I-Train a binary image classiffier using flow from directory
+# II-Train a binary image classiffier using flow from directory
 
 The 
 trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
@@ -51,7 +60,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
 
 
-# II-Train a multiclass image classiffier using satandard dataset
+# III-Train a multiclass image classiffier using satandard dataset
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are builtin in Keras.
@@ -82,15 +91,17 @@ when training starts, it will show a thumbnail image  for sample images from tra
 
 Each training will save the follwoing files in the "Results" folder
 
- 1. a thumbnail image including sample images from the training dtataset
- 2. the trained mode as a .keras2 file
- 3. 
+ 1. Thumbnail image including sample images from the training dtataset
+ 2. The trained mode as a .keras2 file
+ 
 
 # III-Train a multiclass image classiffier using flow_from_data
 
 
-python train_BinaryClassiffer_flow_from_data.py
-python trainBinaryClassiffer_flow_from_directory.py.   
+...TODO documentaiom 
 
 # III-Test Model
 python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
+
+...TODO documentaiom 
+
