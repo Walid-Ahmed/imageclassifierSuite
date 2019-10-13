@@ -4,10 +4,10 @@
 This Repo can be used to train standard keras dataset  or used defined dataser with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
 The repo comes loaded with following datasets (all in folder "datasets"):
-1-Santa/NoSanta     (initially collected  by  Adrian Rosebrock) 
-2-Dogs/Cats
-3-Human/Horses
-4-SportsClassification (originally from this [link])(https://github.com/anubhavmaity/Sports-Type-Classifier)
+ 1. Santa/NoSanta     (initially collected  by  Adrian Rosebrock) 
+ 2. Dogs/Cats
+ 3. Human/Horses
+ 4. SportsClassification (originally from this [link])(https://github.com/anubhavmaity/Sports-Type-Classifier)
 
 The following tree structure represents the current datasets structure in repo 
 
