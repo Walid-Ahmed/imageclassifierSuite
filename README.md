@@ -1,7 +1,7 @@
 ﻿# image classifier Suite
 
 
-This Repo can be used to train standard keras dataset  or used defined dataser with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
+This Repo can be used to train standard keras dataset  or used defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
 The repo comes loaded with following datasets (all in folder "datasets"):
  1. Santa/NoSanta     (initially collected  by  Adrian Rosebrock) 
