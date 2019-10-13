@@ -8,9 +8,7 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 import tensorflow as tf
 import matplotlib.pyplot as plt
-#from keras.utils import np_utils
 from keras.preprocessing.image import ImageDataGenerator
-#from keras.preprocessing.image import img_to_array
 from tensorflow.keras.datasets import cifar10
 import numpy as np
 
@@ -24,11 +22,9 @@ import numpy as np
 
 if __name__ == '__main__':
 
-	INIT_LR = 1e-3
-	EPOCHS=2
-	BS=32
 
 
+    #load cifar10 dataset
 	(trainData, trainLabels), (testData, testLabels) = cifar10.load_data()
 	labels =  ['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck']
 	numPfSamples,imgWidth,imgHeight,numOfchannels=trainData.shape
@@ -38,6 +34,7 @@ if __name__ == '__main__':
 	print("[INFO] Original cifar10 dataset of testLabels shape {}".format(testLabels.shape))
 
 
+    #get data ready for training
 	trainX = trainData.reshape((trainData.shape[0], imgWidth,imgHeight,  numOfchannels))
 	testX = testData.reshape((testData.shape[0], imgWidth,imgHeight, numOfchannels))
 	trainX = trainX.astype("float32") / 255.0
@@ -47,12 +44,19 @@ if __name__ == '__main__':
 	lb = LabelBinarizer()
 	trainY = lb.fit_transform(trainLabels)
 	testY = lb.fit_transform(testLabels)
+	print("[INFO] Data ready for training")
 
 
 
 
+	#tuning parameters
 	weight_decay = 1e-4
+	INIT_LR = 1e-3
+	EPOCHS=2
+	BS=32
 
+
+	#define model
 	model = tf.keras.models.Sequential()
 	model.add(tf.keras.layers.Conv2D(32, (3,3), padding='same', kernel_regularizer=tf.keras.regularizers.l2(weight_decay), input_shape=(32,32,3)))
 	model.add(tf.keras.layers.Activation('elu'))
@@ -82,18 +86,20 @@ if __name__ == '__main__':
 	model.add(tf.keras.layers.Dense(10, activation="softmax"))
 	model.summary()
 
+
+    #compile model
 	opt = tf.keras.optimizers.Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 	model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 
 	# train the network
-	input("[INFO] Press any key to start training")
 	print("[INFO] training network...")
 	aug = ImageDataGenerator()
 	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
-
-
-	
+	model.save("cifar10model.keras2")
+	print("[INFO] Model saved to {}".format("cifar10model.keras2"))
+  
+	#draw training curves	
 	acc      = history.history[     'acc' ]
 	val_acc  = history.history[ 'val_acc' ]
 	loss     = history.history[    'loss' ]
@@ -113,20 +119,12 @@ if __name__ == '__main__':
 
 
 
-	model.save("cifar10model.keras2")
-	print("[INFO] Model saved to {}".format("cifar10model.keras2"))
-
-
-
-
 
 	# evaluate the network
 	print("[INFO] evaluating network...")
 	predictions = model.predict(testX, batch_size=32)
 	y_true=testY.argmax(axis=1)
 	y_pred=predictions.argmax(axis=1)
-
-
 	print(classification_report(y_true,y_pred, target_names=labels))
 	print(confusion_matrix(y_true, y_pred))
 	print(labels)
