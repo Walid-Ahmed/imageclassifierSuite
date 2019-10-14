@@ -121,12 +121,9 @@ Each training will save the follwoing files in the "Results" folder
  2. The trained mode as a .keras2 file
  
 
-# V-Train a multiclass image classiffier using flow_from_data
 
 
-...TODO documentaiom 
-
-# VI-Test Model
+# V-Test Models
 python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
 
 ...TODO documentaiom 
