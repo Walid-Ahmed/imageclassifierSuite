@@ -1,7 +1,7 @@
 ﻿# image classifier Suite
 
 
-This Repo can be used to train standard keras dataset  or used defined dataser with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
+This Repo can be used to train standard keras dataset  or used defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
 The repo comes loaded with following datasets (all in folder "datasets"):
  1. Santa/NoSanta     (initially collected  by  Adrian Rosebrock) 
@@ -20,7 +20,7 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
  - VGG16  
  - miniVGG as defined  in this [link](https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning)
  
-Besides these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
+Beside these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
 # I-Train a CIFAR10
