@@ -101,6 +101,7 @@ folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 
 
 
+
 LABELS = set(["weight_lifting", "tennis", "football"])
 
 
@@ -124,12 +125,14 @@ for imagePath in imagePaths:
 		#continue
 
 
+
 	# load the image, pre-process it, and store it in the data list
 	print("[INFO] Reading image from path: {}".format(imagePath))
 	image = cv2.imread(imagePath)
 	image = cv2.resize(image, (width,height))
 	image = img_to_array(image)	
 	labels.append(label)
+	#print(labels)
 	data.append(image)
 
 
@@ -143,6 +146,7 @@ labels = np.array(labels)
 lb = LabelBinarizer() 
 labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector
 numOfOutputs=len(lb.classes_)
+print(lb.classes_)
 
 
 
@@ -255,5 +259,5 @@ plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
 
 
 # Plot non-normalized confusion matrix
-helper.plot_print_confusion_matrix(y_true, y_pred, classes=labels,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
+helper.plot_print_confusion_matrix(y_true, y_pred, classes=lb.classes_,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
 
