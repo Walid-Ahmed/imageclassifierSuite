@@ -273,7 +273,7 @@ if __name__ == '__main__':
 
 
 	# Plot non-normalized confusion matrix
-	helper.plot_confusion_matrix(y_true, y_pred, classes=labels,dataset=dataset,title=dataset+ '_Confusion matrix, without normalization') 
+	helper.plot_print_confusion_matrix(y_true, y_pred, classes=labels,dataset=dataset,title=dataset+ '_Confusion matrix, without normalization') 
 
 	# Plot normalized confusion matrix
 	#plot_confusion_matrix(y_true, y_pred, classes=labels, dataset=dataset,normalize=True, title=dataset+'_Normalized confusion matrix')

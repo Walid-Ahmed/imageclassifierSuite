@@ -39,7 +39,7 @@ def print_cm(cm, labels, hide_zeroes=False, hide_diagonal=False, hide_threshold=
         print()
 
 
-def plot_confusion_matrix(y_true, y_pred, classes,dataset,
+def plot_print_confusion_matrix(y_true, y_pred, classes,dataset,
                           normalize=False,
                           title=None,
                           cmap=plt.cm.Blues):
@@ -62,7 +62,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,dataset,
     else:
         print('Confusion matrix, without normalization')
 
-    print(cm)
+        print_cm(cm,classes)
 
     fig, ax = plt.subplots()
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
