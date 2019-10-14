@@ -84,7 +84,7 @@ the following files are automatically saved to the "Results" folder
  5. The labels in dictionary stored as a pickle file
  6. Confusion matrix as an image
  
- A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_Confusion Matrix.png)
+ A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
 # IV-Train a multiclass image classiffier using satandard dataset
 
