@@ -140,8 +140,8 @@ labels = np.array(labels)
 
 
 #lb.classes_  will be  the labels with the same order in one hot vector--->. label = lb.classes_[i]
-lb = LabelBinarizer()
-labels = lb.fit_transform(labels)
+lb = LabelBinarizer() 
+labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector
 numOfOutputs=len(lb.classes_)
 
 
@@ -219,6 +219,12 @@ f.close()
 print("[INFO] Labels saved  to file {}".format(fileNameToSaveLabels))
 
 
+if(numOfOutputs==1):
+	labelsDict-dict()
+	labelsDict[lb.classes_[0]]=0
+	labelsDict[lb.classes_[0]]=1
+	print(labelsDict)
+
 
 #sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False)
 # evaluate the network
@@ -231,13 +237,14 @@ if (numOfOutputs==1):
 	y_true=testY
 	y_pred=predictBinaryValue(predictions)
 
+
 else:	
 	y_true=testY.argmax(axis=1)
 	y_pred=predictions.argmax(axis=1)
 
 
 print(classification_report(y_true,y_pred, target_names=lb.classes_))
-print(confusion_matrix(y_true, y_pred))
+cm=confusion_matrix(y_true, y_pred)
 helper.print_cm(cm,lb.classes_)
 
 

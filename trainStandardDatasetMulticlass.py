@@ -217,8 +217,10 @@ if __name__ == '__main__':
 
 	#lb.classes_  will be  the labels with the same order in one hot vector--->. label = lb.classes_[i]
 	lb = LabelBinarizer()
-	trainY = lb.fit_transform(trainLabels)
-	testY = lb.fit_transform(testLabels)
+	trainY = lb.fit_transform(trainLabels) #Binary targets transform to a column vector. otherwise one hot vector
+	testY = lb.fit_transform(testLabels)  #Binary targets transform to a column vector. otherwise one hot vector
+
+
 	numOfOutputs=len(lb.classes_)
 	#print(lb.classes_)
 
