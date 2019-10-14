@@ -3,8 +3,8 @@
 
 
 # USAGE
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --datasetDir Santa
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --datasetDir SportsClassification
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --datasetDir Santa --networkID LenetModel
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --datasetDir SportsClassification --networkID LenetModel
 
 
 
@@ -16,6 +16,8 @@ from  util import  plotUtil
 from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
 from  util import  plotUtil  
+from  util import  helper  
+
 
 
 # import the necessary packages
@@ -30,16 +32,15 @@ import random
 import cv2
 import os
 from sklearn.preprocessing import LabelBinarizer
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+
 from keras.utils import to_categorical
 
 
 root_dir="datasets"
 
 
-#edit here
-datasetDir='SportsClassification'
-imgWidth=224
-imgHeight=224
 
 
 
@@ -47,14 +48,12 @@ imgHeight=224
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 
-ap.add_argument("--width",  required=True,
-	help="path to label list as pickle file")
-ap.add_argument("--height",  required=True,
-	help="path to label list as pickle file")
-ap.add_argument("--EPOCHS",  required=True,
-	help="path to label list as pickle file")
-ap.add_argument("--datasetDir",  required=True,
-	help="path to label list as pickle file")
+ap.add_argument("--width",  required=True,help="path to label list as pickle file")
+ap.add_argument("--height",  required=True,help="path to label list as pickle file")
+ap.add_argument("--EPOCHS",  required=True,help="path to label list as pickle file")
+ap.add_argument("--datasetDir",  required=True,help="path to label list as pickle file")
+ap.add_argument("--networkID", required=True, help="I.D. of the network")
+
 
 args = vars(ap.parse_args())
 
@@ -62,8 +61,18 @@ width=int(args["width"])
 height=int(args["height"])
 EPOCHS =int(args["EPOCHS"])
 datasetDir=args["datasetDir"]
+networkID=args["networkID"]
 
 
+
+def predictBinaryValue(probs,threshold=0.5):
+	y_pred=[]
+	for prob in probs:
+		if (prob>threshold):
+			y_pred.append(1)
+		else:	
+			y_pred.append(0)
+	return np.asarray(y_pred)
 
 
 
@@ -136,6 +145,9 @@ labels = lb.fit_transform(labels)
 numOfOutputs=len(lb.classes_)
 
 
+
+
+
 if (numOfOutputs==2):  #Binary problem
 	numOfOutputs=1  # use only 1 neuron in last layer
 
@@ -170,7 +182,7 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 print("[INFO] compiling model...")
 #model = LeNet.build(width=28, height=28, depth=3, classes=1)
 #model=modelsFactory.ModelCreator(numOfOutputs,imgWidth,imgHeight,"Resnet50").model
-model=modelsFactory.ModelCreator(numOfOutputs,imgWidth,imgHeight,"LenetModel").model
+model=modelsFactory.ModelCreator(numOfOutputs,width,height,networkID=networkID).model
 
 
 model.summary()
@@ -212,9 +224,24 @@ print("[INFO] Labels saved  to file {}".format(fileNameToSaveLabels))
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
-y_true=testY.argmax(axis=1)
-y_pred=predictions.argmax(axis=1)
+
+
+
+if (numOfOutputs==1):
+	y_true=testY
+	y_pred=predictBinaryValue(predictions)
+
+else:	
+	y_true=testY.argmax(axis=1)
+	y_pred=predictions.argmax(axis=1)
+
+
 print(classification_report(y_true,y_pred, target_names=lb.classes_))
+print(confusion_matrix(y_true, y_pred))
+helper.print_cm(cm,lb.classes_)
+
+
+
 
 plotUtil.plotAccuracyAndLossesonSameCurve(history)
 plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)

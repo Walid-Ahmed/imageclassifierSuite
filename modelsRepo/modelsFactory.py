@@ -26,14 +26,16 @@ class  ModelCreator:
 		elif (networkID)=="net2":
 			self.imgWidth=width
 			self.imgHeight=height
-			self.model=self.defineNet2()
 			print("[INFO]  Net2 Model created")
+			self.model=self.defineNet2()
+
 
 		elif networkID=="LenetModel":
 			self.imgWidth=width
 			self.imgHeight=height
 			self.model=self.defineLenetModel()
 			print("[INFO]  Lenet created")
+			
 
 
 		elif networkID=="Resnet50":
@@ -43,27 +45,38 @@ class  ModelCreator:
 			print("[INFO]  Resnet50 created")	
 
 		elif networkID=="net3":
+			self.imgWidth=width
+			self.imgHeight=height
 			self.model=self.defineNet3()
 			print("[INFO]  Net3 created")		
 
 
 		elif networkID=="MiniVGG":
+			self.imgWidth=width
+			self.imgHeight=height
 			self.model=self.defineMiniVGG()
 			print("[INFO]  MiniVGG Model created")
 
 		elif networkID=="net4":
+			self.imgWidth=width
+			self.imgHeight=height
 			self.model=self.defineNet4()
 			print("[INFO]  Net4 created")	
 
 		elif networkID=="net5":
+			self.imgWidth=width
+			self.imgHeight=height
 			self.model=self.defineNet5()
 			print("[INFO]  Net5 created")	
 
 		elif networkID=="VGG16":
+			self.imgWidth=width
+			self.imgHeight=height
 			self.model=self.defineVGG16()
 			print("[INFO]  VGG16 created")	
 
 	def defineLenetModel(self):   #can work with 28*28 
+
 		model = tf.keras.models.Sequential()
 
 		# first set of CONV => RELU => POOL layers
