@@ -255,5 +255,5 @@ plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
 
 
 # Plot non-normalized confusion matrix
-helper.plot_confusion_matrix(y_true, y_pred, classes=labels,dataset=dataset,title=dataset+ '_Confusion matrix, without normalization') 
+helper.plot_confusion_matrix(y_true, y_pred, classes=labels,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
 
