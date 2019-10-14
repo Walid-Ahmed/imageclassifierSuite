@@ -25,7 +25,8 @@ More and more networks will be added soon, however you can still define your own
 
 # I-Train a CIFAR10
 
-you can start by testing your environment by running python trainCIFAR10.py. This code will download the CIFAR10 dataset and start training using a deep convloution neural network. when it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb"
+You can start by testing your environment by running python trainCIFAR10.py. 
+This code will download the CIFAR10 dataset and start training using a deep convloution neural network. When it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb"
  
 
 # II-Train a binary image classiffier using flow from directory
@@ -59,8 +60,33 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
 
+# III--Train a binary/multiclass image classiffier 
 
-# III-Train a multiclass image classiffier using satandard dataset
+The file   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
+
+You can runit as follows
+python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --datasetDir Santa --networkID LenetModel
+
+In case of binary classifier, the last layer will have only one neuron, otherwise  te last laye will have a number of neurons as the number of outputs.
+
+You do not have to enter your labels or to split your data into train/eval, all what you have to do is to arrange your images so that each class in a folder with its label. and all theses folder with a single folder as the following, the name of this single folder is what you should pass as argument when taining. The folder should be in folder datasetes.
+ ![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/classArrang.png)
+
+
+
+
+the following files are automatically saved to the "Results" folder
+
+ 1. Loss curve
+ 2. Accuracy curve
+ 3. Loss and accuracy curves
+ 4. The model as a .keras2 file
+ 5. The labels in dictionary stored as a pickle file
+ 6. Confusion matrix as an image
+ 
+ A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_Confusion Matrix.png)
+
+# IV-Train a multiclass image classiffier using satandard dataset
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are builtin in Keras.
@@ -95,12 +121,12 @@ Each training will save the follwoing files in the "Results" folder
  2. The trained mode as a .keras2 file
  
 
-# III-Train a multiclass image classiffier using flow_from_data
+# V-Train a multiclass image classiffier using flow_from_data
 
 
 ...TODO documentaiom 
 
-# III-Test Model
+# VI-Test Model
 python test_network.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
 
 ...TODO documentaiom 

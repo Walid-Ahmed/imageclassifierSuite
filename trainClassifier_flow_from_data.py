@@ -220,9 +220,9 @@ print("[INFO] Labels saved  to file {}".format(fileNameToSaveLabels))
 
 
 if(numOfOutputs==1):
-	labelsDict-dict()
+	labelsDict=dict()
 	labelsDict[lb.classes_[0]]=0
-	labelsDict[lb.classes_[0]]=1
+	labelsDict[lb.classes_[1]]=1
 	print(labelsDict)
 
 
@@ -252,4 +252,8 @@ helper.print_cm(cm,lb.classes_)
 
 plotUtil.plotAccuracyAndLossesonSameCurve(history)
 plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
+
+
+# Plot non-normalized confusion matrix
+helper.plot_confusion_matrix(y_true, y_pred, classes=labels,dataset=dataset,title=dataset+ '_Confusion matrix, without normalization') 
 

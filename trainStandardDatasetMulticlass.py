@@ -195,7 +195,7 @@ if __name__ == '__main__':
 	fileToSaveSampleImage=os.path.join("Results","sample_"+dataset+".png")
 	cv2.imwrite(fileToSaveSampleImage,sampleImage)
 	print("[INFO] Sample  image of standard dataset:{} is saved at {}".format(dataset,fileToSaveSampleImage))
-	print("[INFO] Press anykey to start training")
+	print("[INFO] Press any key to start training")
 
 	cv2.waitKey(0)
 
@@ -330,7 +330,7 @@ if __name__ == '__main__':
 
 
 	# Plot non-normalized confusion matrix
-	plot_confusion_matrix(y_true, y_pred, classes=labels,dataset=dataset,title=dataset+ '_Confusion matrix, without normalization') 
+	helper.plot_confusion_matrix(y_true, y_pred, classes=labels,dataset=dataset,title=dataset+ '_Confusion matrix, without normalization') 
 
 	# Plot normalized confusion matrix
 	#plot_confusion_matrix(y_true, y_pred, classes=labels, dataset=dataset,normalize=True, title=dataset+'_Normalized confusion matrix')
