@@ -3,9 +3,10 @@
 
 
 # USAGE
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --datasetDir Santa --networkID LenetModel
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --datasetDir SportsClassification --networkID LenetModel
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50
 
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel
 
 
 
@@ -53,6 +54,9 @@ ap.add_argument("--height",  required=True,help="path to label list as pickle fi
 ap.add_argument("--EPOCHS",  required=True,help="path to label list as pickle file")
 ap.add_argument("--datasetDir",  required=True,help="path to label list as pickle file")
 ap.add_argument("--networkID", required=True, help="I.D. of the network")
+ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
+
+
 
 
 args = vars(ap.parse_args())
@@ -62,6 +66,7 @@ height=int(args["height"])
 EPOCHS =int(args["EPOCHS"])
 datasetDir=args["datasetDir"]
 networkID=args["networkID"]
+channels=args["channels"]
 
 
 
@@ -85,9 +90,7 @@ def get_immediate_subdirectories(a_dir):
             if os.path.isdir(os.path.join(a_dir, name))]
 
 
-
-# initialize the number of epochs to train for, initia learning rate,
-# and batch size
+# initial learning rate, and batch size
 
 INIT_LR = 1e-3
 BS = 32
@@ -102,7 +105,6 @@ folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 
 
 
-LABELS = set(["weight_lifting", "tennis", "football"])
 
 
 #plotUtil.drarwGridOfImages(train_label1_dir,train_label2_dir)
@@ -115,20 +117,18 @@ random.shuffle(imagePaths)
 # loop over the input images
 for imagePath in imagePaths:
 
-
-
-	# extract the class label from the image path and update the
-	# labels list
+	# extract the class label from the image path and update the labels list
 	label = imagePath.split(os.path.sep)[-2]
-
-	#if label not in LABELS:
-		#continue
-
 
 
 	# load the image, pre-process it, and store it in the data list
 	print("[INFO] Reading image from path: {}".format(imagePath))
-	image = cv2.imread(imagePath)
+	
+	if(channels==3):
+		image = cv2.imread(imagePath)
+	else:
+		image = cv2.imread(imagePath, cv2.IMREAD_GRAYSCALE)
+	
 	image = cv2.resize(image, (width,height))
 	image = img_to_array(image)	
 	labels.append(label)
@@ -144,7 +144,7 @@ labels = np.array(labels)
 
 #lb.classes_  will be  the labels with the same order in one hot vector--->. label = lb.classes_[i]
 lb = LabelBinarizer() 
-labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector
+labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels
 numOfOutputs=len(lb.classes_)
 print(lb.classes_)
 
@@ -155,14 +155,9 @@ print(lb.classes_)
 if (numOfOutputs==2):  #Binary problem
 	numOfOutputs=1  # use only 1 neuron in last layer
 
-print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   #['football' 'tennis' 'weight_lifting']
-
-#print(lb.get_params())   #{'neg_label': 0, 'pos_label': 1, 'sparse_output': False}. not very usefull
+print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   
 
 
-
-	#labels = to_categorical(labels) # convert the labels from integers to vectors
-	# perform one-hot encoding on the labels
 
 
 
@@ -174,7 +169,11 @@ print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
 (trainX, testX, trainY, testY) = train_test_split(data,labels, test_size=0.25, random_state=42)
-
+numPfSamples,imgWidth,imgHeight,numOfchannels=trainX.shape
+print("[INFO] Original cifar10 dataset of trainData shape {}".format(trainX.shape))
+print("[INFO] Original cifar10 dataset of trainLabels shape {}".format(testX.shape))
+print("[INFO] Original cifar10 dataset of testData shape {}".format(trainY.shape))
+print("[INFO] Original cifar10 dataset of testLabels shape {}".format(testY.shape))
 
 
 # construct the image generator for data augmentation
@@ -186,7 +185,7 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 print("[INFO] compiling model...")
 #model = LeNet.build(width=28, height=28, depth=3, classes=1)
 #model=modelsFactory.ModelCreator(numOfOutputs,imgWidth,imgHeight,"Resnet50").model
-model=modelsFactory.ModelCreator(numOfOutputs,width,height,networkID=networkID).model
+model=modelsFactory.ModelCreator(numOfOutputs,width,height,channels=channels,networkID=networkID).model
 
 
 model.summary()
@@ -201,6 +200,8 @@ else:
 
 
 # train the network
+input("[MSG] Press enter to start training")
+
 print("[INFO] training network...")
 history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 	validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
@@ -230,7 +231,6 @@ if(numOfOutputs==1):
 	print(labelsDict)
 
 
-#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False)
 # evaluate the network
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
