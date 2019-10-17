@@ -8,7 +8,7 @@ The repo comes loaded with following datasets (all in folder "datasets"):
  2. Dogs/Cats
  3. Human/Horses
  4. SportsClassification(originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier))
- 5-Smile/noSmile datset
+ 5. Smile/noSmile datset(originally from this [link](https://github.com/hromi/SMILEsmileD))   
 
 The following tree structure represents the current datasets structure in repo 
 
