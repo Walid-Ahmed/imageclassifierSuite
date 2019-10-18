@@ -66,7 +66,11 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 The file   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
 
 You can runit as follows
-python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --datasetDir Santa --networkID LenetModel
+
+
+    python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --datasetDir Santa --networkID LenetModel
+
+
 
 In case of binary classifier, the last layer will have only one neuron, otherwise  te last laye will have a number of neurons as the number of outputs.
 
@@ -102,10 +106,10 @@ All what you have to do is to pass the i.d. of the dataset, together with the i.
 
 Some of the sample commands you can run are:
 
-'python trainStandardDatasetMulticlass.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20' 
-python trainStandardDatasetMulticlass.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25  
-python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25    
-python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
+    python trainStandardDatasetMulticlass.py --dataset MNIST  --networkID  LenetModel --EPOCHS 20
+    python trainStandardDatasetMulticlass.py  --dataset fashion_mnist --networkID MiniVGG --EPOCHS 25  
+    python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25  
+    python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
 
 when training starts, it will show a thumbnail image  for sample images from training dataset like the following ones:
 
