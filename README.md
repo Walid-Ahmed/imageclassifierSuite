@@ -134,4 +134,7 @@ python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 
 
 python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog_23.jpeg --labelPKL Results/cats_and_dogs_labels.pkl --width  150 --height  150
 
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
+
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
 
