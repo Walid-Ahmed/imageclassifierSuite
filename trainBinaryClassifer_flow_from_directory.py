@@ -131,7 +131,7 @@ if __name__ == '__main__':
     #Write   labels encoding to pickle file,they are sorted by default alphabetically
     labeles_dictionary = train_generator.class_indices
     print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
-    f_pickle=os.path.join("Results","labels.pkl")
+    f_pickle=os.path.join("Results",datasetDir+"_labels.pkl")
     pickle.dump(labeles_dictionary, open(f_pickle, 'wb'))
     print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
     print("*************************************************************************************************************")      

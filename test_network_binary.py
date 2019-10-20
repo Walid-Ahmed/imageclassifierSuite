@@ -1,9 +1,10 @@
 # USAGE
-# python test_network_binary.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl --width  28 --height 28
-# python test_network_binary.py  --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/night_sky.png --labelPKL Results/Santa_labels.pkl
-#python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat.964.jpg
+# python test_network_binary.py --model Results/Santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl --width  28 --height 28
 
-#python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog.6.jpg
+#python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
+
+#python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog_23.jpeg --labelPKL Results/cats_and_dogs_labels.pkl --width  150 --height  150
+
 # import the necessary packages
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
@@ -27,10 +28,15 @@ ap.add_argument("-i", "--image", required=True,
 	help="path to input image")
 ap.add_argument("-lbpkl", "--labelPKL", required=True,
 	help="path to label list as picklw file")
+
+ap.add_argument("--width", required=True,
+	help="path to label list as picklw file")
+ap.add_argument("--height", required=True,
+	help="path to label list as picklw file")
 args = vars(ap.parse_args())
 
-width=args["width"]
-height=args["height"]
+width=int(args["width"])
+height=int(args["height"])
 
 
 labels = pickle.loads(open(args["labelPKL"], "rb").read())
@@ -56,7 +62,15 @@ print("[INFO] Model loaded succesfully from {}".format(args["model"]))
 prediction= (model.predict(image)[0])[0] #probabilty
 print(prediction)
 
+
+tmpLabels=[None,None]
+
 # build the label
+for key,value in labels.items():   #{'cats': 0, 'dogs': 1}
+	tmpLabels[value]= key
+
+labels=tmpLabels
+
 label = labels[1] if prediction > 0.5 else labels[0] 
 proba = prediction if (prediction > 0.5) else (1-prediction)
 
@@ -69,4 +83,5 @@ cv2.putText(output, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,0.7, (0, 255, 0),
 
 # show the output image
 cv2.imshow("Output", output)
+cv2.imwrite("result.png",output)
 cv2.waitKey(0)
