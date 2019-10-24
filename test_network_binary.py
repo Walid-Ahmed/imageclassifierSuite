@@ -83,5 +83,5 @@ cv2.putText(output, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,0.7, (0, 255, 0),
 
 # show the output image
 cv2.imshow("Output", output)
-cv2.imwrite("result.png",output)
+cv2.imwrite("result1.png",output)
 cv2.waitKey(0)
