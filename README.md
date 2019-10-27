@@ -9,7 +9,7 @@ The repo comes loaded with following datasets (all in folder "datasets"):
  3. Human/Horses
  4. SportsClassification(originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier))
  5. Smile/noSmile datset(originally from this [link](https://github.com/hromi/SMILEsmileD))   
- 6. Food5K (originally from this [link](https://www.kaggle.com/binhminhs10/food5k/download)
+ 6. Food5K (originally from this [link](https://www.kaggle.com/binhminhs10/food5k/download))
 
 The following tree structure represents the current datasets structure in repo 
 
