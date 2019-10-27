@@ -1,9 +1,8 @@
 # USAGE
-# python test_network_multiClassifier.py --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl
-# python test_network_binary.py  --model Results/not_santa_santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/night_sky.png --labelPKL Results/Santa_labels.pkl
-#python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat.964.jpg
 
-#python test_network.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog.6.jpg
+
+#python test_network_multiClassifier.py --model Results/SportsClassification_binaryClassifier.keras2  --image TestImages/test_images_sports/tennis.jpeg --labelPKL Results/SportsClassification_labels.pkl --width 224 --height 224
+
 # import the necessary packages
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
@@ -15,7 +14,6 @@ import tensorflow as tf
 import pickle
 
 
-width,height=28,28
 
 
 
@@ -27,9 +25,14 @@ ap.add_argument("-m", "--model", required=True,
 ap.add_argument("-i", "--image", required=True,
 	help="path to input image")
 ap.add_argument("-lbpkl", "--labelPKL", required=True,
-	help="path to label list as picklw file")
+	help="path to label list as pickle file")
+ap.add_argument("--width",  required=True,help="image width")
+ap.add_argument("--height",  required=True,help="image height")
+
 args = vars(ap.parse_args())
 
+width=int(args["width"])
+height=int(args["height"])
 
 labels = pickle.loads(open(args["labelPKL"], "rb").read())
 

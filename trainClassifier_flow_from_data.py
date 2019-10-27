@@ -9,21 +9,15 @@
 # python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel
 
 
-
+# import the necessary packages
 import tensorflow as tf
-
 import pickle
 from  util import  plotUtil
 from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
 from  util import  plotUtil  
 from  util import  helper  
-
-
-
-# import the necessary packages
 from keras.preprocessing.image import ImageDataGenerator
-
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.image import img_to_array
 from imutils import paths
@@ -35,11 +29,9 @@ import os
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
-
 from keras.utils import to_categorical
 
 
-root_dir="datasets"
 
 
 
@@ -49,10 +41,10 @@ root_dir="datasets"
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 
-ap.add_argument("--width",  required=True,help="path to label list as pickle file")
-ap.add_argument("--height",  required=True,help="path to label list as pickle file")
-ap.add_argument("--EPOCHS",  required=True,help="path to label list as pickle file")
-ap.add_argument("--datasetDir",  required=True,help="path to label list as pickle file")
+ap.add_argument("--width",  required=True,help="image width")
+ap.add_argument("--height",  required=True,help="image height")
+ap.add_argument("--EPOCHS",  required=True,help="number of epochs to train")
+ap.add_argument("--datasetDir",  required=True,help="path to dataset directory")
 ap.add_argument("--networkID", required=True, help="I.D. of the network")
 ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
 
@@ -89,6 +81,10 @@ def get_immediate_subdirectories(a_dir):
     return [name for name in os.listdir(a_dir)
             if os.path.isdir(os.path.join(a_dir, name))]
 
+
+
+
+root_dir="datasets"
 
 # initial learning rate, and batch size
 
@@ -146,7 +142,7 @@ labels = np.array(labels)
 lb = LabelBinarizer() 
 labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels
 numOfOutputs=len(lb.classes_)
-print(lb.classes_)
+#print(lb.classes_)
 
 
 
@@ -170,10 +166,10 @@ print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb
 # the data for training and the remaining 25% for testing
 (trainX, testX, trainY, testY) = train_test_split(data,labels, test_size=0.25, random_state=42)
 numPfSamples,imgWidth,imgHeight,numOfchannels=trainX.shape
-print("[INFO] Original cifar10 dataset of trainData shape {}".format(trainX.shape))
-print("[INFO] Original cifar10 dataset of trainLabels shape {}".format(testX.shape))
-print("[INFO] Original cifar10 dataset of testData shape {}".format(trainY.shape))
-print("[INFO] Original cifar10 dataset of testLabels shape {}".format(testY.shape))
+print("[INFO] Dataset of trainData shape {}".format(trainX.shape))
+print("[INFO] Dataset of trainLabels shape {}".format(testX.shape))
+print("[INFO] Dataset of testData shape {}".format(trainY.shape))
+print("[INFO] Dataset of testLabels shape {}".format(testY.shape))
 
 
 # construct the image generator for data augmentation
@@ -186,19 +182,14 @@ print("[INFO] compiling model...")
 #model = LeNet.build(width=28, height=28, depth=3, classes=1)
 #model=modelsFactory.ModelCreator(numOfOutputs,imgWidth,imgHeight,"Resnet50").model
 model=modelsFactory.ModelCreator(numOfOutputs,width,height,channels=channels,networkID=networkID).model
-
-
 model.summary()
 
 
 opt = tf.keras.optimizers.Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
-
 if(numOfOutputs==1):
 	model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
 else:
 	model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
-
-
 # train the network
 input("[MSG] Press enter to start training")
 
