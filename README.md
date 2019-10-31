@@ -28,7 +28,7 @@ More and more networks will be added soon, however you can still define your own
 
 # I-Train a CIFAR10
 
-You can start by testing your environment by running python trainCIFAR10.py. 
+You can start  testing your environment by running python trainCIFAR10.py. 
 This code will download the CIFAR10 dataset and start training using a deep convloution neural network. When it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb"
  
 
