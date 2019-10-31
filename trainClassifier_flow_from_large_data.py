@@ -3,10 +3,10 @@
 
 
 # USAGE
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50
+# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel
+# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50
 
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel
+# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel
 
 
 # import the necessary packages
@@ -61,6 +61,51 @@ networkID=args["networkID"]
 channels=args["channels"]
 
 
+def data_generator(inputPath, bs, lb, mode="train", aug=None):
+
+	# loop indefinitely
+	while True:
+		# initialize our batches of images and labels
+
+
+		# keep looping until we reach our batch size
+		for imagePath in imagePaths:
+
+			images = []
+			labels = []		
+
+			while len(images) < bs:
+			# loop over the input images
+
+				# extract the class label from the image path and update the labels list
+				label = imagePath.split(os.path.sep)[-2]
+
+
+				# load the image, pre-process it, and store it in the data list
+				print("[INFO] Reading image from path: {}".format(imagePath))
+				
+				if(channels==3):
+					image = cv2.imread(imagePath)
+				else:
+					image = cv2.imread(imagePath, cv2.IMREAD_GRAYSCALE)
+				
+				image = cv2.resize(image, (width,height))
+				image = img_to_array(image)	
+				labels.append(label)
+				#print(labels)
+				data.append(image)
+
+			# update our corresponding batches lists
+			images.append(image)
+			labels.append(label)
+
+		# one-hot encode the labels
+		labels = lb.transform(np.array(labels))
+
+
+		# yield the batch to the calling function
+		yield (np.array(images), labels)
+
 
 def predictBinaryValue(probs,threshold=0.5):
 	y_pred=[]
@@ -73,7 +118,9 @@ def predictBinaryValue(probs,threshold=0.5):
 
 
 
+root_dir="datasets"
 
+base_dir = os.path.join(root_dir,datasetDir)
 
 
 def get_immediate_subdirectories(a_dir):
@@ -82,9 +129,6 @@ def get_immediate_subdirectories(a_dir):
 
 
 
-
-root_dir="datasets"
-base_dir = os.path.join(root_dir,datasetDir)
 
 
 # initial learning rate, and batch size
@@ -110,6 +154,7 @@ folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 imagePaths = sorted(list(paths.list_images(base_dir)))
 random.seed(42)
 random.shuffle(imagePaths)
+
 
 # loop over the input images
 for imagePath in imagePaths:
@@ -195,9 +240,9 @@ else:
 input("[MSG] Press enter to start training")
 
 print("[INFO] training network...")
-history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
-	validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
-	epochs=EPOCHS, verbose=1)
+#history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
+
+history = model.fit_generator(data_generator,validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
 
 # save the model to disk
 fileNameToSaveModel="{}_binaryClassifier.keras2".format(datasetDir)
