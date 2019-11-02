@@ -7,7 +7,21 @@
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50
 
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel
+'''
 
+>>> from sklearn import preprocessing
+>>> lb = preprocessing.LabelBinarizer()
+>>> lb.fit([1, 2, 6, 4, 2])
+LabelBinarizer(neg_label=0, pos_label=1, sparse_output=False)
+>>> lb.classes_
+array([1, 2, 4, 6])
+>>> lb.transform([1, 6])
+array([[1, 0, 0, 0],
+       [0, 0, 0, 1]])
+
+
+
+'''
 
 # import the necessary packages
 import tensorflow as tf
@@ -17,9 +31,9 @@ from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
 from  util import  plotUtil  
 from  util import  helper  
-from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
-from keras.preprocessing.image import img_to_array
+from tensorflow.keras.preprocessing.image import img_to_array
 from imutils import paths
 import numpy as np
 import argparse
@@ -29,7 +43,10 @@ import os
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
-from keras.utils import to_categorical
+from tensorflow.keras.utils import to_categorical
+from tensorflow.python.keras.utils.data_utils import Sequence
+
+
 
 
 def get_immediate_subdirectories(a_dir):
@@ -37,28 +54,37 @@ def get_immediate_subdirectories(a_dir):
             if os.path.isdir(os.path.join(a_dir, name))]
 
 
-def data_generator(imagePaths, bs, lb, mode="train", aug=None):
+def getImage(imagePaths):
+	for imagePath in imagePaths:
+		yield imagePath
+
+
+def data_generator(imagePaths, bs, lb):
+  
+	maximumSteps=len(imagePaths)//bs
+  		
+
+
+	stepNum=1
+	imgGen=getImage(imagePaths)
 
 	# loop indefinitely
 	while True:
 		# initialize our batches of images and labels
+		images = []
+		labels = []	
+		while len(images) < bs:
 
-
-		# keep looping until we reach our batch size
-		for imagePath in imagePaths:
-
-			images = []
-			labels = []		
-
-			while len(images) < bs:
-			# loop over the input images
+	
+				# loop over the input images
+				imagePath=next(imgGen)
 
 				# extract the class label from the image path and update the labels list
 				label = imagePath.split(os.path.sep)[-2]
 
 
 				# load the image, pre-process it, and store it in the data list
-				print("[INFO] Reading image from path: {}".format(imagePath))
+				#print("[INFO] Reading image from path: {}".format(imagePath))
 				
 				if(channels==3):
 					image = cv2.imread(imagePath)
@@ -69,21 +95,27 @@ def data_generator(imagePaths, bs, lb, mode="train", aug=None):
 				image = img_to_array(image)	
 				labels.append(label)
 				#print(labels)
-				data.append(image)
 
-			# update our corresponding batches lists
-			images.append(image)
-			labels.append(label)
+				# update our corresponding batches lists
+				images.append(image)
 
 		# one-hot encode the labels
-		labels = lb.transform(np.array(labels))
+		labels = lb.transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels
 		# scale the raw pixel intensities to the range [0, 1]
 		images = np.array(images, dtype="float") / 255.0
 
 
 		# yield the batch to the calling function
-		yield (np.array(images), labels)
+		print("[info] batch {} of {} yielded  with shapes {} and {} ".format(stepNum,maximumSteps,labels.shape,images.shape))
+		stepNum=stepNum+1
 
+		if(stepNum==maximumSteps):
+			imgGen=getImage(imagePaths)
+			stepNum=0
+
+
+
+		yield (np.array(images), labels)
 
 def predictBinaryValue(probs,threshold=0.5):
 	y_pred=[]
@@ -148,8 +180,10 @@ if __name__ == "__main__":
 	folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 	
 
-	#print(len(folders))
-	#exit()
+	print(len(folders))
+	print(folders)
+	folders.sort()
+
 
 
 
@@ -158,17 +192,19 @@ if __name__ == "__main__":
 	imagePaths = sorted(list(paths.list_images(base_dir)))
 	random.seed(42)
 	random.shuffle(imagePaths)
-	NUM_TRAIN_IMAGES=len(imagePaths)
-	NUM_TEST_IMAGES=len(imagePaths)
+	(trainX, testX) = train_test_split(imagePaths,test_size=0.25, random_state=42)
+
+	NUM_TRAIN_IMAGES=len(trainX)
+	NUM_TEST_IMAGES=len(testX)
+
 
 
 
 	lb = LabelBinarizer() 
-	trainnGen=data_generator(imagePaths,BS,lb)
-	testGen=data_generator(imagePaths,BS,lb)
+	lb.fit(folders)
+	trainnGen=data_generator(trainX,BS,lb)
+	testGen=data_generator(testX,BS,lb)
 
-	print(imagePaths)
-	exit()
 
  
 
@@ -216,7 +252,7 @@ if __name__ == "__main__":
 	print("[INFO] training network...")
 	#history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
 
-	history = model.fit_generator(data_generator,steps_per_epoch=NUM_TRAIN_IMAGES // BS, validation_data=testGen,validation_steps=NUM_TEST_IMAGES // BS, epochs=EPOCHS)
+	history = model.fit_generator(trainnGen,steps_per_epoch=NUM_TRAIN_IMAGES // BS, validation_data=testGen,validation_steps=NUM_TEST_IMAGES // BS, epochs=EPOCHS)
 
 	# save the model to disk
 	fileNameToSaveModel="{}_binaryClassifier.keras2".format(datasetDir)
