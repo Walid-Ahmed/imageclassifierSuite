@@ -3,10 +3,10 @@
 
 
 # USAGE
-# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel
-# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50
+# python trainClassifier_flow_from_large_data.py    --EPOCHS 2   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel --BS 32
+# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16
 
-# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel
+# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel --BS 32
 '''
 
 >>> from sklearn import preprocessing
@@ -57,6 +57,14 @@ def get_immediate_subdirectories(a_dir):
 def getImage(imagePaths):
 	for imagePath in imagePaths:
 		yield imagePath
+
+def getLabels(imagePaths):
+	labels=[]
+	for imagePath in imagePaths:
+		label = imagePath.split(os.path.sep)[-2]
+		labels.append(label)
+
+	return 	labels
 
 
 def data_generator(imagePaths, bs, lb):
@@ -141,6 +149,8 @@ if __name__ == "__main__":
 	ap.add_argument("--datasetDir",  required=True,help="path to dataset directory")
 	ap.add_argument("--networkID", required=True, help="I.D. of the network")
 	ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
+	ap.add_argument("--BS", default=32,type=int,help="Batch size")
+
 
 
 
@@ -153,6 +163,9 @@ if __name__ == "__main__":
 	datasetDir=args["datasetDir"]
 	networkID=args["networkID"]
 	channels=args["channels"]
+	BS = args["BS"]
+
+
 
 
 
@@ -170,7 +183,6 @@ if __name__ == "__main__":
 	# initial learning rate, and batch size
 
 	INIT_LR = 1e-3
-	BS = 32
 
 	# initialize the data and labels
 	print("[INFO] loading images...")
@@ -190,20 +202,23 @@ if __name__ == "__main__":
 
 	# grab the image paths and randomly shuffle them
 	imagePaths = sorted(list(paths.list_images(base_dir)))
+
 	random.seed(42)
 	random.shuffle(imagePaths)
-	(trainX, testX) = train_test_split(imagePaths,test_size=0.25, random_state=42)
+
+	Y=getLabels(imagePaths)
+
+
+	(trainX, testX,trainY,testY) = train_test_split(imagePaths,Y,test_size=0.25, random_state=42)
+
 
 	NUM_TRAIN_IMAGES=len(trainX)
 	NUM_TEST_IMAGES=len(testX)
-
-
-
-
 	lb = LabelBinarizer() 
 	lb.fit(folders)
 	trainnGen=data_generator(trainX,BS,lb)
 	testGen=data_generator(testX,BS,lb)
+	testY=lb.transform(testY)
 
 
  
@@ -278,13 +293,20 @@ if __name__ == "__main__":
 
 	# evaluate the network
 	print("[INFO] evaluating network...")
-	predictions = model.predict(testX, batch_size=32)
+	testGen=data_generator(testX,1,lb)
+	
+
+	predictions = model.predict_generator(testGen, steps = NUM_TEST_IMAGES)   
 	if (numOfOutputs==1):
 		y_true=testY
 		y_pred=predictBinaryValue(predictions)
 	else:	
 		y_true=testY.argmax(axis=1)
 		y_pred=predictions.argmax(axis=1)
+
+
+	print(len(y_true)) #231
+	print(len(y_pred)) #224
 
 
 	print(classification_report(y_true,y_pred, target_names=lb.classes_))
