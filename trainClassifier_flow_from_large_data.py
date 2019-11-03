@@ -270,7 +270,7 @@ if __name__ == "__main__":
 	history = model.fit_generator(trainnGen,steps_per_epoch=NUM_TRAIN_IMAGES // BS, validation_data=testGen,validation_steps=NUM_TEST_IMAGES // BS, epochs=EPOCHS)
 
 	# save the model to disk
-	fileNameToSaveModel="{}_binaryClassifier.keras2".format(datasetDir)
+	fileNameToSaveModel="{}_Classifier.keras2".format(datasetDir)
 	fileNameToSaveModel=os.path.join("Results",fileNameToSaveModel)
 	model.save(fileNameToSaveModel)
 	print("[INFO] Model saved  to file {}".format(fileNameToSaveModel))
