@@ -70,7 +70,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
 
-# III--Train a binary/multiclass image classiffier 
+# III--Train a binary/multiclass image classifier 
 
 The file   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
 
@@ -100,7 +100,7 @@ The following files are automatically saved to the "Results" folder
  
  A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
-# IV-Train a multiclass image classiffier using satandard dataset
+# IV-Train a multiclass image classifier using satandard dataset
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
@@ -152,10 +152,10 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
 
-# VI-Train on large ataset using Keras fit_generator
-Not all the datasets that you will be using for training will be small to fit your memory. For example the the sport classification dataset( curated by Anubhav Maity) has xxx  images and only resized to 224px*224px. If you try to load this  whole dataset to memory in any list like structure , you will most likely face memory issues.
+# VI-Train on large dataset using Keras fit_generator
+Not all the datasets that you will be using for training will be small to fit your memory. For example the the sport classification dataset(included in this repo ) has 14,405   images and  resized to only 224px*224px. If you try to load this  whole dataset to memory in any list like structure , you will most likely face memory issues.
 
-python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True
+'''python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True'''
 
 # VII-Others
 ## Use K-NN to build a classifier cat vs dog
