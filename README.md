@@ -104,7 +104,6 @@ The following files are automatically saved to the "Results" folder
  5. The labels in dictionary stored as a pickle file
  6. Confusion matrix as an image
  
- A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
 # IV-Train a multiclass image classifier using satandard dataset
 
@@ -138,8 +137,9 @@ when training starts, it will show a thumbnail image  for sample images from tra
 Each training will save the follwoing files in the "Results" folder
 
  1. Thumbnail image including sample images from the training dtataset
- 2. The trained mode as a .keras2 file
+ 2. The trained model as a .keras2 file
  
+ A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
 
 
