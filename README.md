@@ -7,7 +7,7 @@ The repo comes loaded with following datasets (all in folder "datasets"):
  1. Santa/NoSanta: initially collected  by  Adrian Rosebrock
  2. Dogs/Cats
  3. Human/Horses
- 4. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)).The type of sports are Swimming
+ 4. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The type of sports are Swimming
 ,Badminton,Wrestling,Olympic Shooting,Cricket,Football,Tennis,Hockey,Ice Hockey,Kabaddi,WWE,Gymnasium,Weight lifting,Volleyball,Table tennis,Baseball,Formula 1,Moto GP,Chess,Boxing,FencingBasketbal]
  5. Smile/noSmile datset:originally from this [link](https://github.com/hromi/SMILEsmileD)  
  6. Food5K: a [Kaggle](https://www.kaggle.com/binhminhs10/food5k)
