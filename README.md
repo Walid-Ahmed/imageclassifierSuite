@@ -45,12 +45,18 @@ The
 trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
 
 To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
+```
 
 python trainBinaryClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 100  --width  150 --height  150 --testDir test_images_cats_and_dogs
+```
 
-To start  training  using this file on "cats and dogs" dataset you can run the follwing command:
+
+To start  training  using this file on "horse-or-human " dataset you can run the follwing command:
+```
 
 python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
+```
+
 
 When the training starts it will show sample of images and print some statistics about the dataset. after finishing, the following files are automatically saved to the "Results" folder
 
