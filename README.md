@@ -155,7 +155,9 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 # VI-Train on large dataset using Keras fit_generator
 Not all the datasets that you will be using for training will be small to fit your memory. For example the the sport classification dataset(included in this repo ) has 14,405   images and  resized to only 224px*224px. If you try to load this  whole dataset to memory in any list like structure , you will most likely face memory issues.
 
-'''python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True'''
+```
+python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True
+```
 
 # VII-Others
 ## Use K-NN to build a classifier cat vs dog
