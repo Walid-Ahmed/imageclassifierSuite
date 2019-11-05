@@ -142,6 +142,13 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
 
-# VI-Others
+# VI-Train on large ataset using Keras fit_generator
+
+python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True
+
+# VII-Others
 ## Use K-NN to build a classifier cat vs dog
 jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
+
+
+
