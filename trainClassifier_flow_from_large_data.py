@@ -4,7 +4,7 @@
 
 # USAGE
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 2   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel --BS 32
-# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16
+# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True
 
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel --BS 32
 '''
@@ -70,9 +70,6 @@ def getLabels(imagePaths):
 def data_generator(imagePaths, bs, lb):
   
 	maximumSteps=len(imagePaths)//bs
-  		
-
-
 	stepNum=1
 	imgGen=getImage(imagePaths)
 
@@ -82,18 +79,8 @@ def data_generator(imagePaths, bs, lb):
 		images = []
 		labels = []	
 		while len(images) < bs:
-
-	
 				# loop over the input images
 				imagePath=next(imgGen)
-
-				# extract the class label from the image path and update the labels list
-				label = imagePath.split(os.path.sep)[-2]
-
-
-				# load the image, pre-process it, and store it in the data list
-				#print("[INFO] Reading image from path: {}".format(imagePath))
-				
 				if(channels==3):
 					image = cv2.imread(imagePath)
 				else:
@@ -101,26 +88,27 @@ def data_generator(imagePaths, bs, lb):
 				
 				image = cv2.resize(image, (width,height))
 				image = img_to_array(image)	
-				labels.append(label)
-				#print(labels)
-
-				# update our corresponding batches lists
 				images.append(image)
 
+				# extract the class label from the image path and update the labels list
+				label = imagePath.split(os.path.sep)[-2]
+				labels.append(label)
+
+				
+
 		# one-hot encode the labels
-		labels = lb.transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels
-		# scale the raw pixel intensities to the range [0, 1]
+		labels = lb.transform(labels)  
 		images = np.array(images, dtype="float") / 255.0
 
 
 		# yield the batch to the calling function
-		print("[info] batch {} of {} yielded  with shapes {} and {} ".format(stepNum,maximumSteps,labels.shape,images.shape))
+		if(verbose):
+			print("[info] batch {} of {} yielded  with shapes {} and {} ".format(stepNum,maximumSteps,labels.shape,images.shape))
 		stepNum=stepNum+1
 
 		if(stepNum==maximumSteps):
 			imgGen=getImage(imagePaths)
 			stepNum=0
-
 
 
 		yield (np.array(images), labels)
@@ -150,6 +138,8 @@ if __name__ == "__main__":
 	ap.add_argument("--networkID", required=True, help="I.D. of the network")
 	ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
 	ap.add_argument("--BS", default=32,type=int,help="Batch size")
+	ap.add_argument("--verbose", default="True",type=int,help="Print extra data")
+
 
 
 
@@ -164,6 +154,15 @@ if __name__ == "__main__":
 	networkID=args["networkID"]
 	channels=args["channels"]
 	BS = args["BS"]
+	verbose=args["verbose"]
+
+	if (verbose=="True"):
+		verbose=True
+	else
+		verbose=False
+
+
+
 
 
 
@@ -216,7 +215,7 @@ if __name__ == "__main__":
 	NUM_TEST_IMAGES=len(testX)
 	lb = LabelBinarizer() 
 	lb.fit(folders)
-	trainnGen=data_generator(trainX,BS,lb)
+	trainGen=data_generator(trainX,BS,lb)
 	testGen=data_generator(testX,BS,lb)
 	testY=lb.transform(testY)
 
@@ -267,7 +266,7 @@ if __name__ == "__main__":
 	print("[INFO] training network...")
 	#history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
 
-	history = model.fit_generator(trainnGen,steps_per_epoch=NUM_TRAIN_IMAGES // BS, validation_data=testGen,validation_steps=NUM_TEST_IMAGES // BS, epochs=EPOCHS)
+	history = model.fit_generator(trainGen,steps_per_epoch=NUM_TRAIN_IMAGES // BS, validation_data=testGen,validation_steps=NUM_TEST_IMAGES // BS, epochs=EPOCHS)
 
 	# save the model to disk
 	fileNameToSaveModel="{}_Classifier.keras2".format(datasetDir)
