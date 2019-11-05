@@ -4,10 +4,10 @@
 This Repo can be used to train standard keras dataset  or used defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
 The repo comes loaded with following datasets (all in folder "datasets"):
- 1. Santa/NoSanta     (initially collected  by  Adrian Rosebrock) 
+ 1. Santa/NoSanta: initially collected  by  Adrian Rosebrock
  2. Dogs/Cats
  3. Human/Horses
- 4. SportsClassification(22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier))
+ 4. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier))
  5. Smile/noSmile datset(originally from this [link](https://github.com/hromi/SMILEsmileD))   
  6. Food5K (a [Kaggle](https://www.kaggle.com/binhminhs10/food5k)
 dataset containing 2,500 food and 2,500 non-food images, originally from this [link](https://www.kaggle.com/binhminhs10/food5k/download))
