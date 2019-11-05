@@ -9,7 +9,8 @@ The repo comes loaded with following datasets (all in folder "datasets"):
  3. Human/Horses
  4. SportsClassification(22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier))
  5. Smile/noSmile datset(originally from this [link](https://github.com/hromi/SMILEsmileD))   
- 6. Food5K (originally from this [link](https://www.kaggle.com/binhminhs10/food5k/download))
+ 6. Food5K (a [Kaggle](https://www.kaggle.com › binhminhs10 › food5k
+) dataset containing 2500 food and 2500 non-food images, originally from this [link](https://www.kaggle.com/binhminhs10/food5k/download))
  7. NIH malaria dataset(originally from this [link](https://lhncbc.nlm.nih.gov/publication/pub9932))
 
 The following tree structure represents the current datasets structure in repo 
