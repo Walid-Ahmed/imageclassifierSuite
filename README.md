@@ -65,6 +65,7 @@ When the training starts it will show sample of images and print some statistics
  3. Loss and accuracy curves
  4. The model as a .keras2 file
  5. The labels in dictionary stored as a pickle file
+ 6. Confusion matrix as image
 
 
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
