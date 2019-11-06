@@ -64,8 +64,9 @@ When the training starts it will show sample of images and print some statistics
  2. Accuracy curve
  3. Loss and accuracy curves
  4. The model as a .keras2 file
- 5. The labels in dictionary stored as a pickle file
- 6. Confusion matrix as image
+ 5. The best model (highest accuracy) during training
+ 6. The labels in dictionary stored as a pickle file
+ 7. Confusion matrix as image
 
 
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
@@ -102,8 +103,9 @@ The following files are automatically saved to the "Results" folder
  2. Accuracy curve
  3. Loss and accuracy curves
  4. The model as a .keras2 file
- 5. The labels in dictionary stored as a pickle file
- 6. Confusion matrix as an image
+ 5. The best model (highest accuracy) during training
+ 6. The labels in dictionary stored as a pickle file
+ 7. Confusion matrix as an image
  
 
 # IV-Train a multiclass image classifier using satandard dataset
