@@ -44,7 +44,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
 The 
 trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
 
-The data should have been splitted from the start to train and eval, forexample the cat_and_dogs dataset is arranged as in following figure
+The data should have been splitted from the start to train and eval, for example the cat_and_dogs dataset is arranged as in following figure:
 
 ![structure for cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/cats_and_dogs_dir.png)
 
@@ -55,9 +55,9 @@ python trainBinaryClassifer_flow_from_directory.py  --datasetDir cats_and_dogs -
 ```
 
 
-To start  training  using this file on "horse-or-human " dataset you can run the follwing command:
-```
+To start  training  using this script  on "horse-or-human " dataset you can run the follwing command:
 
+```
 python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
 ```
 
@@ -84,7 +84,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 # III--Train a binary/multiclass image classifier 
 
-The file   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
+The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
 
 You can run it as follows
 
