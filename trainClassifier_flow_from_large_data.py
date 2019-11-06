@@ -44,7 +44,8 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from tensorflow.keras.utils import to_categorical
-from tensorflow.python.keras.utils.data_utils import Sequence
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 
 
@@ -164,7 +165,11 @@ if __name__ == "__main__":
 
 
 
+    fileNameToSaveBestModel="{}_Best_classifier.keras2".format(datasetDir)
+	fileNameToSaveBestModel=os.path.join("Results",fileNameToSaveBestModel)
 
+	es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=50)
+	mc = ModelCheckpoint(fileNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
 
 
 
@@ -266,7 +271,7 @@ if __name__ == "__main__":
 	print("[INFO] training network...")
 	#history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
 
-	history = model.fit_generator(trainGen,steps_per_epoch=NUM_TRAIN_IMAGES // BS, validation_data=testGen,validation_steps=NUM_TEST_IMAGES // BS, epochs=EPOCHS)
+	history = model.fit_generator(trainGen,steps_per_epoch=NUM_TRAIN_IMAGES // BS, validation_data=testGen,validation_steps=NUM_TEST_IMAGES // BS, epochs=EPOCHS ,  callbacks=[es, mc])
 
 	# save the model to disk
 	fileNameToSaveModel="{}_Classifier.keras2".format(datasetDir)
