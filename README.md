@@ -4,13 +4,17 @@
 This Repo can be used to train standard keras dataset  or used defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
 The repo comes loaded with following datasets (all in folder "datasets"):
- 1. Santa/NoSanta     (initially collected  by  Adrian Rosebrock) 
+ 1. Santa/NoSanta: initially collected  by  Adrian Rosebrock
  2. Dogs/Cats
  3. Human/Horses
- 4. SportsClassification(originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier))
- 5. Smile/noSmile datset(originally from this [link](https://github.com/hromi/SMILEsmileD))   
- 6. Food5K (originally from this [link](https://www.kaggle.com/binhminhs10/food5k/download))
- 7. NIH malaria dataset(originally from this [link](https://lhncbc.nlm.nih.gov/publication/pub9932))
+ 4. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The type of sports are Swimming
+,Badminton,Wrestling,Olympic Shooting,Cricket,Football,Tennis,Hockey,Ice Hockey,Kabaddi,WWE,Gymnasium,Weight lifting,Volleyball,Table tennis,Baseball,Formula 1,Moto GP,Chess,Boxing,FencingBasketbal]
+ 5. Smile/noSmile datset:originally from this [link](https://github.com/hromi/SMILEsmileD)  
+ 6. Food5K: a [Kaggle](https://www.kaggle.com/binhminhs10/food5k)
+dataset containing 2,500 food and 2,500 non-food images, originally from this [link](https://www.kaggle.com/binhminhs10/food5k/download))
+ 7. NIH malaria dataset:
+ The dataset consists of 27,588 images belonging to two separate classes: Parasitized/ Uninfected.
+The number of images per class i 13,794 images per each. The dataset is  originally from this [link](https://lhncbc.nlm.nih.gov/publication/pub9932))
 
 The following tree structure represents the current datasets structure in repo 
 
@@ -28,22 +32,31 @@ More and more networks will be added soon, however you can still define your own
 
 # I-Train a CIFAR10
 
-You can start  testing your environment by running python trainCIFAR10.py. 
-This code will download the CIFAR10 dataset and start training using a deep convloution neural network. When it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb"
+You can start  testing your environment by training  a model for the   CIFAR10 dataset  just by excuting the command
+```
+python trainCIFAR10.py 
+```
+This code will download the CIFAR10 dataset(if needed) and start training using a deep convloution neural network. When it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb".
  
 
-# II-Train a binary image classiffier using flow from directory
+# II-Train a binary image classifier using flow from directory
 
 The 
 trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
 
 To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
+```
 
 python trainBinaryClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 100  --width  150 --height  150 --testDir test_images_cats_and_dogs
+```
 
-To start  training  using this file on "cats and dogs" dataset you can run the follwing command:
+
+To start  training  using this file on "horse-or-human " dataset you can run the follwing command:
+```
 
 python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
+```
+
 
 When the training starts it will show sample of images and print some statistics about the dataset. after finishing, the following files are automatically saved to the "Results" folder
 
@@ -52,6 +65,7 @@ When the training starts it will show sample of images and print some statistics
  3. Loss and accuracy curves
  4. The model as a .keras2 file
  5. The labels in dictionary stored as a pickle file
+ 6. Confusion matrix as image
 
 
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
@@ -63,7 +77,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
 
-# III--Train a binary/multiclass image classiffier 
+# III--Train a binary/multiclass image classifier 
 
 The file   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
 
@@ -91,9 +105,8 @@ The following files are automatically saved to the "Results" folder
  5. The labels in dictionary stored as a pickle file
  6. Confusion matrix as an image
  
- A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
-# IV-Train a multiclass image classiffier using satandard dataset
+# IV-Train a multiclass image classifier using satandard dataset
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
@@ -125,16 +138,20 @@ when training starts, it will show a thumbnail image  for sample images from tra
 Each training will save the follwoing files in the "Results" folder
 
  1. Thumbnail image including sample images from the training dtataset
- 2. The trained mode as a .keras2 file
+ 2. The trained model as a .keras2 file
  
+ A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
 
 
 # V-Test Binary Models
 
+```
 python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
-
+```
+```
 python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog_23.jpeg --labelPKL Results/cats_and_dogs_labels.pkl --width  150 --height  150
+```
 
 Note the pkl file is the one created for you by trainClassifier_flow_from_data.py. It contains a dictionary like this  {'cats': 0, 'dogs': 1}
 
@@ -142,6 +159,16 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
 
-# VI-Others
+# VI-Train on large dataset using Keras fit_generator
+Not all the datasets that you will be using for training will be small to fit your memory. For example the the sport classification dataset(included in this repo ) has 14,405   images and  resized to only 224px*224px. If you try to load this  whole dataset to memory in any list like structure , you will most likely face memory issues.
+
+```
+python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True
+```
+
+# VII-Others
 ## Use K-NN to build a classifier cat vs dog
 jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
+
+
+
