@@ -29,6 +29,8 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
   #------------------------------------------------
   # Plot training and validation accuracy per epoch
   #------------------------------------------------
+  plt.figure()
+
   plt.plot  ( epochs,     acc ,label="train_acc")
   plt.plot  ( epochs, val_acc, label="val_acc" )
   plt.title (title+'Training and validation accuracy')
@@ -38,13 +40,10 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
   plt.savefig(fileToSaveAccuracyCurve)
   info=info+"[INFO] Accuracy curve saved to {}".format(fileToSaveAccuracyCurve)
   plt.legend(loc="upper left")
-
-
-
   plt.show()
 
-  plt.figure()
 
+  plt.figure()
   #------------------------------------------------
   # Plot training and validation loss per epoch
   #------------------------------------------------
@@ -58,8 +57,9 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
   plt.savefig(os.path.join("Results","plot_loss.png"))
   plt.legend(loc="upper left")
 
-  return info
   plt.show()
+  return info
+
 
 
 def plotAccuracyAndLossesonSameCurve(history,title=""):

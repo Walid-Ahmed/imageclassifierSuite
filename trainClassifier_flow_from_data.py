@@ -30,7 +30,8 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from keras.utils import to_categorical
-
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 
 
@@ -51,6 +52,10 @@ ap.add_argument("--channels", default=3,type=int,help="Number of channels in ima
 
 
 
+
+
+
+
 args = vars(ap.parse_args())
 
 width=int(args["width"])
@@ -60,6 +65,12 @@ datasetDir=args["datasetDir"]
 networkID=args["networkID"]
 channels=args["channels"]
 
+
+fileNameToSaveBestModel="{}_Best_classifier.keras2".format(datasetDir)
+fileNameToSaveBestModel=os.path.join("Results",fileNameToSaveBestModel)
+
+es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=50)
+mc = ModelCheckpoint(fileNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
 
 
 def predictBinaryValue(probs,threshold=0.5):
@@ -197,13 +208,14 @@ input("[MSG] Press enter to start training")
 print("[INFO] training network...")
 history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 	validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
-	epochs=EPOCHS, verbose=1)
+	epochs=EPOCHS, verbose=1, callbacks=[es, mc])
 
 # save the model to disk
-fileNameToSaveModel="{}_binaryClassifier.keras2".format(datasetDir)
+fileNameToSaveModel="{}_classifier.keras2".format(datasetDir)
 fileNameToSaveModel=os.path.join("Results",fileNameToSaveModel)
 model.save(fileNameToSaveModel)
 print("[INFO] Model saved  to file {}".format(fileNameToSaveModel))
+print("[INFO] Best Model saved  to file {}".format(fileNameToSaveBestModel))
 
 # serialize the label binarizer to disk
 fileNameToSaveLabels=datasetDir+"_labels.pkl"

@@ -138,7 +138,7 @@ if __name__ == "__main__":
 	ap.add_argument("--networkID", required=True, help="I.D. of the network")
 	ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
 	ap.add_argument("--BS", default=32,type=int,help="Batch size")
-	ap.add_argument("--verbose", default="True",type=int,help="Print extra data")
+	ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
 
 
 
@@ -158,7 +158,7 @@ if __name__ == "__main__":
 
 	if (verbose=="True"):
 		verbose=True
-	else
+	else:
 		verbose=False
 
 
@@ -304,8 +304,8 @@ if __name__ == "__main__":
 		y_pred=predictions.argmax(axis=1)
 
 
-	print(len(y_true)) #231
-	print(len(y_pred)) #224
+	print(len(y_true)) 
+	print(len(y_pred)) 
 
 
 	print(classification_report(y_true,y_pred, target_names=lb.classes_))
