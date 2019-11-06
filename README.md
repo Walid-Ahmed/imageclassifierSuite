@@ -44,6 +44,10 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
 The 
 trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
 
+The data should have been splitted from the start to train and eval, forexample the cat_and_dogs dataset is arranged as in following figure
+
+![structure for cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/cats_and_dogs_dir.png)
+
 To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
 ```
 
