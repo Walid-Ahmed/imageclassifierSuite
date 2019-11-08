@@ -89,7 +89,7 @@ def plot_print_confusion_matrix(y_true, y_pred, classes,dataset,
                     ha="center", va="center",
                     color="white" if cm[i, j] > thresh else "black")
     fig.tight_layout()
-    fileToSaveConfusionMatrix=os.path.join("Results",dataset+'_Confusion Matrix.png')
+    fileToSaveConfusionMatrix=os.path.join("Results",dataset+'_ConfusionMatrix.png')
     plt.savefig(fileToSaveConfusionMatrix)
     print("[INFO] Confusion matrix   saved to {}".format(fileToSaveConfusionMatrix))
 

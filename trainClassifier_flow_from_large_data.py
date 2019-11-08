@@ -5,23 +5,8 @@
 # USAGE
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 2   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel --BS 32
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True
-
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel --BS 32
-'''
 
->>> from sklearn import preprocessing
->>> lb = preprocessing.LabelBinarizer()
->>> lb.fit([1, 2, 6, 4, 2])
-LabelBinarizer(neg_label=0, pos_label=1, sparse_output=False)
->>> lb.classes_
-array([1, 2, 4, 6])
->>> lb.transform([1, 6])
-array([[1, 0, 0, 0],
-       [0, 0, 0, 1]])
-
-
-
-'''
 
 # import the necessary packages
 import tensorflow as tf
@@ -71,7 +56,7 @@ def getLabels(imagePaths):
 def data_generator(imagePaths, bs, lb):
   
 	maximumSteps=len(imagePaths)//bs
-	stepNum=1
+	stepNum=0
 	imgGen=getImage(imagePaths)
 
 	# loop indefinitely
@@ -108,7 +93,7 @@ def data_generator(imagePaths, bs, lb):
 		stepNum=stepNum+1
 
 		if(stepNum==maximumSteps):
-			imgGen=getImage(imagePaths)
+			imgGen=getImage(imagePaths)   #reset generator to start from image #0
 			stepNum=0
 
 
@@ -165,7 +150,7 @@ if __name__ == "__main__":
 
 
 
-    fileNameToSaveBestModel="{}_Best_classifier.keras2".format(datasetDir)
+	fileNameToSaveBestModel="{}_Best_classifier.keras2".format(datasetDir)
 	fileNameToSaveBestModel=os.path.join("Results",fileNameToSaveBestModel)
 
 	es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=50)
@@ -173,15 +158,8 @@ if __name__ == "__main__":
 
 
 
-
-
 	root_dir="datasets"
 	base_dir = os.path.join(root_dir,datasetDir)
-
-
-
-
-
 
 
 	# initial learning rate, and batch size
@@ -194,11 +172,14 @@ if __name__ == "__main__":
 	labels = []
 	train_labels_dir=[]
 	folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
-	
-
 	print(len(folders))
 	print(folders)
 	folders.sort()
+	numOfOutputs=len(folders)
+
+	if (numOfOutputs==2):  #Binary problem
+		numOfOutputs=1  # use only 1 neuron in last layer
+
 
 
 
@@ -209,13 +190,10 @@ if __name__ == "__main__":
 
 	random.seed(42)
 	random.shuffle(imagePaths)
-
 	Y=getLabels(imagePaths)
 
 
 	(trainX, testX,trainY,testY) = train_test_split(imagePaths,Y,test_size=0.25, random_state=42)
-
-
 	NUM_TRAIN_IMAGES=len(trainX)
 	NUM_TEST_IMAGES=len(testX)
 	lb = LabelBinarizer() 
@@ -223,29 +201,11 @@ if __name__ == "__main__":
 	trainGen=data_generator(trainX,BS,lb)
 	testGen=data_generator(testX,BS,lb)
 	testY=lb.transform(testY)
+	print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   
+
 
 
  
-
-
-
-
-
-	numOfOutputs=len(folders)
-
-	if (numOfOutputs==2):  #Binary problem
-		numOfOutputs=1  # use only 1 neuron in last layer
-
-	#print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   
-
-
-
-
-
-
-
-
-
 
 	# construct the image generator for data augmentation
 	aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
@@ -308,22 +268,13 @@ if __name__ == "__main__":
 		y_true=testY.argmax(axis=1)
 		y_pred=predictions.argmax(axis=1)
 
-
-	print(len(y_true)) 
-	print(len(y_pred)) 
+	print("[INFO] length of Y_True is {} and y_pred is {}".format(len(y_true),len(y_pred))) 
 
 
 	print(classification_report(y_true,y_pred, target_names=lb.classes_))
-	cm=confusion_matrix(y_true, y_pred)
-	helper.print_cm(cm,lb.classes_)
-
-
-
-
+    #polt and save curves
 	plotUtil.plotAccuracyAndLossesonSameCurve(history)
 	plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
-
-
 	# Plot non-normalized confusion matrix
 	helper.plot_print_confusion_matrix(y_true, y_pred, classes=lb.classes_,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
 
