@@ -43,6 +43,8 @@ import numpy as np
 import pickle
 import os
 from imutils import build_montages
+from  util import  plotUtil
+
 
 
 
@@ -124,6 +126,8 @@ if __name__ == '__main__':
 	trainX = trainData.reshape((trainData.shape[0], imgWidth,imgHeight,  numOfchannels))
 	testX = testData.reshape((testData.shape[0], imgWidth,imgHeight, numOfchannels))
 	images=[]
+
+
 	for  i in range(9):
 		image=trainData[i]
 		if(numOfchannels==1):
@@ -132,15 +136,14 @@ if __name__ == '__main__':
 			image=cv2.cvtColor(image, cv2.COLOR_RGB2BGR)	
 		images.append(image)
 	
-	montage = build_montages(images, (128, 128), (3, 3))
-	cv2.imshow("Sample images from {} training dataset".format(dataset), montage[0])
-	sampleImage=montage[0]
 	fileToSaveSampleImage=os.path.join("Results","sample_"+dataset+".png")
-	cv2.imwrite(fileToSaveSampleImage,sampleImage)
+	plotUtil.drarwGridOfImagesFromImagesData(trainData,fileToSaveSampleImage)
+
 	print("[INFO] Sample  image of standard dataset:{} is saved at {}".format(dataset,fileToSaveSampleImage))
 	print("[INFO] Press any key to start training")
 
-	cv2.waitKey(0)
+
+
 
 	trainX = trainX.astype("float32") / 255.0
 	testX = testX.astype("float32") / 255.0

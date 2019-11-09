@@ -139,3 +139,34 @@ def drarwGridOfImages(dataSetDir):
   plt.show()
   return info
 
+def drarwGridOfImagesFromImagesData(images,fileNameToSaveImage=None):
+
+ 
+  info=""
+  # Parameters for our graph; we'll output images in a 4x4 configuration
+  nrows = 4
+  ncols = 4
+
+  pic_index = 0 # Index for iterating over images
+
+  #display a batch of 4*4 pictures
+
+  # Set up matplotlib fig, and size it to fit 4x4 pics
+  fig = plt.gcf()
+  fig.set_size_inches(ncols*4, nrows*4)
+
+
+
+  for i in range(16):
+    # Set up subplot; subplot indices start at 1
+    sp = plt.subplot(nrows, ncols, i + 1)
+    sp.axis('Off') # Don't show axes (or gridlines)
+
+    img = images[i]
+    plt.imshow(img)
+ 
+  if(fileNameToSaveImage != None):
+    plt.savefig(fileNameToSaveImage)
+  plt.show()
+  return info
+
