@@ -18,7 +18,7 @@ The number of images per class i 13,794 images per each. The dataset is  origina
 
 The following tree structure represents the current datasets structure in repo 
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/ML_Datasets/blob/master/sampleImages/sample_Food-5K.png)
+ ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
 A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. These  networks include 
 
@@ -80,7 +80,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/plot_loss_accu.png)
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
 # III--Train a binary/multiclass image classifier 
 
