@@ -5,7 +5,6 @@
 # USAGE
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 2   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel --BS 32
 # python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True
-# python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel --BS 32
 
 
 # import the necessary packages
@@ -19,7 +18,7 @@ from  util import  helper
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.image import img_to_array
-from imutils import paths
+from util import paths
 import numpy as np
 import argparse
 import random
@@ -150,6 +149,7 @@ if __name__ == "__main__":
 
 
 
+
 	fileNameToSaveBestModel="{}_Best_classifier.keras2".format(datasetDir)
 	fileNameToSaveBestModel=os.path.join("Results",fileNameToSaveBestModel)
 
@@ -160,6 +160,8 @@ if __name__ == "__main__":
 
 	root_dir="datasets"
 	base_dir = os.path.join(root_dir,datasetDir)
+	plotUtil.drarwGridOfImages(base_dir)
+
 
 
 	# initial learning rate, and batch size
@@ -259,6 +261,7 @@ if __name__ == "__main__":
 	print("[INFO] evaluating network...")
 	testGen=data_generator(testX,1,lb)
 	
+
 
 	predictions = model.predict_generator(testGen, steps = NUM_TEST_IMAGES)   
 	if (numOfOutputs==1):

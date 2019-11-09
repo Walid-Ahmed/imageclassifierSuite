@@ -265,6 +265,7 @@ if __name__ == '__main__':
 		#cv2.waitKey(0)
 
 	montage = build_montages(images, (128, 128), (3, 3))
+	
 	cv2.imshow("Sample prediction  from {} testing  dataset".format(dataset), montage[0])
 	fileToSaveResults=os.path.join("Results",dataset+"_result.png")
 	cv2.imwrite(fileToSaveResults,montage[0])

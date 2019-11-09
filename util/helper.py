@@ -5,6 +5,11 @@ import numpy as np
 import os
 
 
+
+def get_immediate_subdirectories(a_dir):
+    return [name for name in os.listdir(a_dir)
+            if os.path.isdir(os.path.join(a_dir, name))]
+            
 #this method from https://gist.github.com/zachguo/10296432
 def print_cm(cm, labels, hide_zeroes=False, hide_diagonal=False, hide_threshold=None):
     """pretty print for confusion matrixes"""

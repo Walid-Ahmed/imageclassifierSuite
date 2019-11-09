@@ -2,7 +2,7 @@ from sklearn.metrics import classification_report
 from keras.preprocessing import image
 import keras
 import os
-from imutils import paths
+from util import paths
 import numpy as np
 from tensorflow import keras
 import tensorflow as tf 

@@ -77,7 +77,9 @@ if __name__ == '__main__':
     #draw sample images for training and  validation datasets 
     train_label1_dir = os.path.join(train_dir, labels[0])
     train_label2_dir = os.path.join(train_dir, labels[1])
-    plotUtil.drarwGridOfImages(train_label1_dir,train_label2_dir)
+
+    plotUtil.drarwGridOfImages(base_dir)
+
 
 
 

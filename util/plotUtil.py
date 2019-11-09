@@ -3,6 +3,9 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import os
 import matplotlib
+#import  helper
+from util import paths
+import random
 
 matplotlib.use("Qt5Agg")
 print("[INFO] matplotlib BACKEND IS {}".format(matplotlib.get_backend())) #[INFO] matplotlib BACKEND IS agg
@@ -92,14 +95,17 @@ def plotAccuracyAndLossesonSameCurve(history,title=""):
 
    
 
-def drarwGridOfImages(train_label1_dir,train_label2_dir):
+
+
+def drarwGridOfImages(dataSetDir):
 
   info=""
-  train_label1_fnames = os.listdir( train_label1_dir )
-  train_label2_fnames = os.listdir( train_label2_dir )
+  print(dataSetDir)
 
   #print(train_label1_fnames[:10])
   #print(train_label2_fnames[:10])
+  imagePaths = sorted(list(paths.list_images(dataSetDir)))
+
 
 
   # Parameters for our graph; we'll output images in a 4x4 configuration
@@ -108,23 +114,21 @@ def drarwGridOfImages(train_label1_dir,train_label2_dir):
 
   pic_index = 0 # Index for iterating over images
 
-  """Now, display a batch of 8 cat and 8 dog pictures. You can rerun the cell to see a fresh batch each time:"""
+  #display a batch of 4*4 pictures
 
   # Set up matplotlib fig, and size it to fit 4x4 pics
   fig = plt.gcf()
   fig.set_size_inches(ncols*4, nrows*4)
 
   pic_index+=8
+  random.shuffle(imagePaths)
+  imagePaths=imagePaths[0:16]
 
-  next_label1_pix = [os.path.join(train_label1_dir, fname) 
-                  for fname in train_label1_fnames[ pic_index-8:pic_index] 
-                 ]
 
-  next_label2_pix = [os.path.join(train_label2_dir, fname) 
-                  for fname in train_label2_fnames[ pic_index-8:pic_index]
-                 ]
 
-  for i, img_path in enumerate(next_label1_pix+next_label2_pix):
+
+
+  for i, img_path in enumerate(imagePaths):
     # Set up subplot; subplot indices start at 1
     sp = plt.subplot(nrows, ncols, i + 1)
     sp.axis('Off') # Don't show axes (or gridlines)
@@ -134,6 +138,4 @@ def drarwGridOfImages(train_label1_dir,train_label2_dir):
  
   plt.show()
   return info
-
-
 
