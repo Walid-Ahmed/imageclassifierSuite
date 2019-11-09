@@ -97,7 +97,7 @@ def plotAccuracyAndLossesonSameCurve(history,title=""):
 
 
 
-def drarwGridOfImages(dataSetDir):
+def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None):
 
   info=""
   print(dataSetDir)
@@ -136,6 +136,9 @@ def drarwGridOfImages(dataSetDir):
     img = mpimg.imread(img_path)
     plt.imshow(img)
  
+
+  if(fileNameToSaveImage != None):
+    plt.savefig(fileNameToSaveImage)
   plt.show()
   return info
 

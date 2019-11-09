@@ -3,6 +3,7 @@
 #python trainBinaryClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 100  --width  150 --height  150 --testDir test_images_cats_and_dogs
 
 #python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
+#python trainBinaryClassifer_flow_from_directory.py  --datasetDir Food-5K --networkID net1  --EPOCHS 2  --width  300 --height  300 
 
 #The final layer will have only 1 neuron
 
@@ -41,7 +42,7 @@ if __name__ == '__main__':
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("--datasetDir", required=True, help="datasetDir")
-    ap.add_argument("--testDir", required=True, help="testDir")
+    ap.add_argument("--testDir", default=None, help="testDir")
     ap.add_argument("--networkID", required=True, help="I.D. of the network")
     ap.add_argument("--EPOCHS", required=True, help="name of the network")
     ap.add_argument("--width", required=True, help="width of image")
@@ -66,8 +67,10 @@ if __name__ == '__main__':
 
     #Read the labels as the name of folders, since this is a binary classifier it is expected to have a total of 2 folders. A folder for each class
     labels=paths.get_immediate_subdirectories(train_dir)
+    print(train_dir)
     #sort labels alphabetically for consistency 
     labels.sort()
+    print(labels)
 
 
 
@@ -78,7 +81,9 @@ if __name__ == '__main__':
     train_label1_dir = os.path.join(train_dir, labels[0])
     train_label2_dir = os.path.join(train_dir, labels[1])
 
-    plotUtil.drarwGridOfImages(base_dir)
+
+    fileToSaveSampleImage=os.path.join("Results","sample_"+datasetDir+".png")
+    plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
 
 
 
@@ -171,12 +176,11 @@ if __name__ == '__main__':
     root_dir="TestImages"
       
 
-    path_test=os.path.join(root_dir,testDir)
-
-
-   #evaluate on a seperate test dataset
-    modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,path_test)
-    modelEvaluator.evaluate1()  #using sklearn & testGenerator
+    if (testDir != None):
+        path_test=os.path.join(root_dir,testDir)
+       #evaluate on a seperate test dataset
+        modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,path_test)
+        modelEvaluator.evaluate1()  #using sklearn & testGenerator
 
 
 

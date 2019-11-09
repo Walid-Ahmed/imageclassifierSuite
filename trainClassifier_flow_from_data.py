@@ -15,7 +15,6 @@ import pickle
 from  util import  plotUtil
 from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
-from  util import  plotUtil  
 from  util import  helper  
 from keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
@@ -114,8 +113,9 @@ folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 
 
 
+fileToSaveSampleImage=os.path.join("Results","sample_"+datasetDir+".png")
+plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
 
-#plotUtil.drarwGridOfImages(train_label1_dir,train_label2_dir)
 
 # grab the image paths and randomly shuffle them
 imagePaths = sorted(list(paths.list_images(base_dir)))
