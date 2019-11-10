@@ -30,6 +30,13 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
 Beside these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
+
+# I-Train a CIFAR10
+# II-Train a binary image classifier using flow from directory
+# [III--Train a binary/multiclass image classifier](#custom-id) 
+# IV-Train a multiclass image classifier using satandard dataset
+
+
 # I-Train a CIFAR10
 
 You can start  testing your environment by training  a model for the   CIFAR10 dataset  just by excuting the command
@@ -82,7 +89,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
-# III--Train a binary/multiclass image classifier 
+# III--Train a binary/multiclass image classifier {#custom-id}
 
 The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
 
