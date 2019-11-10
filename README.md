@@ -1,7 +1,9 @@
 ﻿# image classifier Suite
 
-
+## Introduction 
 This Repo can be used to train standard keras dataset  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
+
+## Available Datasets 
 
 The repo comes loaded with following datasets (all in folder "datasets"):
  1. Santa/NoSanta: initially collected  by  Adrian Rosebrock
@@ -20,6 +22,9 @@ The following tree structure represents the current datasets structure in repo
 
  ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
+
+## Available network structures 
+
 A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. These  networks include 
 
  - Resnet50   
@@ -30,7 +35,14 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
 Beside these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
-# I-Train a CIFAR10
+
+1. Train a CIFAR10 
+2. Train a binary image classifier using flow from directory
+3. [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
+4. IV-Train a multiclass image classifier using satandard dataset
+
+
+## I-Train a CIFAR10
 
 You can start  testing your environment by training  a model for the   CIFAR10 dataset  just by excuting the command
 ```
@@ -39,7 +51,7 @@ python trainCIFAR10.py
 This code will download the CIFAR10 dataset(if needed) and start training using a deep convloution neural network. When it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb".
  
 
-# II-Train a binary image classifier using flow from directory
+## II-Train a binary image classifier using flow from directory
 
 The 
 trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
@@ -82,7 +94,8 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
-# III--Train a binary/multiclass image classifier 
+<h1 id="multiclassimageclassifier">III--Train a binary/multiclass image classifier</h3>
+
 
 The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
 
@@ -112,7 +125,7 @@ The following files are automatically saved to the "Results" folder
  7. Confusion matrix as an image
  
 
-# IV-Train a multiclass image classifier using satandard dataset
+## IV-Train a multiclass image classifier using satandard dataset . 
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
@@ -150,7 +163,7 @@ Each training will save the follwoing files in the "Results" folder
 
 
 
-# V-Test Binary Models
+## V-Test Binary Models
 
 ```
 python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
