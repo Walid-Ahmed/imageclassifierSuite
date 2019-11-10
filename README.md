@@ -37,7 +37,7 @@ More and more networks will be added soon, however you can still define your own
 # IV-Train a multiclass image classifier using satandard dataset
 
 
-# I-Train a CIFAR10
+## I-Train a CIFAR10
 
 You can start  testing your environment by training  a model for the   CIFAR10 dataset  just by excuting the command
 ```
@@ -46,7 +46,7 @@ python trainCIFAR10.py
 This code will download the CIFAR10 dataset(if needed) and start training using a deep convloution neural network. When it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb".
  
 
-# II-Train a binary image classifier using flow from directory
+## II-Train a binary image classifier using flow from directory
 
 The 
 trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
@@ -120,7 +120,7 @@ The following files are automatically saved to the "Results" folder
  7. Confusion matrix as an image
  
 
-# IV-Train a multiclass image classifier using satandard dataset . 
+## IV-Train a multiclass image classifier using satandard dataset . 
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
@@ -158,7 +158,7 @@ Each training will save the follwoing files in the "Results" folder
 
 
 
-# V-Test Binary Models
+## V-Test Binary Models
 
 ```
 python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
