@@ -3,6 +3,8 @@
 ## Introduction 
 This Repo can be used to train standard keras dataset  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
+## Available Datasets 
+
 The repo comes loaded with following datasets (all in folder "datasets"):
  1. Santa/NoSanta: initially collected  by  Adrian Rosebrock
  2. Dogs/Cats
