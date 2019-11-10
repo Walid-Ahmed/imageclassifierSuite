@@ -22,6 +22,9 @@ The following tree structure represents the current datasets structure in repo
 
  ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
+
+## Available network structures 
+
 A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. These  networks include 
 
  - Resnet50   
