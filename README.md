@@ -31,8 +31,7 @@ Beside these networks, the modelsFactory define some usefull neural networks tha
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
 
-### I-Train a CIFAR10
-### II-Train a binary image classifier using flow from directory
+### I-Train a CIFAR10 ### II-Train a binary image classifier using flow from directory
 ### [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
 ### IV-Train a multiclass image classifier using satandard dataset
 
