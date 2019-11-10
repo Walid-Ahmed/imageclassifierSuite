@@ -33,7 +33,7 @@ More and more networks will be added soon, however you can still define your own
 
 # I-Train a CIFAR10
 # II-Train a binary image classifier using flow from directory
-# [III--Train a binary/multiclass image classifier](#customid) 
+# [III--Train a binary/multiclass image classifier](#custom-id) 
 # IV-Train a multiclass image classifier using satandard dataset
 
 
