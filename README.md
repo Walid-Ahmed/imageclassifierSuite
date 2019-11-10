@@ -89,7 +89,8 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
-# III--Train a binary/multiclass image classifier {#customid}
+# III--Train a binary/multiclass image classifier  <h3 id="custom-id">My Great Heading</h3>
+
 
 The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
 
@@ -119,7 +120,7 @@ The following files are automatically saved to the "Results" folder
  7. Confusion matrix as an image
  
 
-# IV-Train a multiclass image classifier using satandard dataset
+# IV-Train a multiclass image classifier using satandard dataset . 
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
