@@ -5,8 +5,9 @@
 # USAGE
 # python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel
 # python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50
-
 # python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir NIHmalaria --networkID LenetModel
+
 
 
 # import the necessary packages
@@ -31,6 +32,7 @@ from sklearn.metrics import confusion_matrix
 from keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
+from util import paths
 
 
 
@@ -114,8 +116,10 @@ folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 
 
 fileToSaveSampleImage=os.path.join("Results","sample_"+datasetDir+".png")
-plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
+plotUtil.drarwGridOfImages(base_dir,fileNameToSaveImage=fileToSaveSampleImage,channels=int(channels))
 
+paths.getTrainStatistics2(base_dir)
+input("Press any key")
 
 # grab the image paths and randomly shuffle them
 imagePaths = sorted(list(paths.list_images(base_dir)))

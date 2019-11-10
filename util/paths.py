@@ -75,3 +75,23 @@ def getTrainStatistics(datasetDir,train_dir,validation_dir):
 
     return NUM_TRAIN_IMAGES,NUM_TEST_IMAGES
 
+def getTrainStatistics2(datasetDir):
+
+    labels=get_immediate_subdirectories(datasetDir)
+    labels.sort()
+
+    for label in labels:
+            train_label1_dir = os.path.join(datasetDir, label)
+            imagePaths = sorted(list(list_images(train_label1_dir)))
+            print('[INFO] Total images of {} is {} '.format(label ,len(imagePaths)))
+
+
+
+
+
+
+
+
+    
+
+

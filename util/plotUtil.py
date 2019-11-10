@@ -6,6 +6,8 @@ import matplotlib
 #import  helper
 from util import paths
 import random
+from PIL import Image
+
 
 matplotlib.use("Qt5Agg")
 print("[INFO] matplotlib BACKEND IS {}".format(matplotlib.get_backend())) #[INFO] matplotlib BACKEND IS agg
@@ -97,10 +99,10 @@ def plotAccuracyAndLossesonSameCurve(history,title=""):
 
 
 
-def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None):
+def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None,channels=3):
 
   info=""
-  print(dataSetDir)
+
 
   #print(train_label1_fnames[:10])
   #print(train_label2_fnames[:10])
@@ -133,7 +135,10 @@ def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None):
     sp = plt.subplot(nrows, ncols, i + 1)
     sp.axis('Off') # Don't show axes (or gridlines)
 
-    img = mpimg.imread(img_path)
+    if (channels==3):
+      img = mpimg.imread(img_path)
+    else:
+      img=Image.open(img_path).convert('L')
     plt.imshow(img)
  
 
