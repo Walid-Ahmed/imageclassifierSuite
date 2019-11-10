@@ -3,10 +3,10 @@
 
 
 # USAGE
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir NIHmalaria --networkID LenetModel
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel --verbose False
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --verbose False
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel --verbose False
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir NIHmalaria --networkID LenetModel --verbose False
 
 
 
@@ -48,6 +48,7 @@ ap.add_argument("--height",  required=True,help="image height")
 ap.add_argument("--EPOCHS",  required=True,help="number of epochs to train")
 ap.add_argument("--datasetDir",  required=True,help="path to dataset directory")
 ap.add_argument("--networkID", required=True, help="I.D. of the network")
+ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
 ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
 
 
@@ -65,6 +66,13 @@ EPOCHS =int(args["EPOCHS"])
 datasetDir=args["datasetDir"]
 networkID=args["networkID"]
 channels=args["channels"]
+
+verbose=args["verbose"]
+
+if (verbose=="True"):
+	verbose=True
+else:
+	verbose=False
 
 
 fileNameToSaveBestModel="{}_Best_classifier.keras2".format(datasetDir)
@@ -119,7 +127,6 @@ fileToSaveSampleImage=os.path.join("Results","sample_"+datasetDir+".png")
 plotUtil.drarwGridOfImages(base_dir,fileNameToSaveImage=fileToSaveSampleImage,channels=int(channels))
 
 paths.getTrainStatistics2(base_dir)
-input("Press any key")
 
 # grab the image paths and randomly shuffle them
 imagePaths = sorted(list(paths.list_images(base_dir)))
@@ -134,7 +141,8 @@ for imagePath in imagePaths:
 
 
 	# load the image, pre-process it, and store it in the data list
-	print("[INFO] Reading image from path: {}".format(imagePath))
+	if(verbose):
+		print("[INFO] Reading image from path: {}".format(imagePath))
 	
 	if(channels==3):
 		image = cv2.imread(imagePath)
@@ -182,10 +190,13 @@ print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb
 # the data for training and the remaining 25% for testing
 (trainX, testX, trainY, testY) = train_test_split(data,labels, test_size=0.25, random_state=42)
 numPfSamples,imgWidth,imgHeight,numOfchannels=trainX.shape
-print("[INFO] Dataset of trainData shape {}".format(trainX.shape))
-print("[INFO] Dataset of trainLabels shape {}".format(testX.shape))
-print("[INFO] Dataset of testData shape {}".format(trainY.shape))
-print("[INFO] Dataset of testLabels shape {}".format(testY.shape))
+    
+print("__________________________________________________________________________________________________________")
+print("[INFO] Dataset of train Data shape {}".format(trainX.shape))
+print("[INFO] Dataset of train Labels shape {}".format(testX.shape))
+print("[INFO] Dataset of test Data shape {}".format(trainY.shape))
+print("[INFO] Dataset of test Labels shape {}".format(testY.shape))
+print("__________________________________________________________________________________________________________")
 
 
 # construct the image generator for data augmentation

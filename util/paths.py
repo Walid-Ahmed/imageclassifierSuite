@@ -77,13 +77,14 @@ def getTrainStatistics(datasetDir,train_dir,validation_dir):
 
 def getTrainStatistics2(datasetDir):
 
-    labels=get_immediate_subdirectories(datasetDir)
-    labels.sort()
+    print("____________________________________________________________________________________")
+    print(datasetDir)
+    for (dirpath, dirnames, filenames) in os.walk(datasetDir):
+        imagePaths = sorted(list(list_images(dirpath)))
+        print('[INFO] Total images of {} is {} '.format(dirpath ,len(imagePaths)))
+    print("____________________________________________________________________________________")
+       
 
-    for label in labels:
-            train_label1_dir = os.path.join(datasetDir, label)
-            imagePaths = sorted(list(list_images(train_label1_dir)))
-            print('[INFO] Total images of {} is {} '.format(label ,len(imagePaths)))
 
 
 
