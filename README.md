@@ -165,7 +165,7 @@ Each training will save the follwoing files in the "Results" folder
 
 ## V-Test Binary Models
 
-You can test the binary model using the script in test_network_binary.py, The results will be displayed an image with the name as file precceded with "prediction_"  will be saved to the Results folder
+You can test the binary model using the script in test_network_binary.py. The results will be displayed as an image with the predicted label typed on it. It will also be   saved with the name as file precceded with "prediction_"  in Results folder
 
 ```
 python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
