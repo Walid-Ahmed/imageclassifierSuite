@@ -165,6 +165,8 @@ Each training will save the follwoing files in the "Results" folder
 
 ## V-Test Binary Models
 
+You can test the binary model using the script in test_network_binary.py, The results will be displayed an image with the name as file precceded with "prediction_"  will be saved to the Results folder
+
 ```
 python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
 ```
@@ -177,6 +179,7 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
+
 
 # VI-Train on large dataset using Keras fit_generator
 Not all the datasets that you will be using for training will be small to fit your memory. For example the the sport classification dataset(included in this repo ) has 14,405   images and  resized to only 224px*224px. If you try to load this  whole dataset to memory in any list like structure , you will most likely face memory issues.
