@@ -14,6 +14,7 @@ import imutils
 import cv2
 import tensorflow as tf 
 import pickle
+import os
 
 
 
@@ -40,6 +41,8 @@ height=int(args["height"])
 
 
 labels = pickle.loads(open(args["labelPKL"], "rb").read())
+print(labels) #for example {'cats': 0, 'dogs': 1}
+
 
 # load the image
 image = cv2.imread(args["image"])
@@ -60,7 +63,6 @@ print("[INFO] Model loaded succesfully from {}".format(args["model"]))
 
 
 prediction= (model.predict(image)[0])[0] #probabilty
-print(prediction)
 
 
 tmpLabels=[None,None]
@@ -83,5 +85,8 @@ cv2.putText(output, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,0.7, (0, 255, 0),
 
 # show the output image
 cv2.imshow("Output", output)
-cv2.imwrite("result1.png",output)
+fileNameToSaveImageWithPrediction="prediction_"+os.path.basename(args["image"])
+fileNameToSaveImageWithPrediction=os.path.join("Results",fileNameToSaveImageWithPrediction)
+cv2.imwrite(fileNameToSaveImageWithPrediction,output)
+print("[INFO] Image with prediction saved to  {}".format(fileNameToSaveImageWithPrediction))
 cv2.waitKey(0)

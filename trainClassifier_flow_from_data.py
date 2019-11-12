@@ -17,7 +17,7 @@ from  util import  plotUtil
 from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
 from  util import  helper  
-from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.image import img_to_array
 from imutils import paths
@@ -167,16 +167,30 @@ lb = LabelBinarizer()
 labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels
 numOfOutputs=len(lb.classes_)
 #print(lb.classes_)
+print("__________________________________________________________________________________________________________")
 
 
+print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   
 
 
 
 if (numOfOutputs==2):  #Binary problem
 	numOfOutputs=1  # use only 1 neuron in last layer
 
-print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   
 
+
+fileNameToSaveLabels=datasetDir+"_labels.pkl"
+fileNameToSaveLabels=os.path.join("Results",fileNameToSaveLabels)
+f = open(fileNameToSaveLabels, "wb")
+labeles_dictionary=dict()
+outInt=0
+for item in lb.classes_:
+	labeles_dictionary[item]=outInt
+	outInt=outInt+1
+
+f.write(pickle.dumps(labeles_dictionary))   #['not_santa' 'santa']
+f.close()
+print("[INFO] Labels saved  to file {} as {}".format(fileNameToSaveLabels,labeles_dictionary))
 
 
 
@@ -233,19 +247,9 @@ print("[INFO] Model saved  to file {}".format(fileNameToSaveModel))
 print("[INFO] Best Model saved  to file {}".format(fileNameToSaveBestModel))
 
 # serialize the label binarizer to disk
-fileNameToSaveLabels=datasetDir+"_labels.pkl"
-fileNameToSaveLabels=os.path.join("Results",fileNameToSaveLabels)
-f = open(fileNameToSaveLabels, "wb")
-f.write(pickle.dumps(lb.classes_))
-f.close()
-print("[INFO] Labels saved  to file {}".format(fileNameToSaveLabels))
 
 
-if(numOfOutputs==1):
-	labelsDict=dict()
-	labelsDict[lb.classes_[0]]=0
-	labelsDict[lb.classes_[1]]=1
-	print(labelsDict)
+
 
 
 # evaluate the network

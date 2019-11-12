@@ -1,16 +1,17 @@
 # USAGE
 
 
-#python test_network_multiClassifier.py --model Results/SportsClassification_binaryClassifier.keras2  --image TestImages/test_images_sports/tennis.jpeg --labelPKL Results/SportsClassification_labels.pkl --width 224 --height 224
+#python test_network_multiClassifier.py  --model Results/SportsClassification_Classifier.keras2 --image TestImages/test_images_sports/tennis.jpeg --labelPKL Results/SportsClassification_labels.pkl --width 224 --height 224
 
 # import the necessary packages
-from keras.preprocessing.image import img_to_array
-from keras.models import load_model
+
+import tensorflow  as tf
+
+from tensorflow.keras.preprocessing.image import img_to_array
 import numpy as np
 import argparse
 import imutils
 import cv2
-import tensorflow as tf 
 import pickle
 
 
@@ -47,8 +48,11 @@ image = img_to_array(image)
 image = np.expand_dims(image, axis=0)
 
 # load the trained convolutional neural network
-print("[INFO] loading network...")
+print("[INFO] loading network. from {}".format(args["model"]))
+#model = tf.keras.models.load_model(args["model"])
 model = tf.keras.models.load_model(args["model"])
+
+
 print("[INFO] Model loaded succesfully from {}".format(args["model"]))
 
 # classify the input image
