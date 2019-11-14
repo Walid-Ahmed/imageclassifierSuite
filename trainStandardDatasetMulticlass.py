@@ -220,7 +220,7 @@ if __name__ == '__main__':
 	
 
 
-	fileToSaveModel=os.path.join("Results",dataset+"Lenet.keras2")
+	fileToSaveModel=os.path.join("Results",dataset+"_"+networkID+".keras2")
 	model.save(fileToSaveModel)
 
 	print("[INFO] Model saved to {}".format(fileToSaveModel))

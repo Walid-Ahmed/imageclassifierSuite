@@ -73,8 +73,8 @@ def plotAccuracyAndLossesonSameCurve(history,title=""):
 
   info=""
     #-----------------------------------------------------------
-  acc      = history.history[     'acc' ]
-  val_acc  = history.history[ 'val_acc' ]
+  acc      = history.history[     'accuracy' ]
+  val_acc  = history.history[ 'val_accuracy' ]
   loss     = history.history[    'loss' ]
   val_loss = history.history['val_loss' ]   
   epochs   = range(len(acc)) # Get number of epochs
