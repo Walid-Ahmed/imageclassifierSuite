@@ -7,7 +7,9 @@ import matplotlib
 from util import paths
 import random
 from PIL import Image
-
+import matplotlib.cm as cm
+import numpy as np
+import cv2
 
 matplotlib.use("Qt5Agg")
 print("[INFO] matplotlib BACKEND IS {}".format(matplotlib.get_backend())) #[INFO] matplotlib BACKEND IS agg
@@ -171,7 +173,9 @@ def drarwGridOfImagesFromImagesData(images,fileNameToSaveImage=None):
     sp.axis('Off') # Don't show axes (or gridlines)
 
     img = images[i]
+
     plt.imshow(img)
+
  
   if(fileNameToSaveImage != None):
     plt.savefig(fileNameToSaveImage)

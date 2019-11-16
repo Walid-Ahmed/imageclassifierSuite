@@ -72,20 +72,20 @@ if __name__ == '__main__':
 	print("[INFO] downloading {0}...".format(dataset))
 
 	if(dataset=="MNIST"):
-		(trainData, trainLabels), (testData, testLabels) = mnist.load_data()
+		(trainX, trainY), (testX, testY) = mnist.load_data()
 		labels =  ['0','1','2','3','4','5','6','7','8','9']
 
 
 
 
 	if(dataset=="CIFAR10"):
-		(trainData, trainLabels), (testData, testLabels) = cifar10.load_data()
+		(trainX, trainY), (testX, testY) = cifar10.load_data()
 		labels =  ['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck']
 
 
 
 	if(dataset=="CIFAR100"):
-		(trainData, trainLabels), (testData, testLabels) = cifar100.load_data()
+		(trainX, trainY), (testX, testY) = cifar100.load_data()
 		labels=['apple', 'aquarium_fish', 'baby', 'bear', 'beaver', 'bed', 'bee', 'beetle', 
     'bicycle', 'bottle', 'bowl', 'boy', 'bridge', 'bus', 'butterfly', 'camel', 
     'can', 'castle', 'caterpillar', 'cattle', 'chair', 'chimpanzee', 'clock', 
@@ -104,32 +104,36 @@ if __name__ == '__main__':
 
 
 	if(dataset=="fashion_mnist"):
-		(trainData, trainLabels), (testData, testLabels) = fashion_mnist.load_data()
+		(trainX, trainY), (testX, testY) = fashion_mnist.load_data()
 		labels = ["top", "trouser", "pullover", "dress", "coat","sandal", "shirt", "sneaker", "bag", "ankle boot"]
 
 
 	#get original img width , hight and number of channels
 	try:
-		numPfSamples,imgWidth,imgHeight,numOfchannels=trainData.shape
+		numPfSamples,imgWidth,imgHeight,numOfchannels=trainX.shape
 
-	except:
-		numPfSamples,imgWidth,imgHeight=trainData.shape
+	except:   #dataset is single channe;
+		numPfSamples,imgWidth,imgHeight=trainX.shape
 		numOfchannels=1
+		trainX = np.expand_dims(trainX, axis=-1)
+		testX = np.expand_dims(testX, axis=-1)
 
 
-	print("[INFO] Original {} dataset of trainData shape {}".format(dataset,trainData.shape))
-	print("[INFO] Original {} dataset of trainLabels shape {}".format(dataset,trainLabels.shape))
-	print("[INFO] Original {} dataset of testData shape {}".format(dataset,testData.shape))
-	print("[INFO] Original {} dataset of testLabels shape {}".format(dataset,testLabels.shape))
+	trainX = trainX.astype("float32") / 255.0
+	testX = testX.astype("float32") / 255.0
+
+	print("[INFO] Original {} dataset of trainData shape {}".format(dataset,trainX.shape))
+	print("[INFO] Original {} dataset of trainLabels shape {}".format(dataset,trainY.shape))
+	print("[INFO] Original {} dataset of testData shape {}".format(dataset,testX.shape))
+	print("[INFO] Original {} dataset of testLabels shape {}".format(dataset,testY.shape))
+	input("press any key to continue")
 
 
-	trainX = trainData.reshape((trainData.shape[0], imgWidth,imgHeight,  numOfchannels))
-	testX = testData.reshape((testData.shape[0], imgWidth,imgHeight, numOfchannels))
+
+	#Prepare images for grid show
 	images=[]
-
-
-	for  i in range(9):
-		image=trainData[i]
+	for  i in range(16):
+		image=trainX[i]
 		if(numOfchannels==1):
 			image = cv2.merge([image] * 3)
 		else:
@@ -137,36 +141,15 @@ if __name__ == '__main__':
 		images.append(image)
 	
 	fileToSaveSampleImage=os.path.join("Results","sample_"+dataset+".png")
-	plotUtil.drarwGridOfImagesFromImagesData(trainData,fileToSaveSampleImage)
-
+	plotUtil.drarwGridOfImagesFromImagesData(images,fileToSaveSampleImage)
 	print("[INFO] Sample  image of standard dataset:{} is saved at {}".format(dataset,fileToSaveSampleImage))
-	print("[INFO] Press any key to start training")
 
-
-
-
-	trainX = trainX.astype("float32") / 255.0
-	testX = testX.astype("float32") / 255.0
-
-
-	# transform the training and testing labels into vectors in the
-	# range [0, classes] -- this generates a vector for each label,
-	# where the index of the label is set to `1` and all other entries
-	# to `0`; in the case of MNIST, there are 10 class labels
 	
-
-
-	trainLabels=trainLabels.astype(str)
-	testLabels=testLabels.astype(str)
-
-
 
 	#lb.classes_  will be  the labels with the same order in one hot vector--->. label = lb.classes_[i]
 	lb = LabelBinarizer()
-	trainY = lb.fit_transform(trainLabels) #Binary targets transform to a column vector. otherwise one hot vector
-	testY = lb.fit_transform(testLabels)  #Binary targets transform to a column vector. otherwise one hot vector
-
-
+	trainY = lb.fit_transform(trainY) #Binary targets transform to a column vector. otherwise one hot vector
+	testY = lb.fit_transform(testY)  #Binary targets transform to a column vector. otherwise one hot vector
 	numOfOutputs=len(lb.classes_)
 	#print(lb.classes_)
 
@@ -184,11 +167,7 @@ if __name__ == '__main__':
 
 	# train the network
 	print("[INFO] training network...")
-	#model.fit(trainX, trainY, batch_size=128, epochs=20,verbose=1)
-
 	aug = ImageDataGenerator()
-
-
 	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
 
 
