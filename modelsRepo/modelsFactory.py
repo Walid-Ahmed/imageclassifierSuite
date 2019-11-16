@@ -131,7 +131,7 @@ class  ModelCreator:
 	def defineNet2(self):   #suitable for catsvsdogs
 
 		model = tf.keras.models.Sequential([
-	    # Note the input shape is the desired size of the image 150x150 with 3 bytes color
+	    # Note the input shape is the desired size of the image 
 	    tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(self.imgWidth,self.imgHeight, self.channels)),
 	    tf.keras.layers.MaxPooling2D(2,2),
 	    tf.keras.layers.Conv2D(32, (3,3), activation='relu'),
@@ -142,7 +142,6 @@ class  ModelCreator:
 	    tf.keras.layers.Flatten(), 
 	    # 512 neuron hidden layer
 	    tf.keras.layers.Dense(512, activation='relu'), 
-	    # Only 1 output neuron. It will contain a value from 0-1 where 0 for 1 class ('cats') and 1 for the other ('dogs')
 	    tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)  ])
 		return model
 
