@@ -8,6 +8,8 @@
 # python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel --verbose False
 # python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir NIHmalaria --networkID LenetModel --verbose False
 
+# python trainClassifier_flow_from_data.py    --EPOCHS 200   --width 48 --height 48 --channels 1 --datasetDir FacialExpression  --networkID net2 --verbose False
+
 
 
 # import the necessary packages
@@ -75,11 +77,11 @@ else:
 	verbose=False
 
 
-fileNameToSaveBestModel="{}_Best_classifier.keras2".format(datasetDir)
-fileNameToSaveBestModel=os.path.join("Results",fileNameToSaveBestModel)
+folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
+folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
 
 es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=50)
-mc = ModelCheckpoint(fileNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
+mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
 
 
 def predictBinaryValue(probs,threshold=0.5):
@@ -239,14 +241,24 @@ history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 	validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
 	epochs=EPOCHS, verbose=1, callbacks=[es, mc])
 
-# save the model to disk
-fileNameToSaveModel="{}_classifier.keras2".format(datasetDir)
-fileNameToSaveModel=os.path.join("Results",fileNameToSaveModel)
-model.save(fileNameToSaveModel)
-print("[INFO] Model saved  to file {}".format(fileNameToSaveModel))
-print("[INFO] Best Model saved  to file {}".format(fileNameToSaveBestModel))
 
-# serialize the label binarizer to disk
+
+
+# save the model to disk
+folderNameToSaveModel="{}_Classifier".format(datasetDir)
+folderNameToSaveModel=os.path.join("Results",folderNameToSaveModel)
+model.save(folderNameToSaveModel,save_format='tf') #model is saved in TF2 format (default)
+
+
+
+fileNameToSaveModel="{}_Classifier.h5".format(datasetDir)
+fileNameToSaveModel=os.path.join(folderNameToSaveModel,fileNameToSaveModel)
+model.save(fileNameToSaveModel,save_format='h5') #model is saved in h5 format
+
+
+print("[INFO] Model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
+print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
+
 
 
 

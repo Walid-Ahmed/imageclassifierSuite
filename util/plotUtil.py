@@ -26,8 +26,8 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
   # Retrieve a list of list results on training and test data
   # sets for each training epoch
   #-----------------------------------------------------------
-  acc      = history.history[     'acc' ]
-  val_acc  = history.history[ 'val_acc' ]
+  acc      = history.history[     'accuracy' ]
+  val_acc  = history.history[ 'val_accuracy' ]
   loss     = history.history[    'loss' ]
   val_loss = history.history['val_loss' ]
 

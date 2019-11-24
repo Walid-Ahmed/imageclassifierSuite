@@ -150,11 +150,12 @@ if __name__ == "__main__":
 
 
 
-	fileNameToSaveBestModel="{}_Best_classifier.keras2".format(datasetDir)
-	fileNameToSaveBestModel=os.path.join("Results",fileNameToSaveBestModel)
+	folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
+	folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
+
 
 	es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=50)
-	mc = ModelCheckpoint(fileNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
+	mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
 
 
 
@@ -236,10 +237,20 @@ if __name__ == "__main__":
 	history = model.fit_generator(trainGen,steps_per_epoch=NUM_TRAIN_IMAGES // BS, validation_data=testGen,validation_steps=NUM_TEST_IMAGES // BS, epochs=EPOCHS ,  callbacks=[es, mc])
 
 	# save the model to disk
-	fileNameToSaveModel="{}_Classifier.keras2".format(datasetDir)
-	fileNameToSaveModel=os.path.join("Results",fileNameToSaveModel)
-	model.save(fileNameToSaveModel)
-	print("[INFO] Model saved  to file {}".format(fileNameToSaveModel))
+	folderNameToSaveModel="{}_Classifier".format(datasetDir)
+	folderNameToSaveModel=os.path.join("Results",folderNameToSaveModel)
+	model.save(folderNameToSaveModel,save_format='tf') #model is saved in TF2 format (default)
+
+	fileNameToSaveModel="{}_Classifier.h5".format(datasetDir)
+	fileNameToSaveModel=os.path.join(folderNameToSaveModel,fileNameToSaveModel)
+	model.save(fileNameToSaveModel,save_format='h5') #model is saved in h5 format
+
+
+
+
+	print("[INFO] Model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
+	print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
+
 
 	# serialize the label binarizer to disk
 	fileNameToSaveLabels=datasetDir+"_labels.pkl"
