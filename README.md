@@ -85,7 +85,7 @@ When the training starts it will show sample of images and print some statistics
  1. Loss curve
  2. Accuracy curve
  3. Loss and accuracy curves
- 4. The model as a .keras2 file
+ 4. The model as a .h5 file and .pb file in a folder with same name as dataset 
  5. The best model (highest accuracy) during training
  6. The labels in dictionary stored as a pickle file
  7. Confusion matrix as image
@@ -125,7 +125,7 @@ The following files are automatically saved to the "Results" folder
  1. Loss curve
  2. Accuracy curve
  3. Loss and accuracy curves
- 4. The model as a .keras2 file
+ 4. The model as a .h5 file and .pb file in a folder with same name as dataset 
  5. The best model (highest accuracy) during training
  6. The labels in dictionary stored as a pickle file
  7. Confusion matrix as an image
