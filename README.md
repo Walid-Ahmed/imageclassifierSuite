@@ -35,6 +35,7 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
 Beside these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
+## tranining Scripts 
 
 1. [I-Train a CIFAR10](#TRAINcIFAR) 
 2. [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)
@@ -56,7 +57,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
  
  ipython notebook  mnist_without_CNN.ipynb
 
-<h1 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary image classifier using flow from directory</h1>
+<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary image classifier using flow from directory</h1>
 
 
 The 
