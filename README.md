@@ -36,13 +36,13 @@ Beside these networks, the modelsFactory define some usefull neural networks tha
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
 
-1. I-Train a CIFAR10 
+1. [I-Train a CIFAR10](#TRAINcIFAR) 
 2. [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)
 3. [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
-4. IV-Train a multiclass image classifier using satandard dataset
+4. [IV-Train a multiclass image classifier using satandard dataset](Trainmulticlassimageclassifierusingsatandard dataset)
 
 
-## I-Train a CIFAR10
+<h1 id="TRAINcIFAR">I-Train a CIFAR10</h1>
 
 You can start  testing your environment by training  a model for the   CIFAR10 dataset  just by excuting the command
 ```
