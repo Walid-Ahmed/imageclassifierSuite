@@ -3,6 +3,17 @@
 ## Introduction 
 This Repo can be used to train standard keras dataset  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
+# Install
+
+Here is the list of libraries you need to install to execute the code:
+- python = 3.6
+- Keras
+- numpy
+- scipy
+- matplotlib
+- scikit-image
+- jupyter
+
 ## Available Datasets 
 
 The repo comes loaded with following datasets (all in folder "datasets"):
