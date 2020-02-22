@@ -92,7 +92,7 @@ python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human 
 ```
 
 
-When the training starts it will show sample of images and print some statistics about the dataset. after finishing, the following files are automatically saved to the "Results" folder
+When the training starts it will show sample of images and print some statistics about the dataset. After finishing, the following files are automatically saved to the "Results" folder
 
  1. Loss curve
  2. Accuracy curve
