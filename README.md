@@ -37,7 +37,7 @@ More and more networks will be added soon, however you can still define your own
 
 
 1. I-Train a CIFAR10 
-2. II-Train a binary image classifier using flow from directory(#binaryimageclassifierusingflowfromdirectory)
+2. [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)
 3. [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
 4. IV-Train a multiclass image classifier using satandard dataset
 
