@@ -161,7 +161,8 @@ for imagePath in imagePaths:
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
-
+print(data.shape)  #(922, 28, 28, 3)
+#exit()
 
 
 #lb.classes_  will be  the labels with the same order in one hot vector--->. label = lb.classes_[i]
