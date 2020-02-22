@@ -35,7 +35,7 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
 Beside these networks, the modelsFactory define some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
-## tranining Scripts 
+## Tranining Scripts 
 
 1. [I-Train a CIFAR10](#TRAINcIFAR) 
 2. [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)
@@ -43,7 +43,7 @@ More and more networks will be added soon, however you can still define your own
 4. [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)
 
 
-<h1 id="TRAINcIFAR">I-Train a CIFAR10</h1>
+<h2 id="TRAINcIFAR">I-Train a CIFAR10</h2>
 
 You can start  testing your environment by training  a model for the   CIFAR10 dataset  just by excuting the command
 ```
@@ -132,7 +132,7 @@ The following files are automatically saved to the "Results" folder
  7. Confusion matrix as an image
  
 
-<h1 id="Trainmulticlassimageclassifierusingsatandarddataset">IV-Train a multiclass image classifier using satandard dataset </h1>
+<h2 id="Trainmulticlassimageclassifierusingsatandarddataset">IV-Train a multiclass image classifier using satandard dataset </h2>
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
