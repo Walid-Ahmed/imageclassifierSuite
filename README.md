@@ -43,7 +43,7 @@ More and more networks will be added soon, however you can still define your own
 4. [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)
 
 
-<h2 id="TRAINcIFAR">I-Train a CIFAR10</h2>
+<h2 id="TRAINcIFAR">I-Train on CIFAR10/MNIST dataset</h2>
 
 You can start  testing your environment by training  a model for the   CIFAR10 dataset  just by excuting the command
 ```
