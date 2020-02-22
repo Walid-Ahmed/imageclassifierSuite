@@ -39,7 +39,7 @@ More and more networks will be added soon, however you can still define your own
 1. [I-Train a CIFAR10](#TRAINcIFAR) 
 2. [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)
 3. [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
-4. [IV-Train a multiclass image classifier using satandard dataset](Trainmulticlassimageclassifierusingsatandard dataset)
+4. [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)
 
 
 <h1 id="TRAINcIFAR">I-Train a CIFAR10</h1>
@@ -131,7 +131,7 @@ The following files are automatically saved to the "Results" folder
  7. Confusion matrix as an image
  
 
-## IV-Train a multiclass image classifier using satandard dataset . 
+<h1 id="Trainmulticlassimageclassifierusingsatandarddataset">IV-Train a multiclass image classifier using satandard dataset </h1>
 
 
 The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
