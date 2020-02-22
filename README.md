@@ -56,6 +56,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
  
  ipython notebook  mnist_without_CNN.ipynb
 
+<h1 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary image classifier using flow from directory</h1>
 
 ## II-Train a binary image classifier using flow from directory
 
@@ -100,7 +101,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
-<h1 id="multiclassimageclassifier">III--Train a binary/multiclass image classifier</h3>
+<h1 id="multiclassimageclassifier">III--Train a binary/multiclass image classifier</h1>
 
 
 The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
