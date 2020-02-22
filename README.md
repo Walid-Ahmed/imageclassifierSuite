@@ -36,8 +36,8 @@ Beside these networks, the modelsFactory define some usefull neural networks tha
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
 
-1. Train a CIFAR10 
-2. Train a binary image classifier using flow from directory
+1. I-Train a CIFAR10 
+2. II-Train a binary image classifier using flow from directory(#binaryimageclassifierusingflowfromdirectory)
 3. [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
 4. IV-Train a multiclass image classifier using satandard dataset
 
@@ -58,7 +58,6 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
 
 <h1 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary image classifier using flow from directory</h1>
 
-## II-Train a binary image classifier using flow from directory
 
 The 
 trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
