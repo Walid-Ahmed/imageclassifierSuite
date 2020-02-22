@@ -177,7 +177,7 @@ Each training will save the follwoing files in the "Results" folder
  1. Thumbnail image including sample images from the training dtataset
  2. The trained model as a .keras2 file
  
- A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
+ A sample confusion matrix  image  is saved as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
 
 
