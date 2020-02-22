@@ -78,7 +78,7 @@ The data should have been splitted from the start to train and eval, for example
 
 ![structure for cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/cats_and_dogs_dir.png)
 
-To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
+To start  training  using this file on "cats and dogs" dataset you can run the follwing command:
 ```
 
 python trainBinaryClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 100  --width  150 --height  150 --testDir test_images_cats_and_dogs
@@ -102,18 +102,19 @@ When the training starts it will show sample of images and print some statistics
  6. The labels in dictionary stored as a pickle file
  7. Confusion matrix as image
 
+For binary classification with 2 classes only, a probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
 Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have  subfolders, each labeled with the name of the class. 
  
-For binary classification with 2 classes only, a probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
+
 
 
 
 <h1 id="multiclassimageclassifier">III--Train a binary/multiclass image classifier</h1>
 
 
-The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
+The script   trainClassifier_flow_from_data.py   can be used to train a binary classifier or a multi classifier. 
 
 You can run it as follows
 
