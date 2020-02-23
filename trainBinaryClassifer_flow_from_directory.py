@@ -22,8 +22,12 @@ from util import paths
 import tensorflow as tf
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+<<<<<<< HEAD
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
+=======
+
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
 
@@ -42,10 +46,17 @@ if __name__ == '__main__':
 
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
+<<<<<<< HEAD
     ap.add_argument("--datasetDir", required=True, help="path to dataset directory with train and validation images")
     ap.add_argument("--testDir", default=None, help="path to test directory with test images")
     ap.add_argument("--networkID", required=True, help="I.D. of the network")
     ap.add_argument("--EPOCHS", required=True, help="Number of maximum epochs to train")
+=======
+    ap.add_argument("--datasetDir", required=True, help="datasetDir")
+    ap.add_argument("--testDir", default=None, help="testDir")
+    ap.add_argument("--networkID", required=True, help="I.D. of the network")
+    ap.add_argument("--EPOCHS", required=True, help="name of the network")
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
     ap.add_argument("--width", required=True, help="width of image")
     ap.add_argument("--height", required=True, help="height of image")
 
@@ -86,12 +97,15 @@ if __name__ == '__main__':
     fileToSaveSampleImage=os.path.join("Results","sample_"+datasetDir+".png")
     plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
 
+<<<<<<< HEAD
     folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
     folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
 
     es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=200)
     mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
 
+=======
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
 
@@ -150,7 +164,11 @@ if __name__ == '__main__':
     print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
     print("*************************************************************************************************************")      
 
+<<<<<<< HEAD
     input("Press any key to start training ")
+=======
+    input("Press any key to start Training ")
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
 
@@ -160,6 +178,7 @@ if __name__ == '__main__':
                                   steps_per_epoch=NUM_TRAIN_IMAGES // BS,   ## 2000 images = batch_size * steps-----steps=images/batch_size
                                   epochs=EPOCHS,
                                   validation_steps=NUM_TEST_IMAGES // BS,
+<<<<<<< HEAD
                                   verbose=2 ,callbacks=[es, mc])
 
 
@@ -182,6 +201,16 @@ if __name__ == '__main__':
 
     print("[INFO] Model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
     print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
+=======
+                                  verbose=2)
+
+
+    #save model
+    fileNameToSaveModel="{}_{}_binaryClassifier.keras2".format(labels[0],labels[1])
+    fileNameToSaveModel=os.path.join("Results",fileNameToSaveModel)
+    model.save(fileNameToSaveModel)
+    print("[INFO] Model saved  to file {}".format(fileNameToSaveModel))
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
     #plot and save training curves 

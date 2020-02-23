@@ -26,6 +26,7 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
   # Retrieve a list of list results on training and test data
   # sets for each training epoch
   #-----------------------------------------------------------
+<<<<<<< HEAD
 
   try:
     acc      = history.history[     'accuracy' ]
@@ -38,6 +39,12 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
     val_acc  = history.history[ 'val_acc' ]
     loss     = history.history[    'loss' ]
     val_loss = history.history['val_loss' ]
+=======
+  acc      = history.history[     'accuracy' ]
+  val_acc  = history.history[ 'val_accuracy' ]
+  loss     = history.history[    'loss' ]
+  val_loss = history.history['val_loss' ]
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
   epochs   = range(len(acc)) # Get number of epochs
 
@@ -83,6 +90,7 @@ def plotAccuracyAndLossesonSameCurve(history,title=""):
 
   info=""
     #-----------------------------------------------------------
+<<<<<<< HEAD
 
     
   try:
@@ -99,6 +107,12 @@ def plotAccuracyAndLossesonSameCurve(history,title=""):
 
 
 
+=======
+  acc      = history.history[     'accuracy' ]
+  val_acc  = history.history[ 'val_accuracy' ]
+  loss     = history.history[    'loss' ]
+  val_loss = history.history['val_loss' ]   
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
   epochs   = range(len(acc)) # Get number of epochs
 
   plt.style.use("ggplot")

@@ -8,6 +8,7 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 import tensorflow as tf
 import matplotlib.pyplot as plt
+<<<<<<< HEAD
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.datasets import cifar10
 import numpy as np
@@ -75,6 +76,13 @@ def plot_print_confusion_matrix(y_true, y_pred, classes,dataset,
 
 
     return ax
+=======
+from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.datasets import cifar10
+import numpy as np
+
+
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
 
@@ -90,10 +98,17 @@ if __name__ == '__main__':
 	(trainData, trainLabels), (testData, testLabels) = cifar10.load_data()
 	labels =  ['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck']
 	numPfSamples,imgWidth,imgHeight,numOfchannels=trainData.shape
+<<<<<<< HEAD
 	print("[INFO] Original cifar10 dataset of train Data shape {}".format(trainData.shape))
 	print("[INFO] Original cifar10 dataset of train Labels shape {}".format(trainLabels.shape))
 	print("[INFO] Original cifar10 dataset of test Data shape {}".format(testData.shape))
 	print("[INFO] Original cifar10 dataset of test Labels shape {}".format(testLabels.shape))
+=======
+	print("[INFO] Original cifar10 dataset of trainData shape {}".format(trainData.shape))
+	print("[INFO] Original cifar10 dataset of trainLabels shape {}".format(trainLabels.shape))
+	print("[INFO] Original cifar10 dataset of testData shape {}".format(testData.shape))
+	print("[INFO] Original cifar10 dataset of testLabels shape {}".format(testLabels.shape))
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
     #get data ready for training
@@ -106,6 +121,7 @@ if __name__ == '__main__':
 	lb = LabelBinarizer()
 	trainY = lb.fit_transform(trainLabels)
 	testY = lb.fit_transform(testLabels)
+<<<<<<< HEAD
 	print(lb.classes_)
 
 
@@ -127,6 +143,9 @@ if __name__ == '__main__':
 	folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
 	es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=200)
 	mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
+=======
+	print("[INFO] Data ready for training")
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
 
@@ -177,6 +196,7 @@ if __name__ == '__main__':
 	# train the network
 	print("[INFO] training network...")
 	aug = ImageDataGenerator()
+<<<<<<< HEAD
 	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1,callbacks=[es, mc])
 
 	pathToSaveModel=os.path.join("Results","cifar10model.h5")
@@ -188,6 +208,11 @@ if __name__ == '__main__':
 	model.save(pathToSaveModel,save_format='tf')
 
 	print("[INFO] Model saved in h5 and tf format to {}".format("Results"))
+=======
+	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
+	model.save("cifar10model.keras2")
+	print("[INFO] Model saved to {}".format("cifar10model.keras2"))
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
   
 	#draw training curves	
 	acc      = history.history[     'accuracy' ]
@@ -206,9 +231,12 @@ if __name__ == '__main__':
 	plt.ylabel("Loss/Accuracy")
 	plt.legend(loc="lower left")
 	plt.show()
+<<<<<<< HEAD
 	fileToSaveLossAccCurve=os.path.join("Results","CIFAR10_"+"plot_loss_accu.png")
 	print("[INFO] Loss curve saved to {}".format(fileToSaveLossAccCurve))
 	plt.savefig(fileToSaveLossAccCurve)
+=======
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
 
@@ -225,10 +253,13 @@ if __name__ == '__main__':
 
 
 
+<<<<<<< HEAD
 	plot_print_confusion_matrix(y_true, y_pred, classes=labels_,dataset="CIFAR10",title="CIFAR10"+ '_Confusion matrix, without normalization') 
 
 
 
 
 
+=======
+>>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
