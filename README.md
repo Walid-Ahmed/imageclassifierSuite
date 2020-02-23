@@ -105,8 +105,7 @@ python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human 
 
 For binary classification with 2 classes only, a probabilty more than 0.5 means that the output is the second  class when they are sorted alphabetically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
-To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
-Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have  subfolders, each labeled with the name of the class. 
+
  
 
 
@@ -207,6 +206,9 @@ python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --he
 ## Use K-NN to build a classifier cat vs dog
 jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
 
+# VIII-Train with your own dataset
 
+To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
+Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have  subfolders, each labeled with the name of the class. 
 
 
