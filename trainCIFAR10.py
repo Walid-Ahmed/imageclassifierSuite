@@ -11,8 +11,70 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.datasets import cifar10
 import numpy as np
+import os
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import ModelCheckpoint
+import pickle
 
 
+def plot_print_confusion_matrix(y_true, y_pred, classes,dataset,
+                          normalize=False,
+                          title=None,
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    if not title:
+        if normalize:
+            title = 'Normalized confusion matrix'
+        else:
+            title = 'Confusion matrix, without normalization'
+
+    # Compute confusion matrix
+    cm = confusion_matrix(y_true, y_pred)
+    # Only use the labels that appear in the data
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+        print_cm(cm,classes)
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+    ax.figure.colorbar(im, ax=ax)
+    # We want to show all ticks...
+    ax.set(xticks=np.arange(cm.shape[1]),
+           yticks=np.arange(cm.shape[0]),
+           # ... and label them with the respective list entries
+           xticklabels=classes, yticklabels=classes,
+           title=title,
+           ylabel='True label',
+           xlabel='Predicted label')
+
+    # Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+             rotation_mode="anchor")
+
+    # Loop over data dimensions and create text annotations.
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j], fmt),
+                    ha="center", va="center",
+                    color="white" if cm[i, j] > thresh else "black")
+    fig.tight_layout()
+    fileToSaveConfusionMatrix=os.path.join("Results",dataset+'_ConfusionMatrix.png')
+    plt.savefig(fileToSaveConfusionMatrix)
+    print("[INFO] Confusion matrix   saved to {}".format(fileToSaveConfusionMatrix))
+
+    plt.show()
+
+
+    return ax
 
 
 
@@ -44,7 +106,27 @@ if __name__ == '__main__':
 	lb = LabelBinarizer()
 	trainY = lb.fit_transform(trainLabels)
 	testY = lb.fit_transform(testLabels)
-	print("[INFO] Data ready for training")
+	print(lb.classes_)
+
+
+	fileNameToSaveLabels="CIFAR10"+"_labels.pkl"
+	fileNameToSaveLabels=os.path.join("Results",fileNameToSaveLabels)
+	f = open(fileNameToSaveLabels, "wb")
+	labeles_dictionary=dict()	
+	outInt=0
+	for item in labels:
+		labeles_dictionary[item]=outInt
+		outInt=outInt+1
+	f.write(pickle.dumps(labeles_dictionary))   #['not_santa' 'santa']
+	f.close()
+	print("[INFO] Labels saved  to file {} as {}".format(fileNameToSaveLabels,labeles_dictionary))
+	input("[INFO] Data ready for training")
+
+
+	folderNameToSaveBestModel="{}_Best_classifier".format("CIFAR10")
+	folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
+	es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=200)
+	mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
 
 
 
@@ -95,9 +177,17 @@ if __name__ == '__main__':
 	# train the network
 	print("[INFO] training network...")
 	aug = ImageDataGenerator()
-	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1)
-	model.save("cifar10model.keras2")
-	print("[INFO] Model saved to {}".format("cifar10model.keras2"))
+	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1,callbacks=[es, mc])
+
+	pathToSaveModel=os.path.join("Results","cifar10model.h5")
+	model.save(pathToSaveModel,save_format='h5')
+	print("[INFO] Model saved to {}".format(pathToSaveModel))
+
+
+	pathToSaveModel=os.path.join("Results","cifar10model")
+	model.save(pathToSaveModel,save_format='tf')
+
+	print("[INFO] Model saved in h5 and tf format to {}".format("Results"))
   
 	#draw training curves	
 	acc      = history.history[     'accuracy' ]
@@ -116,6 +206,9 @@ if __name__ == '__main__':
 	plt.ylabel("Loss/Accuracy")
 	plt.legend(loc="lower left")
 	plt.show()
+	fileToSaveLossAccCurve=os.path.join("Results","CIFAR10_"+"plot_loss_accu.png")
+	print("[INFO] Loss curve saved to {}".format(fileToSaveLossAccCurve))
+	plt.savefig(fileToSaveLossAccCurve)
 
 
 
@@ -128,6 +221,12 @@ if __name__ == '__main__':
 	print(classification_report(y_true,y_pred, target_names=labels))
 	print(confusion_matrix(y_true, y_pred))
 	print(labels)
+
+
+
+
+	plot_print_confusion_matrix(y_true, y_pred, classes=labels_,dataset="CIFAR10",title="CIFAR10"+ '_Confusion matrix, without normalization') 
+
 
 
 

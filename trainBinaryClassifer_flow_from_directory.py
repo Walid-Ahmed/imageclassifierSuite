@@ -42,10 +42,10 @@ if __name__ == '__main__':
 
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument("--datasetDir", required=True, help="datasetDir")
-    ap.add_argument("--testDir", default=None, help="testDir")
+    ap.add_argument("--datasetDir", required=True, help="path to dataset directory with train and validation images")
+    ap.add_argument("--testDir", default=None, help="path to test directory with test images")
     ap.add_argument("--networkID", required=True, help="I.D. of the network")
-    ap.add_argument("--EPOCHS", required=True, help="name of the network")
+    ap.add_argument("--EPOCHS", required=True, help="Number of maximum epochs to train")
     ap.add_argument("--width", required=True, help="width of image")
     ap.add_argument("--height", required=True, help="height of image")
 
