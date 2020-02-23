@@ -143,9 +143,9 @@ The following files are automatically saved to the "Results" folder
 <h2 id="Trainmulticlassimageclassifierusingsatandarddataset">IV-Train a multiclass image classifier using satandard dataset </h2>
 
 
-The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as you might have problems downloading data!).
+The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using one of the  standard datasets that are built in in Keras(but beware if you are behind proxy as you might have problems downloading data!).
 
-Some of these standard dataset are:
+Some of these standard datasets are:
  1. MNIST
  2. Fashion_mnist
  3. CIFAR10
