@@ -109,8 +109,6 @@ For binary classification with 2 classes only, a probabilty more than 0.5 means 
  
 
 
-
-
 <h1 id="multiclassimageclassifier">III--Train a binary/multiclass image classifier</h1>
 
 
