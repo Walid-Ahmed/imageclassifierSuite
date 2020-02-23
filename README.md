@@ -48,6 +48,15 @@ More and more networks will be added soon, however you can still define your own
 
 ## Tranining Scripts 
 
+When the training starts, it will show sample of images and print  statistics about the dataset. After finishing, the following files are automatically saved to the "Results" folder
+
+
+ 1. Loss and accuracy curves
+ 2. The model as a .h5 file and .pb file in a folder with same name as dataset 
+ 3. The best model (highest accuracy) during training
+ 4. The labels in dictionary stored as a pickle file
+ 5. Confusion matrix as image
+
 1. [I-Train a CIFAR10](#TRAINcIFAR) 
 2. [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)
 3. [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
@@ -92,14 +101,7 @@ python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human 
 ```
 
 
-When the training starts, it will show sample of images and print  statistics about the dataset. After finishing, the following files are automatically saved to the "Results" folder
 
-
- 3. Loss and accuracy curves
- 4. The model as a .h5 file and .pb file in a folder with same name as dataset 
- 5. The best model (highest accuracy) during training
- 6. The labels in dictionary stored as a pickle file
- 7. Confusion matrix as image
 
 For binary classification with 2 classes only, a probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
