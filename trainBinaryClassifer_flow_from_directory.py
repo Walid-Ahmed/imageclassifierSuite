@@ -22,7 +22,8 @@ from util import paths
 import tensorflow as tf
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 
 
@@ -85,6 +86,12 @@ if __name__ == '__main__':
     fileToSaveSampleImage=os.path.join("Results","sample_"+datasetDir+".png")
     plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
 
+    folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
+    folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
+
+    es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=200)
+    mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
+
 
 
 
@@ -143,7 +150,7 @@ if __name__ == '__main__':
     print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
     print("*************************************************************************************************************")      
 
-    input("Press any key to start Training ")
+    input("Press any key to start training ")
 
 
 
@@ -153,14 +160,28 @@ if __name__ == '__main__':
                                   steps_per_epoch=NUM_TRAIN_IMAGES // BS,   ## 2000 images = batch_size * steps-----steps=images/batch_size
                                   epochs=EPOCHS,
                                   validation_steps=NUM_TEST_IMAGES // BS,
-                                  verbose=2)
+                                  verbose=2 ,callbacks=[es, mc])
 
 
     #save model
-    fileNameToSaveModel="{}_{}_binaryClassifier.keras2".format(labels[0],labels[1])
+    fileNameToSaveModel="{}_{}_binaryClassifier.h5".format(labels[0],labels[1])
     fileNameToSaveModel=os.path.join("Results",fileNameToSaveModel)
-    model.save(fileNameToSaveModel)
-    print("[INFO] Model saved  to file {}".format(fileNameToSaveModel))
+    model.save(fileNameToSaveModel ,save_format='h5')
+
+
+    # save the model to disk
+    folderNameToSaveModel="{}_Classifier".format(datasetDir)
+    folderNameToSaveModel=os.path.join("Results",folderNameToSaveModel)
+    model.save(folderNameToSaveModel,save_format='tf') #model is saved in TF2 format (default)
+
+
+
+
+
+    print("*************************************************************************************************************")      
+
+    print("[INFO] Model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
+    print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
 
 
     #plot and save training curves 

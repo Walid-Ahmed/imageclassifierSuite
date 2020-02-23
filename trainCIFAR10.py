@@ -8,7 +8,7 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 import tensorflow as tf
 import matplotlib.pyplot as plt
-from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.datasets import cifar10
 import numpy as np
 
@@ -28,10 +28,10 @@ if __name__ == '__main__':
 	(trainData, trainLabels), (testData, testLabels) = cifar10.load_data()
 	labels =  ['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck']
 	numPfSamples,imgWidth,imgHeight,numOfchannels=trainData.shape
-	print("[INFO] Original cifar10 dataset of trainData shape {}".format(trainData.shape))
-	print("[INFO] Original cifar10 dataset of trainLabels shape {}".format(trainLabels.shape))
-	print("[INFO] Original cifar10 dataset of testData shape {}".format(testData.shape))
-	print("[INFO] Original cifar10 dataset of testLabels shape {}".format(testLabels.shape))
+	print("[INFO] Original cifar10 dataset of train Data shape {}".format(trainData.shape))
+	print("[INFO] Original cifar10 dataset of train Labels shape {}".format(trainLabels.shape))
+	print("[INFO] Original cifar10 dataset of test Data shape {}".format(testData.shape))
+	print("[INFO] Original cifar10 dataset of test Labels shape {}".format(testLabels.shape))
 
 
     #get data ready for training
