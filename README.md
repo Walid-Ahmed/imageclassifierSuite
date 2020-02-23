@@ -57,10 +57,10 @@ When the training starts, it will show sample of images and print  statistics ab
  4. The labels in dictionary stored as a pickle file
  5. Confusion matrix as image
 
-1. [I-Train a CIFAR10](#TRAINcIFAR) 
-2. [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)
-3. [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
-4. [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)
+ [I-Train a CIFAR10](#TRAINcIFAR) 
+ [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)
+ [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) 
+ [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)
 
 
 <h2 id="TRAINcIFAR">I-Train on CIFAR10/MNIST dataset</h2>
