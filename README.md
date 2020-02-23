@@ -1,5 +1,7 @@
 ﻿# image classifier Suite
 
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
+
 ## Introduction 
 This Repo can be used to train standard keras dataset  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
 
