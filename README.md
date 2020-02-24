@@ -11,12 +11,13 @@ This Repo can be used to train standard keras dataset  or user defined dataset w
 
 Here is the list of libraries you need to install to execute the code:
 - python = 3.6
-- Keras
-- numpy
-- scipy
-- matplotlib
+- Tesnsorflow:2.0.0
+- numpy=1.16.1
+- sklearn=0.22
+- matplotlib=3.0.2
 - scikit-image
 - jupyter
+- pickle
 
 ## Available Datasets 
 
