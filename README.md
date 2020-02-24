@@ -51,7 +51,7 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
-## Trainining Scripts 
+## Trainining and Testing Scripts 
 
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
 After finishing training, the following files are automatically saved to the "Results" folder.
