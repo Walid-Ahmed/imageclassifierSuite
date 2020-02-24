@@ -50,7 +50,7 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
-## Tranining Scripts 
+## Trainining Scripts 
 
 When the training starts, it will show sample of images and print  statistics about the dataset. After finishing, the following files are automatically saved to the "Results" folder
 
