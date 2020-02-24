@@ -62,6 +62,12 @@ After finishing training, the following files are automatically saved to the "Re
  3. The best model (highest accuracy) during training
  4. The labels in dictionary stored as a pickle file
  5. Confusion matrix as image
+ 
+ when training starts, it will show a thumbnail image  for sample images from training dataset like the following one:
+
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_CIFAR10.png)
+
+ A sample confusion matrix  image  is saved as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
  [I-Train a CIFAR10](#TRAINcIFAR)  </br>
  [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
@@ -155,18 +161,9 @@ Some of the sample commands you can run are:
     python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25  
     python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
 
-when training starts, it will show a thumbnail image  for sample images from training dataset like the following ones:
 
-
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_CIFAR10.png)
-
-Each training will save the follwoing files in the "Results" folder
-
- 1. Thumbnail image including sample images from the training dtataset
- 2. The trained model as a .keras2 file
  
- A sample confusion matrix  image  is saved as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
+
 
 
 
