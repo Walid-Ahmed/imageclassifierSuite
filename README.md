@@ -66,8 +66,8 @@ After finishing training, the following files are automatically saved to the "Re
  [I-Train a CIFAR10](#TRAINcIFAR)  </br>
  [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
  [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) </br>
- [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)
- [V Test a Binary Model](#TestBinaryModels)
+ [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)</br>
+ [V-Test a Binary Model](#TestBinaryModels)
 
 
 <h2 id="TRAINcIFAR">I-Train on CIFAR10/MNIST dataset</h2>
