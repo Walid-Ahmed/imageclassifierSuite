@@ -132,16 +132,6 @@ In case of binary classifier, the last layer will have only one neuron, otherwis
 
 You do not have to enter your labels or to split your data into train/eval, all what you have to do is to arrange your images so that each class in a folder with its label and all theses folders within a single folder as the following, the name of this single folder is what you should pass as argument when training. The folder should be in folder datasetes.
 
-
-The following files are automatically saved to the "Results" folder
-
- 1. Loss curve
- 2. Accuracy curve
- 3. Loss and accuracy curves
- 4. The model as a .h5 file and .pb file in a folder with same name as dataset 
- 5. The best model (highest accuracy) during training
- 6. The labels in dictionary stored as a pickle file
- 7. Confusion matrix as an image
  
 
 <h2 id="Trainmulticlassimageclassifierusingsatandarddataset">IV-Train a multiclass image classifier using satandard dataset </h2>
