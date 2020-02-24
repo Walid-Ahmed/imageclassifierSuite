@@ -67,6 +67,7 @@ After finishing training, the following files are automatically saved to the "Re
  [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
  [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) </br>
  [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)
+ [V Test a Binary Model](#TestBinaryModels)
 
 
 <h2 id="TRAINcIFAR">I-Train on CIFAR10/MNIST dataset</h2>
@@ -177,8 +178,8 @@ Each training will save the follwoing files in the "Results" folder
  A sample confusion matrix  image  is saved as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
 
+<h2 id="TestBinaryModels">V-Test Binary Models</h2>
 
-## V-Test Binary Models
 
 You can test the binary model using the script in test_network_binary.py. The results will be displayed as an image with the predicted label typed on it. It will also be   saved with the name as file precceded with "prediction_"  in Results folder
 
