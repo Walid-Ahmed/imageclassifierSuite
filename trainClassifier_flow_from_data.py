@@ -21,7 +21,7 @@ from modelEvaluator import ModelEvaluator
 from  util import  helper  
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
-from keras.preprocessing.image import img_to_array
+from tensorflow.keras.preprocessing.image import img_to_array
 from imutils import paths
 import numpy as np
 import argparse
@@ -80,11 +80,7 @@ else:
 folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
 folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
 
-<<<<<<< HEAD
 es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=200)
-=======
-es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=50)
->>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
 
 
@@ -165,12 +161,8 @@ for imagePath in imagePaths:
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
-<<<<<<< HEAD
 print(data.shape)  #(922, 28, 28, 3)
-#exit()
-=======
 
->>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
 
 #lb.classes_  will be  the labels with the same order in one hot vector--->. label = lb.classes_[i]
@@ -265,8 +257,6 @@ fileNameToSaveModel=os.path.join(folderNameToSaveModel,fileNameToSaveModel)
 model.save(fileNameToSaveModel,save_format='h5') #model is saved in h5 format
 
 
-print("[INFO] Model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
-print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
 
 
 
@@ -284,11 +274,8 @@ else:
 	y_pred=predictions.argmax(axis=1)
 
 
-<<<<<<< HEAD
-#print(classification_report(y_true,y_pred, target_names=lb.classes_))
-=======
+
 print(classification_report(y_true,y_pred, target_names=lb.classes_))
->>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 cm=confusion_matrix(y_true, y_pred)
 helper.print_cm(cm,lb.classes_)
 
@@ -301,4 +288,7 @@ plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
 
 # Plot non-normalized confusion matrix
 helper.plot_print_confusion_matrix(y_true, y_pred, classes=lb.classes_,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
+print("[INFO] Model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
+print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
+
 
