@@ -117,7 +117,7 @@ Your folder of images  should have two sub folders "train" and "eval". In each o
  
 
 
-<h1 id="multiclassimageclassifier">III--Train a binary/multiclass image classifier</h1>
+<h1 id="multiclassimageclassifier">III-Train a binary/multiclass image classifier</h1>
 
 
 The script   trainClassifier_flow_from_data.py   can be used to train a binary classifier or a multi classifier. 
