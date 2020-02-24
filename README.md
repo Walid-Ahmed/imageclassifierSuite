@@ -16,12 +16,13 @@ This Repo can be used to train standard keras dataset  or user defined dataset w
 
 Here is the list of libraries you need to install to execute the code:
 - python = 3.6
-- Keras
-- numpy
-- scipy
-- matplotlib
+- Tesnsorflow:2.0.0
+- numpy=1.16.1
+- sklearn=0.22
+- matplotlib=3.0.2
 - scikit-image
 - jupyter
+- pickle
 
 >>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 ## Available Datasets 
@@ -69,9 +70,10 @@ More and more networks will be added soon, however you can still define your own
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
-## Tranining Scripts 
+## Trainining and Testing Scripts 
 
-When the training starts, it will show sample of images and print  statistics about the dataset. After finishing, the following files are automatically saved to the "Results" folder
+When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
+After finishing training, the following files are automatically saved to the "Results" folder.
 
 
  1. Loss and accuracy curves
@@ -79,11 +81,18 @@ When the training starts, it will show sample of images and print  statistics ab
  3. The best model (highest accuracy) during training
  4. The labels in dictionary stored as a pickle file
  5. Confusion matrix as image
+ 
+ when training starts, it will show a thumbnail image  for sample images from training dataset like the following one:
+
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_CIFAR10.png)
+
+ A sample confusion matrix  image  is saved as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
  [I-Train a CIFAR10](#TRAINcIFAR)  </br>
  [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
  [III--Train a binary/multiclass image classifier](#multiclassimageclassifier) </br>
- [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)
+ [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)</br>
+ [V-Test a Binary Model](#TestBinaryModels)
 
 
 <h2 id="TRAINcIFAR">I-Train on CIFAR10/MNIST dataset</h2>
@@ -168,11 +177,12 @@ The script   trainClassifier_flow_from_data.py   can be usd to train a binary cl
 
 For binary classification with 2 classes only, a probabilty more than 0.5 means that the output is the second  class when they are sorted alphabetically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
-
+To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
+Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have  subfolders, each labeled with the name of the class. 
  
 
 
-<h1 id="multiclassimageclassifier">III--Train a binary/multiclass image classifier</h1>
+<h1 id="multiclassimageclassifier">III-Train a binary/multiclass image classifier</h1>
 
 
 The script   trainClassifier_flow_from_data.py   can be used to train a binary classifier or a multi classifier. 
@@ -198,6 +208,7 @@ In case of binary classifier, the last layer will have only one neuron, otherwis
 You do not have to enter your labels or to split your data into train/eval, all what you have to do is to arrange your images so that each class in a folder with its label and all theses folders within a single folder as the following, the name of this single folder is what you should pass as argument when training. The folder should be in folder datasetes.
 >>>>>>> f597aee844c32362e8d25aa99186949923a15dba
 
+<<<<<<< HEAD
 
 The following files are automatically saved to the "Results" folder
 
@@ -212,6 +223,8 @@ The following files are automatically saved to the "Results" folder
  5. The best model (highest accuracy) during training
  6. The labels in dictionary stored as a pickle file
  7. Confusion matrix as an image
+=======
+>>>>>>> 7abf9762a748e98860aaed88685582aad0a7b6a0
  
 
 <<<<<<< HEAD
@@ -225,7 +238,7 @@ Some of these standard dataset are:
 <h2 id="Trainmulticlassimageclassifierusingsatandarddataset">IV-Train a multiclass image classifier using satandard dataset </h2>
 
 
-The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using one of the  standard datasets that are built in in Keras(but beware if you are behind proxy as you might have problems downloading data!).
+The  python script trainStandardDatasetMulticlass.py trains a multiclass neural network using one of the  standard datasets that are built in Keras(but beware if you are behind proxy as you might have problems downloading data!).
 
 Some of these standard datasets are:
 >>>>>>> f597aee844c32362e8d25aa99186949923a15dba
@@ -243,10 +256,8 @@ Some of the sample commands you can run are:
     python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25  
     python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
 
-when training starts, it will show a thumbnail image  for sample images from training dataset like the following ones:
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_MNIST.png)
-
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_fashion_mnist.png)
@@ -265,25 +276,14 @@ Each training will save the follwoing files in the "Results" folder
 =======
  A sample confusion matrix  image  is saved as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 >>>>>>> f597aee844c32362e8d25aa99186949923a15dba
+=======
+ 
+>>>>>>> 7abf9762a748e98860aaed88685582aad0a7b6a0
 
 
 
-## V-Test Binary Models
 
-You can test the binary model using the script in test_network_binary.py. The results will be displayed as an image with the predicted label typed on it. It will also be   saved with the name as file precceded with "prediction_"  in Results folder
 
-```
-python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
-```
-```
-python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog_23.jpeg --labelPKL Results/cats_and_dogs_labels.pkl --width  150 --height  150
-```
-
-Note the pkl file is the one created for you by trainClassifier_flow_from_data.py. It contains a dictionary like this  {'cats': 0, 'dogs': 1}
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
 
 
 # VI-Train on large dataset using Keras fit_generator
@@ -293,10 +293,12 @@ Not all the datasets that you will be using for training will be small to fit yo
 python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --BS 16  --verbose True
 ```
 
+
 # VII-Others
 ## Use K-NN to build a classifier cat vs dog
 jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 # VIII-Train with your own dataset
@@ -304,5 +306,22 @@ jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
 Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have  subfolders, each labeled with the name of the class. 
 >>>>>>> f597aee844c32362e8d25aa99186949923a15dba
+=======
 
+>>>>>>> 7abf9762a748e98860aaed88685582aad0a7b6a0
+
+
+<h2 id="TestBinaryModels">V-Test Binary Models</h2>
+
+
+You can test the binary model using the script in test_network_binary.py. The results will be displayed as an image with the predicted label typed on it. It will also be   saved with the name as file precceded with "prediction_"  in Results folder
+
+```
+python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
+```
+
+
+Note the pkl file is the one created for you by trainClassifier_flow_from_data.py. It contains a dictionary like this  {'cats': 0, 'dogs': 1}
+
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
 
