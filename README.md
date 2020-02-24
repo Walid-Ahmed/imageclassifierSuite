@@ -53,7 +53,8 @@ More and more networks will be added soon, however you can still define your own
 
 ## Trainining Scripts 
 
-When the training starts, it will show sample of images and print  statistics about the dataset. After finishing, the following files are automatically saved to the "Results" folder
+When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
+After finishing training, the following files are automatically saved to the "Results" folder.
 
 
  1. Loss and accuracy curves
