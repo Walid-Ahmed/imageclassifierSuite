@@ -166,7 +166,7 @@ Some of the sample commands you can run are:
 
 when training starts, it will show a thumbnail image  for sample images from training dataset like the following ones:
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_MNIST.png)
+
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_CIFAR10.png)
 
