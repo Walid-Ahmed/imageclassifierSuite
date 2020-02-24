@@ -194,7 +194,7 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
+
 
 
 # VI-Train on large dataset using Keras fit_generator
