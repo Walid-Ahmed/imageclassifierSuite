@@ -99,7 +99,6 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
  ipython notebook  mnist_without_CNN.ipynb
 
 
-## II-Train a binary image classifier using flow from directory
 <h2 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary image classifier using flow from directory</h2>
 
 
