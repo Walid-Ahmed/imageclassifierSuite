@@ -100,7 +100,6 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
 
 
 ## II-Train a binary image classifier using flow from directory
-=======
 <h2 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary image classifier using flow from directory</h1>
 
 
@@ -126,7 +125,6 @@ python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human 
 ```
 
 
-<<<<<<< HEAD
 When the training starts it will show sample of images and print some statistics about the dataset. after finishing, the following files are automatically saved to the "Results" folder
 
  1. Loss curve
