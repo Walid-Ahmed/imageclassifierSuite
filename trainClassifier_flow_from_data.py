@@ -3,12 +3,12 @@
 
 
 # USAGE
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel --verbose False
-# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --verbose False
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa
+# python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 224 --height 224 --channels 3  --datasetDir SportsClassification --networkID Resnet50 --verbose False 
 # python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 64 --height 64 --channels 1 --datasetDir SMILES --networkID LenetModel --verbose False
 # python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --channels 3 --datasetDir NIHmalaria --networkID LenetModel --verbose False
 
-# python trainClassifier_flow_from_data.py    --EPOCHS 200   --width 48 --height 48 --channels 1 --datasetDir FacialExpression  --networkID net2 --verbose False
+# python trainClassifier_flow_from_data.py    --EPOCHS 200   --width 48 --height 48 --channels 1 --datasetDir FacialExpression  --networkID net2 --verbose False --ResultsFolder  Results/r2_faceExp
 
 
 
@@ -34,7 +34,12 @@ from sklearn.metrics import confusion_matrix
 from keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import TensorBoard
+import shutil
+
 from util import paths
+from tensorflow.keras.utils import plot_model
+
 
 
 
@@ -52,6 +57,8 @@ ap.add_argument("--datasetDir",  required=True,help="path to dataset directory")
 ap.add_argument("--networkID", required=True, help="I.D. of the network")
 ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
 ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
+ap.add_argument("--patience", required=False, default=50, type=int,help="Number of epochs to wait without accuracy imrovment")
+ap.add_argument("--ResultsFolder", required=False, default="Results",help="Folder to save Results")
 
 
 
@@ -70,6 +77,9 @@ networkID=args["networkID"]
 channels=args["channels"]
 
 verbose=args["verbose"]
+ResultsFolder=args['ResultsFolder']
+
+
 
 if (verbose=="True"):
 	verbose=True
@@ -77,11 +87,20 @@ else:
 	verbose=False
 
 
+if os.path.exists(ResultsFolder):
+	print("[Warning]  Folder aready exists, All files in folder will be deleted")
+	input("[msg]  Press any key to continue")
+	shutil.rmtree(ResultsFolder)
+os.mkdir(ResultsFolder)	
+
+
 folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
-folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
+folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
 
 es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=200)
 mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
+tensorboard_callback = TensorBoard(log_dir=ResultsFolder)
+
 
 
 def predictBinaryValue(probs,threshold=0.5):
@@ -125,7 +144,7 @@ folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 
 
 
-fileToSaveSampleImage=os.path.join("Results","sample_"+datasetDir+".png")
+fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
 plotUtil.drarwGridOfImages(base_dir,fileNameToSaveImage=fileToSaveSampleImage,channels=int(channels))
 
 paths.getTrainStatistics2(base_dir)
@@ -183,7 +202,7 @@ if (numOfOutputs==2):  #Binary problem
 
 
 fileNameToSaveLabels=datasetDir+"_labels.pkl"
-fileNameToSaveLabels=os.path.join("Results",fileNameToSaveLabels)
+fileNameToSaveLabels=os.path.join(ResultsFolder,fileNameToSaveLabels)
 f = open(fileNameToSaveLabels, "wb")
 labeles_dictionary=dict()
 outInt=0
@@ -235,19 +254,25 @@ if(numOfOutputs==1):
 else:
 	model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 # train the network
-input("[MSG] Press enter to start training")
+
+
+
+
+fileToSaveModelPlot=os.path.join(ResultsFolder,'model.png')
+plot_model(model, to_file=fileToSaveModelPlot,show_shapes="True")
+print("[INFO] Model plot  saved to file  {} ".format(fileToSaveModelPlot))
 
 print("[INFO] training network...")
 history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 	validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
-	epochs=EPOCHS, verbose=1, callbacks=[es, mc])
+	epochs=EPOCHS, verbose=1, callbacks=[es, mc,tensorboard_callback])
 
 
 
 
 # save the model to disk
 folderNameToSaveModel="{}_Classifier".format(datasetDir)
-folderNameToSaveModel=os.path.join("Results",folderNameToSaveModel)
+folderNameToSaveModel=os.path.join(ResultsFolder,folderNameToSaveModel)
 model.save(folderNameToSaveModel,save_format='tf') #model is saved in TF2 format (default)
 
 
@@ -282,12 +307,12 @@ helper.print_cm(cm,lb.classes_)
 
 
 
-plotUtil.plotAccuracyAndLossesonSameCurve(history)
-plotUtil.plotAccuracyAndLossesonSDifferentCurves(history)
+plotUtil.plotAccuracyAndLossesonSameCurve(history,ResultsFolder)
+plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,ResultsFolder)
 
 
 # Plot non-normalized confusion matrix
-helper.plot_print_confusion_matrix(y_true, y_pred, classes=lb.classes_,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
+helper.plot_print_confusion_matrix(y_true, y_pred, ResultsFolder,classes=lb.classes_,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
 print("[INFO] Model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
 print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
 

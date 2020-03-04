@@ -16,6 +16,7 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import precision_score
 from sklearn.metrics import f1_score
 import pickle
+from util import helper
 
 
 #modelEvaluator.evaluate1()  #using sklearn & testGenerator
@@ -34,17 +35,28 @@ class   ModelEvaluator:
 			return 0	
 
 
-	def __init__(self, model,labels,input_shape,path_test,mode=1):
+	def __init__(self, model,labels,input_shape,ResultsFolder,path_test,datasetDir,mode=1):
 		self.model=tf.keras.models.load_model(model)
 
 		self.testFilesFullPathList=[]
 		self.input_shape=input_shape
 		self.labels=labels
+		self.datasetDir=datasetDir
+		self.ResultsFolder=ResultsFolder
 
 		self.labels.sort()
 		self.path_test=path_test
 		self.totalTest = len(list(paths.list_images(self.path_test)))
 		print('[INFO] Total images in test  dataset '+self.path_test+ 'images :', self.totalTest)
+
+
+		numOfOutputs=len(labels)  
+
+		if(numOfOutputs==2):  # binary classiffication problem
+			numOfOutputs=1
+			self.classMode='binary'
+		else:
+			self.classMode='categorical'  #class_mode="categorical" will do one hot encoding
 
 
 		for root, dirs, files in os.walk(self.path_test):
@@ -304,7 +316,7 @@ class   ModelEvaluator:
 		test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 	# initialize the testing generator
 		test_generator = test_datagen.flow_from_directory(self.path_test,
-			class_mode="binary",
+			class_mode=self.classMode,
 			target_size=self.input_shape,
 			color_mode="rgb",
 			shuffle = False,
@@ -320,19 +332,33 @@ class   ModelEvaluator:
 		predictedLabels=[]
 
 
+		if(self.classMode=='binary'):  
+			for  predIdx in predIdxs:
 
-		for  predIdx in predIdxs:
+			  if predIdx[0]>0.5:     #1  is a labels[1]
+			      #print(" belongs to {}".format(labels[1]))
+			      predictedLabels.append(1)
+			      
+			  else:
+			      #print( " belongs to  {}".format(labels[0]))
+			      predictedLabels.append(0)
 
 
-		  if predIdx[0]>0.5:     #1  is a labels[1]
-		      #print(" belongs to {}".format(labels[1]))
-		      predictedLabels.append(1)
-		      
-		  else:
-		      #print( " belongs to  {}".format(labels[0]))
-		      predictedLabels.append(0)
+		else:
 
+			y_true=test_generator.classes
+			y_pred=predIdxs.argmax(axis=1)
+			predictedLabels=y_pred
+
+
+		#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False, zero_division='warn')[source]¶
 		print(classification_report(test_generator.classes, predictedLabels,target_names=test_generator.class_indices.keys()))
+		y_true=test_generator.classes
+		y_pred=predictedLabels
+		labels=test_generator.class_indices.keys()
+
+		helper.plot_print_confusion_matrix(y_true, y_pred, self.ResultsFolder,classes=labels,dataset=self.datasetDir ,title=self.datasetDir+ "_Confusion matrix, without normalization") 
+
 		print("*************************************************************************************************************")      
 
 

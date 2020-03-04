@@ -44,7 +44,7 @@ def print_cm(cm, labels, hide_zeroes=False, hide_diagonal=False, hide_threshold=
         print()
 
 
-def plot_print_confusion_matrix(y_true, y_pred, classes,dataset,
+def plot_print_confusion_matrix(y_true, y_pred, ResultsFolder,classes,dataset,
                           normalize=False,
                           title=None,
                           cmap=plt.cm.Blues):

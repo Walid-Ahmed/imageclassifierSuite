@@ -14,11 +14,15 @@ import numpy as np
 import os
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import TensorBoard
 import pickle
+import shutil
+from tensorflow.keras.utils import plot_model
+
 
 
 #this method from https://gist.github.com/zachguo/10296432
-def print_cm(cm, labels, hide_zeroes=False, hide_diagonal=False, hide_threshold=None):
+def print_cm(cm, labels, ResultsFolder,hide_zeroes=False, hide_diagonal=False, hide_threshold=None):
     """pretty print for confusion matrixes"""
     columnwidth = max([len(x) for x in labels] + [5])  # 5 is value length
     empty_cell = " " * columnwidth
@@ -73,7 +77,7 @@ def plot_print_confusion_matrix(y_true, y_pred, classes,dataset,
     else:
         print('Confusion matrix, without normalization')
 
-        print_cm(cm,classes)
+        print_cm(cm,classes,ResultsFolder)
 
     fig, ax = plt.subplots()
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -100,7 +104,7 @@ def plot_print_confusion_matrix(y_true, y_pred, classes,dataset,
                     ha="center", va="center",
                     color="white" if cm[i, j] > thresh else "black")
     fig.tight_layout()
-    fileToSaveConfusionMatrix=os.path.join("Results",dataset+'_ConfusionMatrix.png')
+    fileToSaveConfusionMatrix=os.path.join(ResultsFolder,dataset+'_ConfusionMatrix.png')
     plt.savefig(fileToSaveConfusionMatrix)
     print("[INFO] Confusion matrix   saved to {}".format(fileToSaveConfusionMatrix))
 
@@ -129,6 +133,16 @@ if __name__ == '__main__':
 	print("[INFO] Original cifar10 dataset of test Labels shape {}".format(testLabels.shape))
 
 
+	ResultsFolder=os.path.join("Results","CIFAR10")
+	if os.path.exists(ResultsFolder):
+		print("[Warning]  Folder aready exists, All files in folder will be deleted")
+		input("[msg]  Press any key to continue")
+		shutil.rmtree(ResultsFolder)
+	os.mkdir(ResultsFolder)
+
+
+
+
 
     #get data ready for training
 	trainX = trainData.reshape((trainData.shape[0], imgWidth,imgHeight,  numOfchannels))
@@ -144,7 +158,7 @@ if __name__ == '__main__':
 
 
 	fileNameToSaveLabels="CIFAR10"+"_labels.pkl"
-	fileNameToSaveLabels=os.path.join("Results",fileNameToSaveLabels)
+	fileNameToSaveLabels=os.path.join(ResultsFolder,fileNameToSaveLabels)
 	f = open(fileNameToSaveLabels, "wb")
 	labeles_dictionary=dict()	
 	outInt=0
@@ -157,9 +171,14 @@ if __name__ == '__main__':
 
 
 	folderNameToSaveBestModel="{}_Best_classifier".format("CIFAR10")
-	folderNameToSaveBestModel=os.path.join("Results",folderNameToSaveBestModel)
+	folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
+	
+
 	es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=200)
 	mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
+	tensorboard_callback = TensorBoard(log_dir=ResultsFolder,profile_batch=0)
+	
+
 	print("[INFO] Data ready for training")
 
 
@@ -168,7 +187,7 @@ if __name__ == '__main__':
 	#tuning parameters
 	weight_decay = 1e-4
 	INIT_LR = 1e-3
-	EPOCHS=2
+	EPOCHS=10
 	BS=32
 
 
@@ -208,20 +227,25 @@ if __name__ == '__main__':
 	model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 
+	fileToSaveModelPlot=os.path.join(ResultsFolder,'model.png')
+	plot_model(model, to_file=fileToSaveModelPlot,show_shapes="True")
+	print("[INFO] Model plot  saved to file  {} ".format(fileToSaveModelPlot))
+
+
 	# train the network
 	print("[INFO] training network...")
 	aug = ImageDataGenerator()
-	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1,callbacks=[es, mc])
+	history = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,epochs=EPOCHS, verbose=1,callbacks=[es, mc,tensorboard_callback])
 
-	pathToSaveModel=os.path.join("Results","cifar10model.h5")
+	pathToSaveModel=os.path.join(ResultsFolder,"cifar10model.h5")
 	model.save(pathToSaveModel,save_format='h5')
 	print("[INFO] Model saved to {}".format(pathToSaveModel))
 
 
-	pathToSaveModel=os.path.join("Results","cifar10model")
+	pathToSaveModel=os.path.join(ResultsFolder,"cifar10model")
 	model.save(pathToSaveModel,save_format='tf')
 
-	print("[INFO] Model saved in h5 and tf format to {}".format("Results"))
+	print("[INFO] Model saved in h5 and tf format to {}".format(ResultsFolder))
 
   
 
@@ -263,7 +287,7 @@ if __name__ == '__main__':
 	plt.ylabel("Loss/Accuracy")
 	plt.legend(loc="lower left")
 	plt.show()
-	fileToSaveLossAccCurve=os.path.join("Results","CIFAR10_"+"plot_loss_accu.png")
+	fileToSaveLossAccCurve=os.path.join(ResultsFolder,"CIFAR10_"+"plot_loss_accu.png")
 	print("[INFO] Loss curve saved to {}".format(fileToSaveLossAccCurve))
 	plt.savefig(fileToSaveLossAccCurve)
 

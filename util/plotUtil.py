@@ -15,7 +15,7 @@ matplotlib.use("Qt5Agg")
 print("[INFO] matplotlib BACKEND IS {}".format(matplotlib.get_backend())) #[INFO] matplotlib BACKEND IS agg
 info=""
 
-def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
+def plotAccuracyAndLossesonSDifferentCurves(history,ResultsFolder,title=""):
 
   info=""
     #Let's plot the training/validation accuracy and loss as collected during training:
@@ -52,7 +52,7 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
   plt.title (title+'Training and validation accuracy')
   plt.xlabel("Epoch #")
   plt.ylabel("Accuracy")
-  fileToSaveAccuracyCurve=os.path.join("Results",title+"plot_acc.png")
+  fileToSaveAccuracyCurve=os.path.join(ResultsFolder,title+"plot_acc.png")
   plt.savefig(fileToSaveAccuracyCurve)
   info=info+"[INFO] Accuracy curve saved to {}".format(fileToSaveAccuracyCurve)
   plt.legend(loc="upper left")
@@ -78,7 +78,7 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title=""):
 
 
 
-def plotAccuracyAndLossesonSameCurve(history,title=""):
+def plotAccuracyAndLossesonSameCurve(history,ResultsFolder,title=""):
 
     # construct a plot that plots and saves the training history
 
@@ -113,7 +113,7 @@ def plotAccuracyAndLossesonSameCurve(history,title=""):
   plt.xlabel("Epoch #")
   plt.ylabel("Loss/Accuracy")
   plt.legend(loc="lower left")
-  fileToSaveLossAccCurve=os.path.join("Results",title+"plot_loss_accu.png")
+  fileToSaveLossAccCurve=os.path.join(ResultsFolder,title+"plot_loss_accu.png")
   info=info+"[INFO] Loss curve saved to {}".format(fileToSaveLossAccCurve)
   plt.savefig(fileToSaveLossAccCurve)
   plt.show()
