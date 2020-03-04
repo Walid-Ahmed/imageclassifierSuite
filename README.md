@@ -99,7 +99,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
  ipython notebook  mnist_without_CNN.ipynb
 
 
-<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary image classifier using flow from directory</h2>
+<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train an image classifier using flow from directory</h2>
 
 
 The 
@@ -110,10 +110,9 @@ The data should have been splitted from the start to train and eval, for example
 ![structure for cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/cats_and_dogs_dir.png)
 
 To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
-To start  training  using this file on "cats and dogs" dataset you can run the follwing command:
 ```
 
-python trainBinaryClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 100  --width  150 --height  150 --testDir test_images_cats_and_dogs
+python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 10  --width  150 --height  150 --testDir test_images_cats_and_dogs --ResultsFolder  Results/r1_cats_dogs
 ```
 
 
@@ -148,7 +147,6 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 
 The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
-=======
 
 
 For binary classification with 2 classes only, a probabilty more than 0.5 means that the output is the second  class when they are sorted alphabetically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
