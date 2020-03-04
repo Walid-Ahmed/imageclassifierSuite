@@ -62,7 +62,8 @@ More and more networks will be added soon, however you can still define your own
 ## Trainining and Testing Scripts 
 
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
-After finishing training, the following files are automatically saved to the "Results" folder.
+
+After finishing training, the following files are automatically saved to a  "Results" folder you pss as argument when you start training.
 
 
  1. Loss and accuracy curves
@@ -70,6 +71,9 @@ After finishing training, the following files are automatically saved to the "Re
  3. The best model (highest accuracy) during training
  4. The labels in dictionary stored as a pickle file
  5. Confusion matrix as image
+ 
+
+
  
  when training starts, it will show a thumbnail image  for sample images from training dataset like the following one:
 
@@ -116,22 +120,9 @@ python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --netwo
 ```
 
 
-To start  training  using this script  on "horse-or-human " dataset you can run the follwing command:
-
-```
-python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
-```
 
 
-When the training starts it will show sample of images and print some statistics about the dataset. after finishing, the following files are automatically saved to the "Results" folder
 
- 1. Loss curve
- 2. Accuracy curve
- 3. Loss and accuracy curves
- 4. The model as a .keras2 file
- 5. The best model (highest accuracy) during training
- 6. The labels in dictionary stored as a pickle file
- 7. Confusion matrix as image
 
 
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
