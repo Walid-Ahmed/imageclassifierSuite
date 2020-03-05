@@ -97,10 +97,14 @@ python trainCIFAR10.py
 This code will download the CIFAR10 dataset(if needed) and start training using a deep convloution neural network. When it finishes training, results will be shown. You can also  run  the code in your browser with the command   "ipython notebook trainCIFAR10.ipynb".
  
  You can also train the mnist dataset  with any of the following: 
-
+```
  ipython notebook  mnist-CNN.ipynb
+ ```
+
  
+``` 
  ipython notebook  mnist_without_CNN.ipynb
+```
 
 
 <h2 id="binaryimageclassifierusingflowfromdirectory">II-Train an image classifier using flow from directory</h2>
