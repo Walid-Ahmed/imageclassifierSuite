@@ -98,12 +98,12 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
  
  You can also train the mnist dataset  with any of the following: 
 ```
- ipython notebook  mnist-CNN.ipynb
+ ipython notebook  notebooks/mnist-CNN.ipynb
  ```
 
  
 ``` 
- ipython notebook  mnist_without_CNN.ipynb
+ ipython notebook  notebooks/mnist_without_CNN.ipynb
 ```
 
 
