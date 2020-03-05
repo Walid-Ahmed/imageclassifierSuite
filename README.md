@@ -62,7 +62,8 @@ More and more networks will be added soon, however you can still define your own
 ## Trainining and Testing Scripts 
 
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
-After finishing training, the following files are automatically saved to the "Results" folder.
+
+After finishing training, the following files are automatically saved to a  "Results" folder you pss as argument when you start training.
 
 
  1. Loss and accuracy curves
@@ -70,6 +71,9 @@ After finishing training, the following files are automatically saved to the "Re
  3. The best model (highest accuracy) during training
  4. The labels in dictionary stored as a pickle file
  5. Confusion matrix as image
+ 
+
+
  
  when training starts, it will show a thumbnail image  for sample images from training dataset like the following one:
 
@@ -99,7 +103,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
  ipython notebook  mnist_without_CNN.ipynb
 
 
-<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary image classifier using flow from directory</h2>
+<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train an image classifier using flow from directory</h2>
 
 
 The 
@@ -110,29 +114,15 @@ The data should have been splitted from the start to train and eval, for example
 ![structure for cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/cats_and_dogs_dir.png)
 
 To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
-To start  training  using this file on "cats and dogs" dataset you can run the follwing command:
 ```
 
-python trainBinaryClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 100  --width  150 --height  150 --testDir test_images_cats_and_dogs
-```
-
-
-To start  training  using this script  on "horse-or-human " dataset you can run the follwing command:
-
-```
-python trainBinaryClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
+python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 10  --width  150 --height  150 --testDir test_images_cats_and_dogs --ResultsFolder  Results/r1_cats_dogs
 ```
 
 
-When the training starts it will show sample of images and print some statistics about the dataset. after finishing, the following files are automatically saved to the "Results" folder
 
- 1. Loss curve
- 2. Accuracy curve
- 3. Loss and accuracy curves
- 4. The model as a .keras2 file
- 5. The best model (highest accuracy) during training
- 6. The labels in dictionary stored as a pickle file
- 7. Confusion matrix as image
+
+
 
 
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
@@ -148,7 +138,6 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 
 The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
-=======
 
 
 For binary classification with 2 classes only, a probabilty more than 0.5 means that the output is the second  class when they are sorted alphabetically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
