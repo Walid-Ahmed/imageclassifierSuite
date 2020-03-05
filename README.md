@@ -60,7 +60,7 @@ More and more networks will be added soon, however you can still define your own
 
 
 
-## Trainining and Testing Scripts 
+## Training and Testing Scripts 
 
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
 
@@ -256,3 +256,9 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
 
+# IX-Utilities
+
+The script split_dataset.py  can be used to split image files ofteh dataset to training and validation based on split percentage you choose, for example you can run it as follows
+```
+python split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Database  --TRAIN_SPLIT 0.7
+```
