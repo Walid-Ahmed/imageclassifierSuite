@@ -6,7 +6,8 @@
 
 
 ## Introduction 
-This Repo can be used to train standard keras dataset  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification.
+
+This Repo can be used to train standard  datasets  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. Training parmeters that can be set are  batch size, type of optimizer, image input size, early stopping, data augmentation, label smoothing, learning rate schedule,..... 
 
 
 # Install
