@@ -87,6 +87,7 @@ Also training and validation losses and accuray curves are  plotted to tensorboa
 
 tensorboard --logdir Results
 ```
+and then browsing the following url http://localhost:6008/
 
  [I-Train a CIFAR10](#TRAINcIFAR)  </br>
  [II-Train a binary image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
