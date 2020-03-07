@@ -69,7 +69,7 @@ if __name__ == '__main__':
     ap.add_argument("--ResultsFolder", required=False, default="Results",help="Folder to save Results")
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
-    parser.add_argument(“--useLabelSmoothing”, help=”turn on label smoothing”, action=”store_true”)
+    ap.add_argument("--useLabelSmoothing", help="turn on label smoothing", action="store_true")
 
 
 
@@ -87,6 +87,7 @@ if __name__ == '__main__':
     ResultsFolder=args["ResultsFolder"]
     learningRate=args["lr"]
     channels=args["channels"]
+    useLabelSmoothing=args["useLabelSmoothing"]
 
 
 
