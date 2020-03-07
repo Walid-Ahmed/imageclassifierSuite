@@ -1,11 +1,11 @@
 
 
-#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs
+#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1
 
 
 #python trainClassifer_flow_from_directory.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID net2  --EPOCHS 20  --width  150 --height  150  --BS 32  --ResultsFolder  Results/r1_disaster
 
-#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression  channels 1
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression  --channels 1 --labelSmoothing 0.1
 
 #python trainClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
 
@@ -32,6 +32,9 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import TensorBoard
 import shutil
 from tensorflow.keras.utils import plot_model
+from tensorflow.keras.losses import CategoricalCrossentropy
+from tensorflow.keras.losses import BinaryCrossentropy
+
 
 
 
@@ -69,7 +72,9 @@ if __name__ == '__main__':
     ap.add_argument("--ResultsFolder", required=False, default="Results",help="Folder to save Results")
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
-    ap.add_argument("--useLabelSmoothing", help="turn on label smoothing", action="store_true")
+    ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
+    #ap.add_argument("--label smoothing", help="turn on label smoothing", action="store_true")
+
 
 
 
@@ -87,7 +92,7 @@ if __name__ == '__main__':
     ResultsFolder=args["ResultsFolder"]
     learningRate=args["lr"]
     channels=args["channels"]
-    useLabelSmoothing=args["useLabelSmoothing"]
+    labelSmoothing=args["labelSmoothing"]
 
 
 
@@ -101,6 +106,8 @@ if __name__ == '__main__':
     parameters=parameters+"[INFO] patience".format(EPOCHS) +"\n"
     parameters=parameters+"[INFO] ResultsFolder".format(EPOCHS) +"\n"
     parameters=parameters+"[INFO] lr".format(EPOCHS) +"\n"
+    parameters=parameters+"[INFO] labelSmoothing".format(labelSmoothing) +"\n"
+
 
 
 
@@ -134,10 +141,10 @@ if __name__ == '__main__':
 
     if(numOfOutputs==2):  # binary classiffication problem
         numOfOutputs=1
-        lossFun='binary_crossentropy'
+        lossFun=BinaryCrossentropy(label_smoothing=labelSmoothing)
         classMode='binary'
     else:
-        lossFun='categorical_crossentropy'    
+        lossFun = CategoricalCrossentropy(label_smoothing=labelSmoothing) 
         classMode='categorical'  #class_mode="categorical" will do one hot encoding
 
 

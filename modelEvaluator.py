@@ -305,8 +305,8 @@ class   ModelEvaluator:
 			# reset the testing generator and then use our trained model to
 		
 		#To get label values which you are using test_generator.classes. It gives all the labels that are used for the test.
-		print(test_generator.classes)
-		print(len(test_generator.classes))
+		#print(test_generator.classes)
+		#print(len(test_generator.classes))
 
 
 
