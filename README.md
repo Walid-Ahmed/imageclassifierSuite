@@ -79,6 +79,8 @@ After finishing training, the following files are automatically saved to a  "Res
  3. The best model (highest accuracy) during training
  4. The labels in dictionary stored as a pickle file
  5. Confusion matrix as image
+ 6. Precision Recal curve (for binary classification only )
+ 7. F1-score vs Threshould (for binary classification only)
  
 
 
