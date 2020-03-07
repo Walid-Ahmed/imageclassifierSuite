@@ -128,7 +128,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
 
 
 The 
-trainBinaryClassifer_flow_from_directory trains a neural network with final layer of one neuron that is suitable for binary classification.
+trainClassifer_flow_from_director.py  trains a neural network with final layer of one neuron that is suitable for binary classification(2 classes)  otherwise the number of neurons in last layer will be equal to number of classes.
 
 The data should have been splitted from the start to train and eval, for example the cat_and_dogs dataset is arranged as in following figure:
 
