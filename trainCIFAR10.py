@@ -174,8 +174,8 @@ if __name__ == '__main__':
 	folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
 	
 
-	es = EarlyStopping(monitor='val_accuracy', mode='max', min_delta=1 ,  patience=200)
-	mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_loss', mode='min', save_best_only=True)
+    es = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
+    mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_acc', mode='auto', save_best_only=True, verbose=1)
 	tensorboard_callback = TensorBoard(log_dir=ResultsFolder,profile_batch=0)
 	
 

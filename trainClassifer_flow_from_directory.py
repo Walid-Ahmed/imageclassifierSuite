@@ -1,9 +1,11 @@
 
 
-#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 10  --width  150 --height  150 --testDir test_images_cats_and_dogs --ResultsFolder  Results/r1_cats_dogs
+#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs
 
 
 #python trainClassifer_flow_from_directory.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID net2  --EPOCHS 20  --width  150 --height  150  --BS 32  --ResultsFolder  Results/r1_disaster
+
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression  channels 1
 
 #python trainClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
 
@@ -63,9 +65,12 @@ if __name__ == '__main__':
     ap.add_argument("--BS", required=False, default=16 , type=int, help="Batch size")
     ap.add_argument("--width", required=True, help="width of image")
     ap.add_argument("--height", required=True, help="height of image")
-    ap.add_argument("--patience", required=False, default=50, type=int,help="Number of epochs to wait without accuracy imrovment")
+    ap.add_argument("--patience", required=False, default=50, type=int,help="Number of epochs to wait without accuracy improvment")
     ap.add_argument("--ResultsFolder", required=False, default="Results",help="Folder to save Results")
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
+    ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
+    parser.add_argument(“--useLabelSmoothing”, help=”turn on label smoothing”, action=”store_true”)
+
 
 
 
@@ -81,6 +86,8 @@ if __name__ == '__main__':
     patience=args["patience"]
     ResultsFolder=args["ResultsFolder"]
     learningRate=args["lr"]
+    channels=args["channels"]
+
 
 
     input_shape=width,height
@@ -100,7 +107,7 @@ if __name__ == '__main__':
 
 
     if os.path.exists(ResultsFolder):
-        print("[Warning]  Folder aready exists, All files in folder will be deleted")
+        print("[Warning]  Folder {} already exists, All files in folder will be deleted".format(ResultsFolder))
         input("[msg]  Press any key to continue")
         shutil.rmtree(ResultsFolder)
     os.mkdir(ResultsFolder)
@@ -118,7 +125,7 @@ if __name__ == '__main__':
     labels=paths.get_immediate_subdirectories(train_dir)
     #sort labels alphabetically for consistency 
     labels.sort()
-    print("[INFO] training labels are  {}".format(str(labels)))
+    print("[INFO] Training labels are  {}".format(str(labels)))
     print("[INFO] Number of classes are  {}".format(len(labels)))
 
 
@@ -139,14 +146,15 @@ if __name__ == '__main__':
 
     #draw sample images for training and  validation datasets 
     fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
-    plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
+
+    plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,channels)
 
 
     folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
     folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
 
-    es = EarlyStopping(monitor='val_acc', mode='max', min_delta=1 ,  patience=patience)
-    mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_acc', mode='max', save_best_only=True)
+    es = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
+    mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_acc', mode='auto', save_best_only=True, verbose=1)
     tensorboard_callback = TensorBoard(log_dir=ResultsFolder,profile_batch=0)
 
 
@@ -157,7 +165,7 @@ if __name__ == '__main__':
 
 
     #build the model
-    model=modelsFactory.ModelCreator(numOfOutputs,width,height,networkID=networkID).model
+    model=modelsFactory.ModelCreator(numOfOutputs,width,height,networkID=networkID,channels=channels).model
     #print model structure 
     model.summary()
     #compile model
@@ -173,7 +181,7 @@ if __name__ == '__main__':
 
 
 
-
+#color_mode: One of "grayscale", "rgb", "rgba". Default: "rgb"
 
 
 
@@ -187,6 +195,11 @@ if __name__ == '__main__':
           horizontal_flip=True,
           fill_mode='nearest')
 
+    
+    if(channels==1):
+        colorMode="grayscale"
+    else:
+        colorMode="rgb"
 
     test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 
@@ -195,7 +208,7 @@ if __name__ == '__main__':
     train_generator = train_datagen.flow_from_directory(train_dir,
                                                         batch_size=BS,
                                                         class_mode=classMode,   #class_mode="categorical" will do one hot encoding
-                                                        target_size=input_shape)     
+                                                        target_size=input_shape,color_mode=colorMode)     
 
 
 
@@ -203,7 +216,7 @@ if __name__ == '__main__':
     validation_generator =  test_datagen.flow_from_directory(validation_dir,
                                                              batch_size=BS,
                                                              class_mode  = classMode,
-                                                             target_size = input_shape)
+                                                             target_size = input_shape,color_mode=colorMode)
 
 
 
@@ -275,13 +288,14 @@ if __name__ == '__main__':
     root_dir="TestImages"
       
 
-    if (testDir is None):
+    if (testDir is not None):
         path_test=os.path.join(root_dir,testDir)
     else:
         path_test=validation_dir
     
-    modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,ResultsFolder,path_test,datasetDir)
-    modelEvaluator.evaluate1()  #using sklearn & testGenerator
+    modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,ResultsFolder,path_test,datasetDir,channels)
+    modelEvaluator.evaluateGenerator()  #using sklearn & testGenerator
+
 
 
 

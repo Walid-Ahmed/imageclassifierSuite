@@ -35,7 +35,7 @@ class   ModelEvaluator:
 			return 0	
 
 
-	def __init__(self, model,labels,input_shape,ResultsFolder,path_test,datasetDir,mode=1):
+	def __init__(self, model,labels,input_shape,ResultsFolder,path_test,datasetDir,channels,mode=1):
 		self.model=tf.keras.models.load_model(model)
 
 		self.testFilesFullPathList=[]
@@ -48,6 +48,7 @@ class   ModelEvaluator:
 		self.path_test=path_test
 		self.totalTest = len(list(paths.list_images(self.path_test)))
 		print('[INFO] Total images in test  dataset '+self.path_test+ 'images :', self.totalTest)
+		self.channels=channels
 
 
 		numOfOutputs=len(labels)  
@@ -65,60 +66,18 @@ class   ModelEvaluator:
 		      self.testFilesFullPathList.append(os.path.join(root, name))
 
 
-	def PrecisionRecall(self):
+	def calculatePrecisionRecall(self,probs,y_true,y_pred):
 		print("[INFO] Evaluating  Precision-Recall curve")
-		y_pred=[]
-		y_true=[]
-		probs=[]
-
-
-
-		#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False)
-
-		for imgPath in self.testFilesFullPathList:
-
-		  if (".DS_Store") in imgPath:
-		    continue
-		  #print(imgPath)
-		  folderName=(imgPath).split(os.sep)[-2:-1][0]
-		  if(self.labels[0] in folderName  ):
-		    y_true.append(0)
-		  elif (self.labels[1] in folderName ):  
-		    y_true.append(1)
-
-
-
-		  img=keras.preprocessing.image.load_img(imgPath, target_size=self.input_shape)
-		  
-		  x=keras.preprocessing.image.img_to_array(img)
-		  x=x/255   #rescale image
-		  x=np.expand_dims(x, axis=0)
-		  image = np.vstack([x])
-
-		  classes = self.model.predict(image)
-		  probs.append(classes[0])
-		  #print(type(classes))     <class 'numpy.ndarray'>
-		  
-		  #print(classes)
-
-		  #print(classes[0])
-		  
-		  if classes[0]>0.5:     #1  is a labels[1]
-		    y_pred.append(1)
-		  else:
-		    y_pred.append(0)
 
 
 		precision, recall, thresholds = precision_recall_curve(y_true, probs) #y_score    probabilities between 0 and 1
 
-		#print(precision)
-		#print(recall)
 
 
 
 		# calculate 
-		F1 = f1_score(y_true, y_pred)  # vcalculated for a certian threshold used to calculate  y_pred
-		print("[INFO] F1 score at threshold 0.5=" +str(F1) )
+		F1 = f1_score(y_true, y_pred)  # calculated for a certian threshold used to calculate  y_pred
+		print("[INFO] F1 score at threshold 0.5=".format(F1) )
 
 	
 		F1=[]
@@ -127,7 +86,7 @@ class   ModelEvaluator:
 			#print("Perciosion = {0} and Recall={1} at Threshold={2} and F1-Score={3}".format(precision[i], recall[i],thresholds[i],F1[i]) )
 		F1_Max=max(F1)
 		index=F1.index(F1_Max)
-		print("The Highest F1_Score is {0}  with Precision {1} and recall {2} at Threshold {3}".format(F1_Max,precision[index] , recall[index],thresholds[index]))
+		print("[INFO] The Highest F1_Score is {0}  with Precision {1} and recall {2} at Threshold {3}".format(F1_Max,precision[index] , recall[index],thresholds[index]))
 			
 
 		average_precision = average_precision_score(y_true, probs)
@@ -147,9 +106,13 @@ class   ModelEvaluator:
 		plt.ylabel('Precision')
 		plt.ylim([0.0, 1.05])
 		plt.xlim([0.0, 1.0])
-		plt.title('Class Precision-Recall curve for class {0}'.format(self.labels[1] +" vs " +  self.labels[0]))
+		plt.title(' Precision-Recall curve for class {0}'.format(self.labels[1] +" vs " +  self.labels[0]))
 		fileName="Precision_Recall_curve_"+self.labels[1]+".png"
+		fileName=os.path.join(self.ResultsFolder,fileName)
+
 		plt.savefig(fileName)
+		print("[INFO] Precision_Recall_curve_  plot is saved to {}" .format(fileName) )
+
 		plt.show()
 
 		          
@@ -161,7 +124,10 @@ class   ModelEvaluator:
 		plt.ylabel('F1-Score')
 		plt.title('F1-Score Vs Threshold for  class {0}'.format(self.labels[1] +" vs " +  self.labels[0]))
 		fileName="F1_Vs Threshold_"+self.labels[1] +" vs " +  self.labels[0]+".png"
+		fileName=os.path.join(self.ResultsFolder,fileName)
 		plt.savefig(fileName)
+		print("[INFO] F1_Vs Threshold curve plot is saved to {}".format(fileName) )
+
 		plt.show()
 
 
@@ -310,56 +276,85 @@ class   ModelEvaluator:
 
 		print("*************************************************************************************************************")
 
-	def evaluate1(self):
+
+
+
+
+
+
+	def evaluateGenerator(self):
 
 
 		test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
+
+
+
+
+		if(self.channels==1):
+			colorMode="grayscale"
+		else:
+			colorMode="rgb"
 	# initialize the testing generator
 		test_generator = test_datagen.flow_from_directory(self.path_test,
 			class_mode=self.classMode,
 			target_size=self.input_shape,
-			color_mode="rgb",
+			color_mode=colorMode,
 			shuffle = False,
 			batch_size=1)
 
 			# reset the testing generator and then use our trained model to
+		
+		#To get label values which you are using test_generator.classes. It gives all the labels that are used for the test.
+		print(test_generator.classes)
+		print(len(test_generator.classes))
+
+
+
 		# make predictions on the data
+		
 		print("[INFO] Evaluating  Classiffication Report 1")
 
 		test_generator.reset()
-		predIdxs = self.model.predict_generator(test_generator,steps=self.totalTest) 
+		probs = self.model.predict_generator(test_generator,steps=self.totalTest)   #Probabilities [[ , , , ,],[]] 
+		 
+		#print(predIdxs)
+		#exit()
 
-		predictedLabels=[]
+
+		#predictedLabels=[]
+		y_pred=[]
+		y_true=test_generator.classes
 
 
 		if(self.classMode=='binary'):  
-			for  predIdx in predIdxs:
+			for  predIdx in probs:
 
 			  if predIdx[0]>0.5:     #1  is a labels[1]
 			      #print(" belongs to {}".format(labels[1]))
-			      predictedLabels.append(1)
+			      y_pred.append(1)
 			      
 			  else:
 			      #print( " belongs to  {}".format(labels[0]))
-			      predictedLabels.append(0)
-
-
+			      y_pred.append(0)
 		else:
-
-			y_true=test_generator.classes
-			y_pred=predIdxs.argmax(axis=1)
-			predictedLabels=y_pred
+			y_pred=probs.argmax(axis=1)
+			#predictedLabels=y_pred
 
 
-		#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False, zero_division='warn')[source]¶
-		print(classification_report(test_generator.classes, predictedLabels,target_names=test_generator.class_indices.keys()))
+		#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False, zero_division='warn')
+		print(classification_report(y_true, y_pred,target_names=test_generator.class_indices.keys()))
 		y_true=test_generator.classes
-		y_pred=predictedLabels
+		#y_pred=predictedLabels
 		labels=test_generator.class_indices.keys()
 
 		helper.plot_print_confusion_matrix(y_true, y_pred, self.ResultsFolder,classes=labels,dataset=self.datasetDir ,title=self.datasetDir+ "_Confusion matrix, without normalization") 
 
-		print("*************************************************************************************************************")      
+		print("*************************************************************************************************************")     
+
+
+		if self.classMode=='binary':
+			self.calculatePrecisionRecall(probs,y_true,y_pred) 
+
 
 
 
@@ -442,7 +437,7 @@ if __name__ == '__main__':
 
 	modelEvaluator.ROC_Calculate()
 
-	modelEvaluator.evaluate1()
+	modelEvaluator.evaluateGenerator()
 	modelEvaluator.evaluate2()
 	modelEvaluator.evaluate3()
 
