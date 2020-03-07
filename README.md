@@ -135,7 +135,7 @@ The data should have been splitted from the start to train and eval, for example
 To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
 ```
 
-python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 10  --width  150 --height  150 --testDir test_images_cats_and_dogs --ResultsFolder  Results/r1_cats_dogs
+python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1
 ```
 
 
