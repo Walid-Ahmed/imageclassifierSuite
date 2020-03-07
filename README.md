@@ -268,5 +268,5 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 
 The script split_dataset.py  can be used to split image files of the  dataset to training and validation based on split percentage you choose, for example you can run it as follows
 ```
-python split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Database  --TRAIN_SPLIT 0.7
+python util/split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Database  --TRAIN_SPLIT 0.7
 ```
