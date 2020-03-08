@@ -146,7 +146,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
 
 
 The 
-trainClassifer_flow_from_director.py  trains a neural network with final layer of one neuron that is suitable for binary classification(2 classes)  otherwise the number of neurons in last layer will be equal to number of classes.
+trainClassifer_flow_from_director.py  trains a neural network with final layer of one neuron  in case of  binary classification(2 classes)  otherwise the number of neurons in last layer will be equal to number of classes in case we are training a multiclass image classifier.
 
 The data should have been **splitted** earlier in the folder to train and eval, for example the cat_and_dogs dataset is arranged as in following figure:
 
@@ -165,7 +165,7 @@ python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --netwo
 
 
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
-Your folder of images  should have two sub folders "train" and "eval".In each of the "train" and "eval" folder, you should have 2 subfolders, each labeled with the name of the class. 
+Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have 2 subfolders, each labeled with the name of the class. 
  
 A probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
