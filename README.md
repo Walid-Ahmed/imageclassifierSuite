@@ -1,6 +1,6 @@
 ﻿# image classifier Suite
  
- multiclass or multinomial classification is the problem of classifying instances into one of three or more classes. (Classifying instances into one of two classes is called binary classification.)
+ Multiclass or multinomial classification is the problem of classifying instances into one of three or more classes. Classifying instances into one of two classes is called binary classification
  
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
