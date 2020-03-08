@@ -125,7 +125,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
 ```
 
 
-<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train an image classifier using flow from directory</h2>
+<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary/multiclass(multinomial)  image classifier isong flow from directory</h2>
 
 
 The 
@@ -156,7 +156,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
-<h1 id="multiclassimageclassifier">III--Train a binary/multiclass(multinomial)  image classifier </h3> 
+<h1 id="multiclassimageclassifier">III--Train a binary/multiclass(multinomial)  image classifier isong flow from data</h3> 
  
 
 
@@ -171,7 +171,7 @@ Your folder of images  should have two sub folders "train" and "eval". In each o
  
 
 
-<h1 id="multiclassimageclassifier">III-Train a binary/multiclass image classifier</h1>
+<h1 id="multiclassimageclassifier">III-Train a binary/multiclass image classifier using flow from data</h1>
 
 
 The script   trainClassifier_flow_from_data.py   can be used to train a binary classifier or a multi classifier. 
