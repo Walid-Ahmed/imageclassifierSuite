@@ -1,14 +1,13 @@
 ﻿# image classifier Suite
  
+ 
+ ## Introduction 
+
  Multiclass or multinomial classification is the problem of classifying instances into one of three or more classes. Classifying instances into one of two classes is called binary classification
  
+This Repo can be used to train an image  classifier on standard  datasets  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. 
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/TensorBoardDemo.png)
-## Introduction 
-
-This Repo can be used to train a classifier on standard  datasets  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. Training parmeters that can be set are:
+Training parmeters that can be set are:
 - Batch size, 
 - type of optimizer, 
 - image input size, 
@@ -16,6 +15,16 @@ This Repo can be used to train a classifier on standard  datasets  or user defin
 - data augmentation, 
 - Label smoothing, 
 - Learning rate schedule
+ 
+ 
+ 
+
+ 
+
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
+
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/TensorBoardDemo.png)
+
 
 
 # Install
