@@ -142,7 +142,7 @@ This code will download the CIFAR10 dataset(if needed) and start training using 
 ```
 
 
-<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary/multiclass(multinomial)  image classifier isong flow from directory</h2>
+<h2 id="binaryimageclassifierusingflowfromdirectory">II-Train a binary/multiclass(multinomial)  image classifier using flow from directory</h2>
 
 
 The 
