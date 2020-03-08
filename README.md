@@ -1,5 +1,6 @@
 ﻿# image classifier Suite
-
+ 
+ multiclass or multinomial classification is the problem of classifying instances into one of three or more classes. (Classifying instances into one of two classes is called binary classification.)
  
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
@@ -7,7 +8,7 @@
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/TensorBoardDemo.png)
 ## Introduction 
 
-This Repo can be used to train standard  datasets  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. Training parmeters that can be set are  :
+This Repo can be used to train a classifier on standard  datasets  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. Training parmeters that can be set are:
 - Batch size, 
 - type of optimizer, 
 - image input size, 
@@ -155,7 +156,9 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
 
-<h1 id="multiclassimageclassifier">III--Train a binary/multiclass image classifier</h3>
+<h1 id="multiclassimageclassifier">III--Train a binary/multiclass(multinomial)  image classifier </h3> 
+ 
+
 
 
 The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
