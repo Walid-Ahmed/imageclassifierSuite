@@ -196,12 +196,6 @@ You do not have to enter your labels or to split your data into train/eval, all 
 
 
 
-## IV-Train a multiclass image classifier using satandard dataset . 
-
-
-The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
-
-
 <h2 id="Trainmulticlassimageclassifierusingsatandarddataset">IV-Train a multiclass image classifier using satandard dataset </h2>
 
 
