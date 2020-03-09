@@ -1,6 +1,6 @@
 
 
-#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1
+#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1 --applyAugmentation False
 
 
 #python trainClassifer_flow_from_directory.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID net2  --EPOCHS 20  --width  150 --height  150  --BS 32  --ResultsFolder  Results/r1_disaster
@@ -37,7 +37,7 @@ from tensorflow.keras.losses import BinaryCrossentropy
 
 
 
-
+print(tf.keras.__version__) #2.2.4-tf
 
 def predictBinaryValue(probs,threshold=0.5):
     y_pred=[]
@@ -73,8 +73,9 @@ if __name__ == '__main__':
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
     ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
-    #ap.add_argument("--label smoothing", help="turn on label smoothing", action="store_true")
-
+    ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
+    ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
+    ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
 
 
 
@@ -93,6 +94,20 @@ if __name__ == '__main__':
     learningRate=args["lr"]
     channels=args["channels"]
     labelSmoothing=args["labelSmoothing"]
+    applyAugmentation=args["applyAugmentation"]
+    continueTraining=args["continueTraining"]
+
+
+    if(applyAugmentation=="True") or  (applyAugmentation=="True"):
+        applyAugmentation=True
+    else:
+        applyAugmentation=False
+
+    if(continueTraining=="True") or  (continueTraining=="True"):
+        continueTraining=True
+    else:
+        continueTraining=False
+        
 
 
 
@@ -162,7 +177,7 @@ if __name__ == '__main__':
     folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
 
     es = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
-    mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_acc', mode='auto', save_best_only=True, verbose=1)
+    mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
     tensorboard_callback = TensorBoard(log_dir=ResultsFolder,profile_batch=0)
 
 
@@ -175,9 +190,13 @@ if __name__ == '__main__':
     #build the model
     model=modelsFactory.ModelCreator(numOfOutputs,width,height,networkID=networkID,channels=channels).model
     #print model structure 
+    
+    #modelFileName=os.path.join(ResultsFolder,"model.h5")
+    #model = load_model(modelFileName)
+
     model.summary()
     #compile model
-    model.compile(optimizer=RMSprop(lr=learningRate),loss=lossFun,metrics = ['acc'])
+    model.compile(optimizer=RMSprop(lr=learningRate),loss=lossFun,metrics = ['accuracy'])
     print("[INFO] Model compiled sucessfully")
 
 
@@ -191,17 +210,22 @@ if __name__ == '__main__':
 
 #color_mode: One of "grayscale", "rgb", "rgba". Default: "rgb"
 
+    if(applyAugmentation):
 
+        train_datagen = ImageDataGenerator(
+              rescale=1./255,   #All images will be rescaled by 1./255
+              rotation_range=40,
+              width_shift_range=0.2,
+              height_shift_range=0.2,
+              shear_range=0.2,
+              zoom_range=0.2,
+              horizontal_flip=True,
+              fill_mode='nearest')
+    else:
+        train_datagen = ImageDataGenerator(
+                  rescale=1./255,   #All images will be rescaled by 1./255
+                  )
 
-    train_datagen = ImageDataGenerator(
-          rescale=1./255,   #All images will be rescaled by 1./255
-          rotation_range=40,
-          width_shift_range=0.2,
-          height_shift_range=0.2,
-          shear_range=0.2,
-          zoom_range=0.2,
-          horizontal_flip=True,
-          fill_mode='nearest')
 
     
     if(channels==1):
@@ -252,6 +276,9 @@ if __name__ == '__main__':
                                   callbacks=[es, mc,tensorboard_callback]
                                   )
 
+
+    
+  
 
     #save model
     fileNameToSaveModel="{}_{}_binaryClassifier.h5".format(labels[0],labels[1])

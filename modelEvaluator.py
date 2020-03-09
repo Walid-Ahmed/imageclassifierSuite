@@ -66,18 +66,10 @@ class   ModelEvaluator:
 		      self.testFilesFullPathList.append(os.path.join(root, name))
 
 
-	def calculatePrecisionRecall(self,probs,y_true,y_pred):
-		print("[INFO] Evaluating  Precision-Recall curve")
-
-
-		precision, recall, thresholds = precision_recall_curve(y_true, probs) #y_score    probabilities between 0 and 1
-
-
-
-
-		# calculate 
+	def calculateF1_score(self,y_true,y_pred,precision, recall, thresholds):		 
+	# calculate 
 		F1 = f1_score(y_true, y_pred)  # calculated for a certian threshold used to calculate  y_pred
-		print("[INFO] F1 score at threshold 0.5=".format(F1) )
+		print("[INFO] F1 score at threshold 0.5={}".format(F1) )
 
 	
 		F1=[]
@@ -87,6 +79,32 @@ class   ModelEvaluator:
 		F1_Max=max(F1)
 		index=F1.index(F1_Max)
 		print("[INFO] The Highest F1_Score is {0}  with Precision {1} and recall {2} at Threshold {3}".format(F1_Max,precision[index] , recall[index],thresholds[index]))
+
+
+		plt.plot(thresholds, F1, 'ro')
+		plt.ylim([0.0, 1.05])
+		plt.xlim([0.0, 1.05])
+		plt.xlabel('Threshold')
+		plt.ylabel('F1-Score')
+		plt.title('F1-Score Vs Threshold for  class {0}'.format(self.labels[1] +" vs " +  self.labels[0]))
+		fileName="F1_Vs Threshold_"+self.labels[1] +" vs " +  self.labels[0]+".png"
+		fileName=os.path.join(self.ResultsFolder,fileName)
+		plt.savefig(fileName)
+		print("[INFO] F1_Vs Threshold curve plot is saved to {}".format(fileName) )
+
+		plt.show()
+
+
+	def calculatePrecisionRecall(self,probs,y_true,y_pred):
+		print("[INFO] Evaluating  Precision-Recall curve")
+
+
+		precision, recall, thresholds = precision_recall_curve(y_true, probs) #y_score    probabilities between 0 and 1
+
+
+
+
+		
 			
 
 		average_precision = average_precision_score(y_true, probs)
@@ -96,8 +114,7 @@ class   ModelEvaluator:
 
 		precision_value=precision_score(y_true, y_pred, average='macro')  
 
-		print(precision_value)
-		print("[INFO] precision_value at threshold 0.5=" +str(precision_value) )
+		print("[INFO] precision_value at threshold 0.5=".format(precision_value) )
 
 
 		plt.step(recall, precision, color='b', alpha=0.2, where='post')
@@ -114,21 +131,11 @@ class   ModelEvaluator:
 		print("[INFO] Precision_Recall_curve_  plot is saved to {}" .format(fileName) )
 
 		plt.show()
+		return precision, recall, thresholds
 
 		          
 
-		plt.plot(thresholds, F1, 'ro')
-		plt.ylim([0.0, 1.05])
-		plt.xlim([0.0, 1.05])
-		plt.xlabel('Threshold')
-		plt.ylabel('F1-Score')
-		plt.title('F1-Score Vs Threshold for  class {0}'.format(self.labels[1] +" vs " +  self.labels[0]))
-		fileName="F1_Vs Threshold_"+self.labels[1] +" vs " +  self.labels[0]+".png"
-		fileName=os.path.join(self.ResultsFolder,fileName)
-		plt.savefig(fileName)
-		print("[INFO] F1_Vs Threshold curve plot is saved to {}".format(fileName) )
 
-		plt.show()
 
 
 
@@ -312,7 +319,7 @@ class   ModelEvaluator:
 
 		# make predictions on the data
 		
-		print("[INFO] Evaluating  Classiffication Report 1")
+		print("[INFO] Evaluating  Classiffication Report ")
 
 		test_generator.reset()
 		probs = self.model.predict_generator(test_generator,steps=self.totalTest)   #Probabilities [[ , , , ,],[]] 
@@ -353,7 +360,8 @@ class   ModelEvaluator:
 
 
 		if self.classMode=='binary':
-			self.calculatePrecisionRecall(probs,y_true,y_pred) 
+			precision, recall, thresholds=self.calculatePrecisionRecall(probs,y_true,y_pred) 
+			self.calculateF1_score(y_true,y_pred,precision, recall, thresholds)
 
 
 
