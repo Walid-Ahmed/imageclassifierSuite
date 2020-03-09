@@ -172,19 +172,6 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/treeStructure.png)
-
-<h1 id="multiclassimageclassifier">III--Train a binary/multiclass(multinomial)  image classifier isong flow from data</h3> 
- 
-
-
-
-The script   trainClassifier_flow_from_data.py   can be usd to train a binary classifier or a multi classifier. 
-
-
-For binary classification with 2 classes only, a probabilty more than 0.5 means that the output is the second  class when they are sorted alphabetically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
-
-To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
-Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have  subfolders, each labeled with the name of the class. 
  
 
 
