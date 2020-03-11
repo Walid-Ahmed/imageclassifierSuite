@@ -99,7 +99,8 @@ After finishing training, the following files are automatically saved to a  "Res
  5. Confusion matrix as image
  6. Precision Recal curve (for binary classification only )
  7. F1-score vs Threshould (for binary classification only)
- 8. History of accutacy and loss for training and valisation as a json file (history.json)
+ 8. History of accuracy and loss for training and valisation as a json file (history.json)
+ 9. A plot for acc and accuracy that is being updated each epoch (onlineLossAccPlot.png)
  
 
 
