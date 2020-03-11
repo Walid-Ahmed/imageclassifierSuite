@@ -89,7 +89,7 @@ More and more networks will be added soon, however you can still define your own
 
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
 
-After finishing training, the following files are automatically saved to a  "Results" folder you pss as argument when you start training.
+After finishing training, the following files are automatically saved to a  "Results" folder you pass as argument when you start training.
 
 
  1. Loss and accuracy curves
@@ -99,6 +99,7 @@ After finishing training, the following files are automatically saved to a  "Res
  5. Confusion matrix as image
  6. Precision Recal curve (for binary classification only )
  7. F1-score vs Threshould (for binary classification only)
+ 8. History of accutacy and loss for training and valisation as a json file (history.json)
  
 
 
