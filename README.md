@@ -102,7 +102,7 @@ After finishing training, the following files are automatically saved to a  "Res
  6. Precision Recal curve (for binary classification only )
  7. F1-score vs Threshould (for binary classification only)
  8. History of accuracy and loss for training and valisation as a json file (history.json)
- 9. A plot for acc and accuracy that is being updated each epoch (onlineLossAccPlot.png)
+ 9. A plot for acc and accuracy that is being updated each epoch (onlineLossAccPlot.png), this will also take into account any training done before when training starts from a previous checkpoint.
  10. Checkpoints of model as .h5 saved each 5 epochs(You can change this value) 
  
 
