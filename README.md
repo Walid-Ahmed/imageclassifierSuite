@@ -24,7 +24,7 @@ The repo enables you also to stop training and restart  it again from a checkpoi
 
 <p align="center">
 
- <img src="(https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/animatedGif.gif">
+ <img src="https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/animatedGif.gif">
 </p>
 
 
