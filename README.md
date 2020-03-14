@@ -5,7 +5,7 @@
 
  Multiclass or multinomial classification is the problem of classifying instances into one of three or more classes. Classifying instances into one of two classes is called binary classification
  
-This Repo can be used to train an image  classifier on standard  datasets  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. 
+This Repo can be used to train an image  classifier   on user defined dataset or on standard  datasets with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. 
 
 Training parmeters that can be set are:
 - Batch size, 
@@ -17,13 +17,15 @@ Training parmeters that can be set are:
 - Learning rate schedule
  
  
- 
+The repo enables you also to stop training and restart  it again from a checkpoint withe a new learning rate. Checkpoints of model as .h5 saved each 5 epochs(You can change this value)
 
- 
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/TensorBoardDemo.png)
+<p align="center">
+
+ <img src="https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/animatedGif.gif">
+</p>
+
 
 
 
@@ -83,13 +85,13 @@ More and more networks will be added soon, however you can still define your own
 
 
 
-
-
 ## Training and Testing Scripts 
 
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
+You do not need to worry about whether your are training with color images or gray scale images as the number of channels is detected automatically.
 
-After finishing training, the following files are automatically saved to a  "Results" folder you pss as argument when you start training.
+
+After finishing training, the following files are automatically saved to a  "Results" folder you pass as argument when you start training.
 
 
  1. Loss and accuracy curves
@@ -99,17 +101,14 @@ After finishing training, the following files are automatically saved to a  "Res
  5. Confusion matrix as image
  6. Precision Recal curve (for binary classification only )
  7. F1-score vs Threshould (for binary classification only)
+ 8. History of accuracy and loss for training and valisation as a json file (history.json)
+ 9. A plot for acc and accuracy that is being updated each epoch (onlineLossAccPlot.png), this will also take into account any training done before when training starts from a previous checkpoint.
+ 10. Checkpoints of model as .h5 saved each 5 epochs(You can change this value) 
  
 
 
  
- When training starts, it will show a thumbnail image  for sample images from training dataset like the following one:
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_CIFAR10.png)
-
- A sample confusion matrix  image  is saved as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
-
-Also training and validation losses and accuray curves are  plotted to tensorboard, you can view them during training by running the command 
+ When training starts, it will show a thumbnail image  for sample images from training dataset  Also training and validation losses and accuray curves are  plotted to tensorboard, you can view them during training by running the command 
 ```
 
 tensorboard --logdir Results
@@ -196,12 +195,6 @@ You do not have to enter your labels or to split your data into train/eval, all 
 
 
 
-## IV-Train a multiclass image classifier using satandard dataset . 
-
-
-The file python trainStandardDatasetMulticlass.py trains a multiclass neural network using a standard datasets that are built in in Keras(but beware if you are behind proxy as u might have problems downloadind data!).
-
-
 <h2 id="Trainmulticlassimageclassifierusingsatandarddataset">IV-Train a multiclass image classifier using satandard dataset </h2>
 
 
@@ -222,15 +215,6 @@ Some of the sample commands you can run are:
     python trainStandardDatasetMulticlass.py  --dataset CIFAR10 --networkID net5  --EPOCHS 25  
     python trainStandardDatasetMulticlass.py  --dataset CIFAR100 --networkID MiniVGG  --EPOCHS 25 
 
-
-
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_fashion_mnist.png)
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_CIFAR10.png)
-
- 
- A sample confusion matrix  image saved is as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
 
 
 
@@ -279,3 +263,7 @@ The script split_dataset.py  can be used to split image files of the  dataset to
 ```
 python util/split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Database  --TRAIN_SPLIT 0.7
 ```
+
+
+# credits
+The animated gif was made using  Animated GIF Maker available at https://ezgif.com/maker
