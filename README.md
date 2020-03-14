@@ -270,4 +270,4 @@ python util/split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Datab
 
 
 # credits
-The animatedd gif was made using  Animated GIF Maker available at https://ezgif.com/maker
+The animated gif was made using  Animated GIF Maker available at https://ezgif.com/maker
