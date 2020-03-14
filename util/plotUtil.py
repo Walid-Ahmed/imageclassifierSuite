@@ -10,6 +10,7 @@ from PIL import Image
 import matplotlib.cm as cm
 import numpy as np
 import cv2
+from scipy.ndimage import imread
 
 matplotlib.use("Qt5Agg")
 print("[INFO] matplotlib BACKEND IS {}".format(matplotlib.get_backend())) #[INFO] matplotlib BACKEND IS agg
@@ -70,7 +71,7 @@ def plotAccuracyAndLossesonSDifferentCurves(history,ResultsFolder,title=""):
   plt.ylabel("Loss")
   fileToSaveLossCurve=os.path.join("Results",title+"plot_loss.png")
   info=info+"[INFO] Loss curve saved to {}".format(fileToSaveLossCurve)
-  plt.savefig(os.path.join("Results","plot_loss.png"))
+  plt.savefig(os.path.join(ResultsFolder,"plot_loss.png"))
   plt.legend(loc="upper left")
 
   plt.show()
@@ -123,7 +124,9 @@ def plotAccuracyAndLossesonSameCurve(history,ResultsFolder,title=""):
 
 
 
-def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None,channels=3):
+#def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None,channels=3):
+def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None):
+
 
   info=""
 
@@ -132,6 +135,14 @@ def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None,channels=3):
   #print(train_label2_fnames[:10])
   imagePaths = sorted(list(paths.list_images(dataSetDir)))
 
+  firstImage=imagePaths[0]
+  firstImage= imread(firstImage)
+  channels=len(firstImage.shape)
+
+  print(channels)
+
+  if (channels==2):
+    channels=1
 
 
   # Parameters for our graph; we'll output images in a 4x4 configuration
@@ -169,7 +180,7 @@ def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None,channels=3):
   if(fileNameToSaveImage != None):
     plt.savefig(fileNameToSaveImage)
   plt.show()
-  return info
+  return info,channels
 
 def drarwGridOfImagesFromImagesData(images,fileNameToSaveImage=None):
 

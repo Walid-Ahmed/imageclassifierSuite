@@ -5,9 +5,15 @@
 
 #python trainClassifer_flow_from_directory.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID net2  --EPOCHS 20  --width  150 --height  150  --BS 32  --ResultsFolder  Results/r1_disaster
 
-#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression  --channels 1 --labelSmoothing 0.1
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression   --labelSmoothing 0.1
+
+
+
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r2_FacialExpression  --modelcheckpoint Results/r1_FacialExpression/checkPoints/epoch_30.h5  --startepoch 30 
 
 #python trainClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
+
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
 
 
 #The final layer will have only 1 neuron if we are dealing with 2 classes only (binary classiffier)
@@ -34,10 +40,24 @@ import shutil
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras.losses import CategoricalCrossentropy
 from tensorflow.keras.losses import BinaryCrossentropy
+import tensorflow.keras.backend as K
+from callbacks  import  TrainingMonitor
+from callbacks   import EpochCheckpoint
+from tensorflow.keras.models import load_model
 
 
 
-print(tf.keras.__version__) #2.2.4-tf
+#aim to get Reproducible Results with Keras
+#from tensorflow.random  import set_seed
+
+
+
+from numpy.random import seed
+seed(1)
+tf.random.set_seed(2)
+
+
+print("[INFO] tf.Keras   version is {}".format( tf.keras.__version__)) 
 
 def predictBinaryValue(probs,threshold=0.5):
     y_pred=[]
@@ -71,11 +91,16 @@ if __name__ == '__main__':
     ap.add_argument("--patience", required=False, default=50, type=int,help="Number of epochs to wait without accuracy improvment")
     ap.add_argument("--ResultsFolder", required=False, default="Results",help="Folder to save Results")
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
-    ap.add_argument("--channels", default=3,type=int,help="Number of channels in image")
+    ap.add_argument("--new_lr", required=False, type=float, default=1e-4,help="restarting Learning rate")
+
     ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
     ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
     ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
     ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
+    ap.add_argument("--modelcheckpoint", type=str, default=None ,help="path to *specific* model checkpoint to load")
+    ap.add_argument("--startepoch", type=int, default=0, help="epoch to restart training at")
+    ap.add_argument("--saveEpochRate", type=int, default=5, help="Frequency to save checkpoints")
+
 
 
 
@@ -92,11 +117,17 @@ if __name__ == '__main__':
     patience=args["patience"]
     ResultsFolder=args["ResultsFolder"]
     learningRate=args["lr"]
-    channels=args["channels"]
+    new_lr=args["new_lr"]
+
+
+
+
     labelSmoothing=args["labelSmoothing"]
     applyAugmentation=args["applyAugmentation"]
     continueTraining=args["continueTraining"]
-
+    modelcheckpoint=args["modelcheckpoint"]    
+    startepoch=args["startepoch"]
+    saveEpochRate=args['saveEpochRate']
 
     if(applyAugmentation=="True") or  (applyAugmentation=="True"):
         applyAugmentation=True
@@ -167,37 +198,78 @@ if __name__ == '__main__':
     #get statistics about your dataset
     NUM_TRAIN_IMAGES,NUM_TEST_IMAGES=paths.getTrainStatistics(datasetDir,train_dir,validation_dir)
 
+
     #draw sample images for training and  validation datasets 
     fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
 
-    plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,channels)
+    #info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,channels)
+    info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
+
+
 
 
     folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
     folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
-
-    es = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
-    mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
-    tensorboard_callback = TensorBoard(log_dir=ResultsFolder,profile_batch=0)
+    folderNameToSaveModelCheckPoints=os.path.join(ResultsFolder,"checkPoints")
+    os.mkdir(folderNameToSaveModelCheckPoints)
 
 
 
-
-
-
-
-
-    #build the model
-    model=modelsFactory.ModelCreator(numOfOutputs,width,height,networkID=networkID,channels=channels).model
-    #print model structure 
+    plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
     
-    #modelFileName=os.path.join(ResultsFolder,"model.h5")
-    #model = load_model(modelFileName)
+    jsonPath=os.path.join(ResultsFolder,"history.json")
+
+
+
+
+
+
+
+
+
+    if modelcheckpoint is None:
+        #build the model
+        model=modelsFactory.ModelCreator(numOfOutputs,width,height,networkID=networkID,channels=channels).model
+        #print model structure 
+        
+        #modelFileName=os.path.join(ResultsFolder,"model.h5")
+        #model = load_model(modelFileName)
+
+        #compile model
+        model.compile(optimizer=RMSprop(lr=learningRate),loss=lossFun,metrics = ['accuracy'])
+
+
+        # otherwise, we're using a checkpoint model
+    else:
+    # load the checkpoint from disk
+        print("[INFO] loading {}".format(modelcheckpoint))
+        print(modelcheckpoint)
+        model = load_model(modelcheckpoint)
+        # update the learning rate
+        print("[INFO] old learning rate: {}".format(K.get_value(model.optimizer.lr)))
+        K.set_value(model.optimizer.lr, new_lr)
+        print("[INFO] new learning rate: {}".format(K.get_value(model.optimizer.lr)))
+        print("[INFO] Model loaded  sucessfully from checkpoint")
+        #copy previous histort data of val and accuracy
+        folderOfPerviousCheckPoint=os.path.dirname(modelcheckpoint)
+        dst=ResultsFolder
+        src=os.path.join(folderOfPerviousCheckPoint, "history.json" )
+        shutil.copy(src,dst)
+
+
+
 
     model.summary()
-    #compile model
-    model.compile(optimizer=RMSprop(lr=learningRate),loss=lossFun,metrics = ['accuracy'])
-    print("[INFO] Model compiled sucessfully")
+
+
+
+
+    earlyStopping = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
+    modelCheckpoint = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
+    tensorboard_callback = TensorBoard(log_dir=ResultsFolder,profile_batch=0)
+    epochCheckpoint=EpochCheckpoint(folderNameToSaveModelCheckPoints, every=saveEpochRate,startAt=startepoch)
+    trainingMonitor=TrainingMonitor(plotPath,jsonPath=jsonPath,startAt=startepoch)
+
 
 
     fileToSaveModelPlot=os.path.join(ResultsFolder,'model.png')
@@ -273,7 +345,7 @@ if __name__ == '__main__':
                                   epochs=EPOCHS,
                                   validation_steps=NUM_TEST_IMAGES // BS,
                                   verbose=2 ,
-                                  callbacks=[es, mc,tensorboard_callback]
+                                  callbacks=[earlyStopping, modelCheckpoint,tensorboard_callback,trainingMonitor,epochCheckpoint]
                                   )
 
 
@@ -281,7 +353,13 @@ if __name__ == '__main__':
   
 
     #save model
-    fileNameToSaveModel="{}_{}_binaryClassifier.h5".format(labels[0],labels[1])
+
+    if(classMode=='binary'):
+        fileNameToSaveModel="{}_{}_binaryClassifier.h5".format(labels[0],labels[1])
+    else:
+        fileNameToSaveModel="{}_Classifier.h5".format(datasetDir)
+
+
     fileNameToSaveModel=os.path.join(ResultsFolder,fileNameToSaveModel)
     model.save(fileNameToSaveModel ,save_format='h5')
 
@@ -295,10 +373,8 @@ if __name__ == '__main__':
 
 
 
-    print("*************************************************************************************************************")      
-    print("[INFO] Model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
-    print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
-    print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
+
+    
 
 
 
@@ -307,15 +383,13 @@ if __name__ == '__main__':
     #plot and save training curves 
     info1=plotUtil.plotAccuracyAndLossesonSameCurve(history,ResultsFolder)
     info2=plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,ResultsFolder)
-    print("*************************************************************************************************************")      
-    print(info1)
-    print(info2)
-    print("*************************************************************************************************************")      
+   
 
 
-
-
-
+    #copying history.json to model chechpoint folder
+    dst=folderNameToSaveModelCheckPoints
+    src=os.path.join(ResultsFolder, "history.json" )
+    shutil.copy(src,dst)
 
 
 
@@ -330,6 +404,25 @@ if __name__ == '__main__':
     
     modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,ResultsFolder,path_test,datasetDir,channels)
     modelEvaluator.evaluateGenerator()  #using sklearn & testGenerator
+
+    print("[INFO] Evaluation finished. Confusion matrix plot is now shown")
+    print("*************************************************************************************************************")      
+    print(info1)
+    print(info2)
+    print("*************************************************************************************************************")   
+
+    print("[INFO] Full path of Model as .h5 is  {} ".format(fileNameToSaveModel))
+    print("[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate))
+    print("*************************************************************************************************************")      
+    print("[INFO] Final model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
+    print("[INFO] Full path of Model as .h5 is  {} ".format(fileNameToSaveModel))
+
+    print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
+    print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
+    print("[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath))
+
+
+
 
 
 
