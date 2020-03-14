@@ -5,7 +5,7 @@
 
  Multiclass or multinomial classification is the problem of classifying instances into one of three or more classes. Classifying instances into one of two classes is called binary classification
  
-This Repo can be used to train an image  classifier on standard  datasets  or user defined dataset with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. 
+This Repo can be used to train an image  classifier   on user defined dataset or on standard  datasets with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. 
 
 Training parmeters that can be set are:
 - Batch size, 
@@ -17,7 +17,7 @@ Training parmeters that can be set are:
 - Learning rate schedule
  
  
- 
+The repo enables you also to stop training and restart  it again from a checkpoint withe a new learning rate. Checkpoints of model as .h5 saved each 5 epochs(You can change this value)
 
  
 
@@ -101,7 +101,7 @@ After finishing training, the following files are automatically saved to a  "Res
  7. F1-score vs Threshould (for binary classification only)
  8. History of accuracy and loss for training and valisation as a json file (history.json)
  9. A plot for acc and accuracy that is being updated each epoch (onlineLossAccPlot.png)
- 10. Checkpoints of model as .ht saved each 5 epochs(You can change this value) 
+ 10. Checkpoints of model as .h5 saved each 5 epochs(You can change this value) 
  
 
 
