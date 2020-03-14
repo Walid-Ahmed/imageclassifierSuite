@@ -19,8 +19,12 @@ Training parmeters that can be set are:
  
 The repo enables you also to stop training and restart  it again from a checkpoint withe a new learning rate. Checkpoints of model as .h5 saved each 5 epochs(You can change this value)
 
-<p align="center">
+
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/animatedGif.gif)
+
+<p align="center">
+
+ <img src="(https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/animatedGif.gif">
 </p>
 
 
