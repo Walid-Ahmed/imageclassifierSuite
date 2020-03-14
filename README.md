@@ -108,13 +108,7 @@ After finishing training, the following files are automatically saved to a  "Res
 
 
  
- When training starts, it will show a thumbnail image  for sample images from training dataset like the following one:
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/sample_CIFAR10.png)
-
- A sample confusion matrix  image  is saved as the following![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/MNIST_ConfusionMatrix.png)
-
-Also training and validation losses and accuray curves are  plotted to tensorboard, you can view them during training by running the command 
+ When training starts, it will show a thumbnail image  for sample images from training dataset  Also training and validation losses and accuray curves are  plotted to tensorboard, you can view them during training by running the command 
 ```
 
 tensorboard --logdir Results
