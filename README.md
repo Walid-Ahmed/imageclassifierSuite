@@ -184,6 +184,9 @@ You can run it as follows
 python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --applyAugmentation True
 ```
 
+```
+python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --applyAugmentation True
+```
 
 In case of binary classifier, the last layer will have only one neuron, otherwise  the last laye will have a number of neurons as the number of outputs, The activation  function in  last layer will be changed from Sigmoid to Softmax accordingly
 
