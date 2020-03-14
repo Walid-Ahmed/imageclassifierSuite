@@ -267,3 +267,7 @@ The script split_dataset.py  can be used to split image files of the  dataset to
 ```
 python util/split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Database  --TRAIN_SPLIT 0.7
 ```
+
+
+# credits
+The animatedd gif was made using  Animated GIF Maker available at https://ezgif.com/maker
