@@ -21,11 +21,7 @@ The repo enables you also to stop training and restart  it again from a checkpoi
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/animatedGif.gif)
  
- https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/animatedGif.gif
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_dog.png)
-
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/TensorBoardDemo.png)
 
 
 
