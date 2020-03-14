@@ -151,18 +151,17 @@ The data should have been **splitted** earlier in the folder to train and eval, 
 
 ![structure for cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/cats_and_dogs_dir.png)
 
-To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
+To start  training  using this file on "cats and dogs" dataset you can run the follwing command:
 ```
 
 python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1
 ```
 
+To start  training  using this file on "Facial Expression" dataset you can run the follwing command:
 
-
-
-
-
-
+```
+python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
+```
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
 Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have 2 subfolders, each labeled with the name of the class. 
  
