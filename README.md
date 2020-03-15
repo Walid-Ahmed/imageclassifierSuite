@@ -154,7 +154,7 @@ The data should have been **splitted** earlier in the folder to train and eval, 
 To start  training  using this file on "cats and dogs" dataset you can run the follwing command:
 ```
 
-python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1
+python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 25  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1
 ```
 
 To start  training  using this file on "Facial Expression" dataset you can run the follwing command:
