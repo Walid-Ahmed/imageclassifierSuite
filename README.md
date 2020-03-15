@@ -45,7 +45,7 @@ Here is the list of libraries you need to install to execute the code:
 
 The repo comes loaded with following datasets (all in folder "datasets"):
  
- 1. Santa/NoSanta: initially collected  by  Adrian Rosebrock
+ 1. Santa/NoSanta: initially collected  by  [Adrian Rosebrock](https://www.pyimagesearch.com/2017/12/11/image-classification-with-keras-and-deep-learning/)
  2. Dogs/Cats
  3. Human/Horses
  4. Smile/noSmile datset:originally from this [link](https://github.com/hromi/SMILEsmileD)  
