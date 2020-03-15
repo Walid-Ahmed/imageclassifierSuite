@@ -1,4 +1,4 @@
-﻿# image classifier Suite
+﻿# Image classifier Suite
  
  
  ## Introduction 
