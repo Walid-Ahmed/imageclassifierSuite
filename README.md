@@ -176,7 +176,7 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 <h1 id="multiclassimageclassifier">III-Train a binary/multiclass image classifier using flow from data</h1>
 
 
-The script   trainClassifier_flow_from_data.py   can be used to train a binary classifier or a multi classifier. 
+The script   trainClassifier_flow_from_data.py   can be used to train a binary classifier or a multi class classifier. 
 
 You can run it as follows
 
@@ -185,7 +185,7 @@ python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28
 ```
 
 ```
-python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --applyAugmentation True
+python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r2_FacialExpression   --applyAugmentation True
 ```
 
 In case of binary classifier, the last layer will have only one neuron, otherwise  the last laye will have a number of neurons as the number of outputs, The activation  function in  last layer will be changed from Sigmoid to Softmax accordingly
