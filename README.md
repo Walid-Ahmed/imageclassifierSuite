@@ -82,7 +82,7 @@ Beside these networks, the modelsFactory defines some usefull neural networks th
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
 
-
+ ![Network parameters](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/numOfParametersPerNetwork.png)
 
 
 ## Training and Testing Scripts 
