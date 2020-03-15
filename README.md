@@ -115,7 +115,7 @@ tensorboard --logdir Results
 ```
 and then browsing the following url http://localhost:6008/
 
- [I-Train a CIFAR10](#TRAINcIFAR)  </br>
+ [I-Train a CIFAR10/MNIST dataset](#TRAINcIFAR)  </br>
  [II-Train an image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
  [III-Train a binary/multiclass image classifier](#multiclassimageclassifier) </br>
  [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)</br>
