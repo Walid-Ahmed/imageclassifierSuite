@@ -1,11 +1,14 @@
+#to view all model 
+#python modelsFactory.py
+
 import tensorflow as tf
 from  tensorflow.keras.applications import  ResNet50
 from tensorflow.keras.applications.vgg16 import VGG16
-
+import matplotlib
 class  ModelCreator:
 
 
-	def __init__(self, numOfOutputs,width,height,channels=3,networkID="default"):
+	def __init__(self, numOfOutputs=2,width=224,height=224,channels=3,networkID="default"):
 
 		#self.imgWidth,self.imgHeight=imgSize
 		self.numOfOutputs=numOfOutputs
@@ -147,23 +150,6 @@ class  ModelCreator:
 
 
 
-	def defineResnet50(self):   #https://www.pyimagesearch.com/2019/07/15/video-classification-with-keras-and-deep-learning/
-		baseModel = ResNet50(weights="imagenet", include_top=False,input_tensor=tf.keras.layers.Input(shape=(self.imgWidth,self.imgHeight, self.channels)))
-		# construct the head of the model that will be placed on top of the
-		# the base model
-		headModel = baseModel.output
-		headModel = tf.keras.layers.AveragePooling2D(pool_size=(7, 7))(headModel)
-		headModel = tf.keras.layers.Flatten(name="flatten")(headModel)
-		headModel = tf.keras.layers.Dense(512, activation="relu")(headModel)
-		headModel = tf.keras.layers.Dropout(0.5)(headModel)
-		headModel = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(headModel)
-
-		# place the head FC model on top of the base model (this will become
-		# the actual model we will train)
-		model = tf.keras.models.Model(inputs=baseModel.input, outputs=headModel)
-		return model
-
-
 	def defineNet3(self):  #should be suitable with CIFAR10.  https://ermlab.com/en/blog/nlp/cifar-10-classification-using-keras-tutorial/
 		model = tf.keras.models.Sequential()
 		 
@@ -192,42 +178,8 @@ class  ModelCreator:
 		model.add(tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation))	
 		return model
 
+	
 
-	def defineMiniVGG(self): #src https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning. #Fashionmnist
-		# first CONV => RELU => CONV => RELU => POOL layer set
-		model = tf.keras.models.Sequential()
-		model.add(tf.keras.layers.Conv2D(32, (3, 3), padding="same",input_shape=(self.imgWidth,self.imgHeight, self.channels)))
-		model.add(tf.keras.layers.Activation("relu"))
-		model.add(tf.keras.layers.BatchNormalization())
-		model.add(tf.keras.layers.Conv2D(32, (3, 3), padding="same"))
-		model.add(tf.keras.layers.Activation("relu"))
-		model.add(tf.keras.layers.BatchNormalization())
-		model.add(tf.keras.layers.MaxPool2D(pool_size=(2, 2)))
-		model.add(tf.keras.layers.Dropout(0.25))
-
-		# second CONV => RELU => CONV => RELU => POOL layer set
-		model.add(tf.keras.layers.Conv2D(64, (3, 3), padding="same"))
-		model.add(tf.keras.layers.Activation("relu"))
-		model.add(tf.keras.layers.BatchNormalization())
-		model.add(tf.keras.layers.Conv2D(64, (3, 3), padding="same"))
-		model.add(tf.keras.layers.Activation("relu"))
-		model.add(tf.keras.layers.BatchNormalization())
-		model.add(tf.keras.layers.MaxPool2D(pool_size=(2, 2)))
-		model.add(tf.keras.layers.Dropout(0.25))
- 
-		# first (and only) set of FC => RELU layers
-		model.add(tf.keras.layers.Flatten())
-		model.add(tf.keras.layers.Dense(512))
-		model.add(tf.keras.layers.Activation("relu"))
-		model.add(tf.keras.layers.BatchNormalization())
-		model.add(tf.keras.layers.Dropout(0.5))
- 
-		# softmax classifier
-		model.add(tf.keras.layers.Dense(self.numOfOutputs))
-		model.add(tf.keras.layers.Activation(self.finalActivation))
- 
-		# return the constructed network architecture
-		return model 
 
 	def defineNet4(self):     #src https://github.com/dribnet/kerosene/blob/master/examples/cifar100.py	   #CIFAR100
 		model = tf.keras.models.Sequential()
@@ -294,6 +246,66 @@ class  ModelCreator:
 		return model 
 
 
+	#use transfer learning, weights from imagenet are loaded initially	
+
+	def defineResnet50(self):   #https://www.pyimagesearch.com/2019/07/15/video-classification-with-keras-and-deep-learning/
+		baseModel = ResNet50(weights="imagenet", include_top=False,input_tensor=tf.keras.layers.Input(shape=(self.imgWidth,self.imgHeight, self.channels)))
+		# construct the head of the model that will be placed on top of the
+		# the base model
+		headModel = baseModel.output
+		headModel = tf.keras.layers.AveragePooling2D(pool_size=(7, 7))(headModel)
+		headModel = tf.keras.layers.Flatten(name="flatten")(headModel)
+		headModel = tf.keras.layers.Dense(512, activation="relu")(headModel)
+		headModel = tf.keras.layers.Dropout(0.5)(headModel)
+		headModel = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(headModel)
+
+		# place the head FC model on top of the base model (this will become
+		# the actual model we will train)
+		model = tf.keras.models.Model(inputs=baseModel.input, outputs=headModel)
+		return model
+
+
+
+
+
+	def defineMiniVGG(self): #src https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning. #Fashionmnist
+		# first CONV => RELU => CONV => RELU => POOL layer set
+		model = tf.keras.models.Sequential()
+		model.add(tf.keras.layers.Conv2D(32, (3, 3), padding="same",input_shape=(self.imgWidth,self.imgHeight, self.channels)))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Conv2D(32, (3, 3), padding="same"))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.MaxPool2D(pool_size=(2, 2)))
+		model.add(tf.keras.layers.Dropout(0.25))
+
+		# second CONV => RELU => CONV => RELU => POOL layer set
+		model.add(tf.keras.layers.Conv2D(64, (3, 3), padding="same"))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Conv2D(64, (3, 3), padding="same"))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.MaxPool2D(pool_size=(2, 2)))
+		model.add(tf.keras.layers.Dropout(0.25))
+ 
+		# first (and only) set of FC => RELU layers
+		model.add(tf.keras.layers.Flatten())
+		model.add(tf.keras.layers.Dense(512))
+		model.add(tf.keras.layers.Activation("relu"))
+		model.add(tf.keras.layers.BatchNormalization())
+		model.add(tf.keras.layers.Dropout(0.5))
+ 
+		# softmax classifier
+		model.add(tf.keras.layers.Dense(self.numOfOutputs))
+		model.add(tf.keras.layers.Activation(self.finalActivation))
+ 
+		# return the constructed network architecture
+		return model 
+
+
+
 	 
 	
 	def defineVGG16(self):
@@ -304,11 +316,48 @@ class  ModelCreator:
 			layer.trainable = False
 		# add new classifier layers
 		flat1 = tf.keras.layers.Flatten()(model.layers[-1].output)
-		class1 = tf.keras.layers.Dense(128, activation='relu', kernel_initializer='he_uniform')(flat1)
-		output = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(class1)
+		dense1 = tf.keras.layers.Dense(128, activation='relu', kernel_initializer='he_uniform')(flat1)
+		output = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(dense1)
 		# define new model
 		model = tf.keras.models.Model(inputs=model.inputs, outputs=output)
 
 		return model	
 			 
+
+
+if __name__ == "__main__":
+
+	allNetIds=["net1","net2","net3","net4","net5","LenetModel","Resnet50","net3","MiniVGG","VGG16"]
+	netDic=dict()
+	for netID in  allNetIds:
+		modelCreator=ModelCreator(networkID=netID)
+		model=modelCreator.model
+		model.summary()
+		numOfparmeters=model.count_params()
+		netDic[netID]=numOfparmeters
+
+		print("[INFO] Model  with i.d. {} is created sucessfully".format(netID))
+	print(netDic)	
+	import matplotlib.pylab as plt
+
+	lists = sorted(netDic.items()) # sorted by key, return a list of tuples
+
+	x, y = zip(*lists) # unpack a list of pairs into two tuples
+
+
+	fig, ax = plt.subplots()
+	#ax.plot(range(2003,2012,1),range(200300,201200,100))
+	ax.ticklabel_format(style='plain')
+	plt.ylabel("Number of Parameters")
+	plt.xlabel("Network I.D.")
+	plt.title("Number of Parameters for each network")
+	ax.get_yaxis().set_major_formatter(matplotlib.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+
+	plt.plot(x, y,'ro')
+	plt.show()
+
+
+
+
+
 	

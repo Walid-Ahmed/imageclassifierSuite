@@ -16,7 +16,9 @@
 #python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
 
 
-#The final layer will have only 1 neuron if we are dealing with 2 classes only (binary classiffier)
+#python trainClassifer_flow_from_directory.py  --datasetDir SportsClassification  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_SportsClassification --labelSmoothing 0.1 --applyAugmentation False
+
+
 
 import os
 from imutils import paths
@@ -31,7 +33,6 @@ import pickle
 import argparse
 from util import paths
 import tensorflow as tf
-from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
@@ -45,17 +46,16 @@ from callbacks  import  TrainingMonitor
 from callbacks   import EpochCheckpoint
 from tensorflow.keras.models import load_model
 
+from tensorflow.keras.optimizers import RMSprop
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers import SGD
+
 
 
 #aim to get Reproducible Results with Keras
-#from tensorflow.random  import set_seed
-
-
-
 from numpy.random import seed
 seed(1)
 tf.random.set_seed(2)
-
 
 print("[INFO] tf.Keras   version is {}".format( tf.keras.__version__)) 
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument("--datasetDir", required=True, help="path to dataset directory with train and validation images")
     ap.add_argument("--testDir", default=None, help="path to test directory with test images")
-    ap.add_argument("--networkID", required=True, help="I.D. of the network")
+    ap.add_argument("--networkID", required=True, help="I.D. of the network, it can be any of [net1,net2,net3,net4,net5,LenetModel,Resnet50,net3,MiniVGG,VGG16]")
     ap.add_argument("--EPOCHS", required=False, type=int, default=25, help="Number of maximum epochs to train")
     ap.add_argument("--BS", required=False, default=16 , type=int, help="Batch size")
     ap.add_argument("--width", required=True, help="width of image")
@@ -92,7 +92,6 @@ if __name__ == '__main__':
     ap.add_argument("--ResultsFolder", required=False, default="Results",help="Folder to save Results")
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--new_lr", required=False, type=float, default=1e-4,help="restarting Learning rate")
-
     ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
     ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
     ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
@@ -100,6 +99,8 @@ if __name__ == '__main__':
     ap.add_argument("--modelcheckpoint", type=str, default=None ,help="path to *specific* model checkpoint to load")
     ap.add_argument("--startepoch", type=int, default=0, help="epoch to restart training at")
     ap.add_argument("--saveEpochRate", type=int, default=5, help="Frequency to save checkpoints")
+    ap.add_argument("--opt", type=str, default="SGD", help="Type of optimizer")
+
 
 
 
@@ -118,16 +119,15 @@ if __name__ == '__main__':
     ResultsFolder=args["ResultsFolder"]
     learningRate=args["lr"]
     new_lr=args["new_lr"]
-
-
-
-
     labelSmoothing=args["labelSmoothing"]
     applyAugmentation=args["applyAugmentation"]
     continueTraining=args["continueTraining"]
     modelcheckpoint=args["modelcheckpoint"]    
     startepoch=args["startepoch"]
     saveEpochRate=args['saveEpochRate']
+    opt=args['opt']
+
+    
 
     if(applyAugmentation=="True") or  (applyAugmentation=="True"):
         applyAugmentation=True
@@ -212,11 +212,7 @@ if __name__ == '__main__':
     folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
     folderNameToSaveModelCheckPoints=os.path.join(ResultsFolder,"checkPoints")
     os.mkdir(folderNameToSaveModelCheckPoints)
-
-
-
     plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
-    
     jsonPath=os.path.join(ResultsFolder,"history.json")
 
 
@@ -235,8 +231,18 @@ if __name__ == '__main__':
         #modelFileName=os.path.join(ResultsFolder,"model.h5")
         #model = load_model(modelFileName)
 
+        #setup optimizer
+        if (opt=="RMSprop"):
+            opt=RMSprop(learning_rate=learningRate, rho=0.9)
+        elif(opt=="Adam"):
+            opt=Adam(learning_rate=learningRate, beta_1=0.9, beta_2=0.999, amsgrad=False)
+        elif(opt=="SGD"):
+            opt=SGD(learning_rate=learningRate, momentum=0.0, nesterov=False)
+
+
         #compile model
-        model.compile(optimizer=RMSprop(lr=learningRate),loss=lossFun,metrics = ['accuracy'])
+
+        model.compile(optimizer=opt,loss=lossFun,metrics = ['accuracy'])
 
 
         # otherwise, we're using a checkpoint model
@@ -381,8 +387,14 @@ if __name__ == '__main__':
 
 
     #plot and save training curves 
-    info1=plotUtil.plotAccuracyAndLossesonSameCurve(history,ResultsFolder)
-    info2=plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,ResultsFolder)
+    title=datasetDir
+
+    fileToSaveLossAccCurve=os.path.join(ResultsFolder,title+"plot_loss_accu.png")
+    plotUtil.plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve)
+
+    fileToSaveAccuracyCurve=os.path.join(ResultsFolder,title+"plot_acc.png")
+    fileToSaveLossCurve=os.path.join("Results",title+"plot_loss.png")
+    plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurve,fileToSaveLossCurve)
    
 
 
@@ -407,19 +419,16 @@ if __name__ == '__main__':
 
     print("[INFO] Evaluation finished. Confusion matrix plot is now shown")
     print("*************************************************************************************************************")      
-    print(info1)
-    print(info2)
-    print("*************************************************************************************************************")   
 
-    print("[INFO] Full path of Model as .h5 is  {} ".format(fileNameToSaveModel))
-    print("[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate))
-    print("*************************************************************************************************************")      
-    print("[INFO] Final model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
-    print("[INFO] Full path of Model as .h5 is  {} ".format(fileNameToSaveModel))
-
+    print("[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve))
+    print("[INFO] Loss curve saved to {}".format(fileToSaveLossCurve))
+    print("[INFO] Accuracy  curve saved to {}".format(fileToSaveAccuracyCurve))
     print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
+    print("[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate))
+    print("[INFO] Final model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
     print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
     print("[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath))
+    print("*************************************************************************************************************")      
 
 
 
