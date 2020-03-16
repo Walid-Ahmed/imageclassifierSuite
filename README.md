@@ -1,4 +1,4 @@
-﻿# image classifier Suite
+﻿# Image classifier Suite
  
  
  ## Introduction 
@@ -45,10 +45,10 @@ Here is the list of libraries you need to install to execute the code:
 
 The repo comes loaded with following datasets (all in folder "datasets"):
  
- 1. Santa/NoSanta: initially collected  by  Adrian Rosebrock
+ 1. Santa/NoSanta: initially collected  by  [Adrian Rosebrock](https://www.pyimagesearch.com/2017/12/11/image-classification-with-keras-and-deep-learning/)
  2. Dogs/Cats
  3. Human/Horses
- 4. Smile/noSmile datset:originally from this [link](https://github.com/hromi/SMILEsmileD)  
+ 4. Smile/noSmile dataset:originally from this [link](https://github.com/hromi/SMILEsmileD)  
  5. Food5K: a [Kaggle](https://www.kaggle.com/binhminhs10/food5k)
 dataset containing 2,500 food and 2,500 non-food images, originally from this [link](https://www.kaggle.com/binhminhs10/food5k/download))
  6. NIH malaria dataset:
@@ -82,7 +82,7 @@ Beside these networks, the modelsFactory defines some usefull neural networks th
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
 
-
+ ![Network parameters](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/numOfParametersPerNetwork.png)
 
 
 ## Training and Testing Scripts 
@@ -115,7 +115,7 @@ tensorboard --logdir Results
 ```
 and then browsing the following url http://localhost:6008/
 
- [I-Train a CIFAR10](#TRAINcIFAR)  </br>
+ [I-Train a CIFAR10/MNIST dataset](#TRAINcIFAR)  </br>
  [II-Train an image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
  [III-Train a binary/multiclass image classifier](#multiclassimageclassifier) </br>
  [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)</br>
@@ -151,18 +151,17 @@ The data should have been **splitted** earlier in the folder to train and eval, 
 
 ![structure for cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/cats_and_dogs_dir.png)
 
-To start  training  using this file on "cats and dogs " dataset you can run the follwing command:
+To start  training  using this file on "cats and dogs" dataset you can run the follwing command:
 ```
 
-python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1
+python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 25  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1
 ```
 
+To start  training  using this file on "Facial Expression" dataset you can run the follwing command:
 
-
-
-
-
-
+```
+python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
+```
 To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
 Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have 2 subfolders, each labeled with the name of the class. 
  
@@ -177,14 +176,17 @@ A probabilty more than 0.5 means that the output is the second  class when they 
 <h1 id="multiclassimageclassifier">III-Train a binary/multiclass image classifier using flow from data</h1>
 
 
-The script   trainClassifier_flow_from_data.py   can be used to train a binary classifier or a multi classifier. 
+The script   trainClassifier_flow_from_data.py   can be used to train a binary classifier or a multi class classifier. 
 
 You can run it as follows
 
+```
+python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --applyAugmentation True
+```
 
-    python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28 --datasetDir Santa --networkID LenetModel
-
-
+```
+python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r2_FacialExpression   --applyAugmentation True
+```
 
 In case of binary classifier, the last layer will have only one neuron, otherwise  the last laye will have a number of neurons as the number of outputs, The activation  function in  last layer will be changed from Sigmoid to Softmax accordingly
 
