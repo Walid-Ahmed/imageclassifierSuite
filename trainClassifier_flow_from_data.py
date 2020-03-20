@@ -78,12 +78,16 @@ if __name__ == '__main__':
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--new_lr", required=False, type=float, default=1e-4,help="restarting Learning rate")
     ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
-    ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
+    #ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
     ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
     ap.add_argument("--modelcheckpoint", type=str, default=None ,help="path to *specific* model checkpoint to load")
     ap.add_argument("--startepoch", type=int, default=0, help="epoch to restart training at")
     ap.add_argument("--saveEpochRate", type=int, default=5, help="Frequency to save checkpoints")
     ap.add_argument("--opt", type=str, default="SGD", help="Type of optimizer")
+    ap.add_argument("--augmentationLevel", type=int, default=0,help="turn on  Augmentation")
+    ap.add_argument("--useOneNeuronForBinaryClassification", type=str, default="True",help="turn on  Augmentation")
+
+
 
 
     ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
@@ -111,6 +115,8 @@ if __name__ == '__main__':
     startepoch=args["startepoch"]
     saveEpochRate=args['saveEpochRate']
     opt=args['opt']
+    augmentationLevel=args["augmentationLevel"]
+    useOneNeuronForBinaryClassification=args['useOneNeuronForBinaryClassification']
 
 
     verbose=args["verbose"]
@@ -137,7 +143,8 @@ if __name__ == '__main__':
         
 
 
-if(applyAugmentation):
+
+    if(augmentationLevel==2):
 
         train_datagen = ImageDataGenerator(
               rescale=1./255,   #All images will be rescaled by 1./255
@@ -148,35 +155,43 @@ if(applyAugmentation):
               zoom_range=0.2,
               horizontal_flip=True,
               fill_mode='nearest')
-else:
+   
+    elif(augmentationLevel==1):
+        train_datagen = ImageDataGenerator(
+        rotation_range=15,
+        fill_mode="nearest",
+        rescale=1./255, )
+
+    else:    
         train_datagen = ImageDataGenerator(
                   rescale=1./255,   #All images will be rescaled by 1./255
                   )
 
-test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 
- 
+	test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 
-
-if os.path.exists(ResultsFolder):
-	print("[Warning]  Folder {} aready exists, All files in folder will be deleted".format(ResultsFolder))
-	input("[msg]  Press any key to continue")
-	shutil.rmtree(ResultsFolder)
-os.mkdir(ResultsFolder)	
+	 
 
 
-folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
-folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
-folderNameToSaveModelCheckPoints=os.path.join(ResultsFolder,"checkPoints")
-os.mkdir(folderNameToSaveModelCheckPoints)
-plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
-jsonPath=os.path.join(ResultsFolder,"history.json")
+	if os.path.exists(ResultsFolder):
+		print("[Warning]  Folder {} aready exists, All files in folder will be deleted".format(ResultsFolder))
+		input("[msg]  Press any key to continue")
+		shutil.rmtree(ResultsFolder)
+	os.mkdir(ResultsFolder)	
 
-earlyStopping = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
-modelCheckpoint = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
-tensorboard_callback = TensorBoard(log_dir=ResultsFolder)
-epochCheckpoint=EpochCheckpoint(folderNameToSaveModelCheckPoints, every=saveEpochRate,startAt=startepoch)
-trainingMonitor=TrainingMonitor(plotPath,jsonPath=jsonPath,startAt=startepoch)
+
+	folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
+	folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
+	folderNameToSaveModelCheckPoints=os.path.join(ResultsFolder,"checkPoints")
+	os.mkdir(folderNameToSaveModelCheckPoints)
+	plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
+	jsonPath=os.path.join(ResultsFolder,"history.json")
+
+	earlyStopping = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
+	modelCheckpoint = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
+	tensorboard_callback = TensorBoard(log_dir=ResultsFolder)
+	epochCheckpoint=EpochCheckpoint(folderNameToSaveModelCheckPoints, every=saveEpochRate,startAt=startepoch)
+	trainingMonitor=TrainingMonitor(plotPath,jsonPath=jsonPath,startAt=startepoch)
 
 
 def predictBinaryValue(probs,threshold=0.5):

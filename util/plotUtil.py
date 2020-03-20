@@ -131,9 +131,9 @@ def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None):
 
   firstImage=imagePaths[0]
   firstImage= imread(firstImage)
+  print(firstImage.shape)
   channels=len(firstImage.shape)
 
-  print(channels)
 
   if (channels==2):
     channels=1

@@ -310,19 +310,27 @@ class  ModelCreator:
 	
 	def defineVGG16(self):
 		# load model
-		model = VGG16(include_top=False, input_shape=(self.imgWidth,self.imgHeight, self.channels))  #224,224,3
+		baseModel = VGG16(include_top=False, weights='imagenet',input_shape=(self.imgWidth,self.imgHeight, self.channels))  #224,224,3
 		# mark loaded layers as not trainable
-		for layer in model.layers:
+		for layer in baseModel.layers:
 			layer.trainable = False
 		# add new classifier layers
-		flat1 = tf.keras.layers.Flatten()(model.layers[-1].output)
-		dense1 = tf.keras.layers.Dense(128, activation='relu', kernel_initializer='he_uniform')(flat1)
-		output = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(dense1)
+		#flat1 = tf.keras.layers.Flatten()(model.layers[-1].output)
+		headModel = baseModel.output
+		headModel =  tf.keras.layers.AveragePooling2D(pool_size=(4, 4))(headModel)
+		headModel = tf.keras.layers.Flatten()(headModel)
+
+		#headModel = tf.keras.layers.Dense(128, activation='relu', kernel_initializer='he_uniform')(headModel)
+		headModel = tf.keras.layers.Dense(64, activation='relu', kernel_initializer='he_uniform')(headModel)
+		headModel = tf.keras.layers.Dropout(0.5)(headModel)
+		output = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(headModel)
 		# define new model
-		model = tf.keras.models.Model(inputs=model.inputs, outputs=output)
+		model = tf.keras.models.Model(inputs=baseModel.inputs, outputs=output)
 
 		return model	
 			 
+
+
 
 
 if __name__ == "__main__":

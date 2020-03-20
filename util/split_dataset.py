@@ -1,6 +1,10 @@
 # USAGE
 # python split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Database  --TRAIN_SPLIT 0.7
+# python split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Database  --TRAIN_SPLIT 0.7
+# python split_dataset.py   --dataset coronaVirus  --TRAIN_SPLIT 0.7
 
+
+coronaVirus
 
 # import the necessary packages
 from imutils import paths

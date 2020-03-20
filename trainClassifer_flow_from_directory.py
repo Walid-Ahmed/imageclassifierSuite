@@ -1,6 +1,6 @@
 
 
-#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 2  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1 --applyAugmentation False
+#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 13  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1 --augmentationLevel 1
 
 
 #python trainClassifer_flow_from_directory.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID net2  --EPOCHS 20  --width  150 --height  150  --BS 32  --ResultsFolder  Results/r1_disaster
@@ -16,7 +16,10 @@
 #python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
 
 
-#python trainClassifer_flow_from_directory.py  --datasetDir SportsClassification  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_SportsClassification --labelSmoothing 0.1 --applyAugmentation False
+#python trainClassifer_flow_from_directory.py  --datasetDir SportsClassification  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_SportsClassification --labelSmoothing 0.1       
+
+#python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
+
 
 
 
@@ -28,7 +31,7 @@ import numpy as np
 from sklearn.metrics import classification_report
 from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
-from  util import  plotUtil
+from  util import     plotUtil
 import pickle
 import argparse
 from util import paths
@@ -93,13 +96,16 @@ if __name__ == '__main__':
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--new_lr", required=False, type=float, default=1e-4,help="restarting Learning rate")
     ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
-    ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
+    #ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
     ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
     ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
     ap.add_argument("--modelcheckpoint", type=str, default=None ,help="path to *specific* model checkpoint to load")
     ap.add_argument("--startepoch", type=int, default=0, help="epoch to restart training at")
     ap.add_argument("--saveEpochRate", type=int, default=5, help="Frequency to save checkpoints")
     ap.add_argument("--opt", type=str, default="SGD", help="Type of optimizer")
+    ap.add_argument("--augmentationLevel", type=int, default=0,help="turn on  Augmentation")
+    ap.add_argument("--useOneNeuronForBinaryClassification", type=str, default="True",help="turn on  Augmentation")
+
 
 
 
@@ -120,13 +126,18 @@ if __name__ == '__main__':
     learningRate=args["lr"]
     new_lr=args["new_lr"]
     labelSmoothing=args["labelSmoothing"]
-    applyAugmentation=args["applyAugmentation"]
+    #applyAugmentation=args["applyAugmentation"]
     continueTraining=args["continueTraining"]
     modelcheckpoint=args["modelcheckpoint"]    
     startepoch=args["startepoch"]
     saveEpochRate=args['saveEpochRate']
     opt=args['opt']
+    augmentationLevel=args["augmentationLevel"]
+    useOneNeuronForBinaryClassification=args["useOneNeuronForBinaryClassification"]
 
+
+
+    '''
     
 
     if(applyAugmentation=="True") or  (applyAugmentation=="True"):
@@ -134,11 +145,18 @@ if __name__ == '__main__':
     else:
         applyAugmentation=False
 
-    if(continueTraining=="True") or  (continueTraining=="True"):
+    '''
+
+    if(continueTraining=="True") :
         continueTraining=True
     else:
         continueTraining=False
         
+
+    if(useOneNeuronForBinaryClassification=="True") :
+        useOneNeuronForBinaryClassification=True
+    else:
+        useOneNeuronForBinaryClassification=False
 
 
 
@@ -153,6 +171,7 @@ if __name__ == '__main__':
     parameters=parameters+"[INFO] ResultsFolder".format(EPOCHS) +"\n"
     parameters=parameters+"[INFO] lr".format(EPOCHS) +"\n"
     parameters=parameters+"[INFO] labelSmoothing".format(labelSmoothing) +"\n"
+
 
 
 
@@ -185,13 +204,16 @@ if __name__ == '__main__':
 
     numOfOutputs=len(labels)  
 
-    if(numOfOutputs==2):  # binary classiffication problem
+    
+
+    if(numOfOutputs==2) and useOneNeuronForBinaryClassification:  # binary classiffication problem  with 1 neuuron at last layer
         numOfOutputs=1
         lossFun=BinaryCrossentropy(label_smoothing=labelSmoothing)
         classMode='binary'
     else:
         lossFun = CategoricalCrossentropy(label_smoothing=labelSmoothing) 
         classMode='categorical'  #class_mode="categorical" will do one hot encoding
+    
 
 
 
@@ -204,6 +226,7 @@ if __name__ == '__main__':
 
     #info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,channels)
     info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
+    print("[INFO] Number of input channels is {}".format(channels))
 
 
 
@@ -214,6 +237,20 @@ if __name__ == '__main__':
     os.mkdir(folderNameToSaveModelCheckPoints)
     plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
     jsonPath=os.path.join(ResultsFolder,"history.json")
+
+
+
+
+    if(channels==1 and networkID not in ["Resnet50","VGG16"]):
+        colorMode="grayscale"
+    else:
+        colorMode="rgb"
+        channels=3
+
+
+    if(networkID  in ["Resnet50","VGG16"]):   
+        colorMode="rgb"
+        channels=3
 
 
 
@@ -241,6 +278,9 @@ if __name__ == '__main__':
 
 
         #compile model
+
+        opt = Adam(lr=learningRate, decay=learningRate / EPOCHS)
+
 
         model.compile(optimizer=opt,loss=lossFun,metrics = ['accuracy'])
 
@@ -288,7 +328,7 @@ if __name__ == '__main__':
 
 #color_mode: One of "grayscale", "rgb", "rgba". Default: "rgb"
 
-    if(applyAugmentation):
+    if(augmentationLevel==2):
 
         train_datagen = ImageDataGenerator(
               rescale=1./255,   #All images will be rescaled by 1./255
@@ -299,17 +339,21 @@ if __name__ == '__main__':
               zoom_range=0.2,
               horizontal_flip=True,
               fill_mode='nearest')
-    else:
+   
+    elif(augmentationLevel==1):
+        train_datagen = ImageDataGenerator(
+        rotation_range=15,
+        fill_mode="nearest",
+        rescale=1./255, )
+
+    else:    
         train_datagen = ImageDataGenerator(
                   rescale=1./255,   #All images will be rescaled by 1./255
                   )
 
+ 
+        
 
-    
-    if(channels==1):
-        colorMode="grayscale"
-    else:
-        colorMode="rgb"
 
     test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 
@@ -350,7 +394,7 @@ if __name__ == '__main__':
                                   steps_per_epoch=NUM_TRAIN_IMAGES // BS,   ## 2000 images = batch_size * steps-----steps=images/batch_size
                                   epochs=EPOCHS,
                                   validation_steps=NUM_TEST_IMAGES // BS,
-                                  verbose=2 ,
+                                  verbose=1 ,
                                   callbacks=[earlyStopping, modelCheckpoint,tensorboard_callback,trainingMonitor,epochCheckpoint]
                                   )
 
