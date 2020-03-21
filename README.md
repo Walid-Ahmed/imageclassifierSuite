@@ -9,10 +9,10 @@ This Repo can be used to train an image  classifier   on user defined dataset or
 
 Training parmeters that can be set are:
 - Batch size, 
-- type of optimizer, 
-- image input size, 
-- early stopping, 
-- data augmentation, 
+- Type of optimizer, 
+- Image input size, 
+- Early stopping, 
+- Data augmentation, 
 - Label smoothing, 
 - Learning rate schedule
  
