@@ -54,7 +54,7 @@ dataset containing 2,500 food and 2,500 non-food images, originally from this [l
  6. NIH malaria dataset:
  The dataset consists of 27,588 images belonging to two separate classes: Parasitized/ Uninfected.
 The number of images per class i 13,794 images per each. The dataset is  originally from this [link](https://lhncbc.nlm.nih.gov/publication/pub9932))
-7. CoronaVirus (pos_covid vs ned_covid) he dataset is  originally from this [link](https://www.pyimagesearch.com/2020/03/16/detecting-covid-19-in-x-ray-images-with-keras-tensorflow-and-deep-learning/))
+7. CoronaVirus (pos_covid vs ned_covid) the dataset is  originally from this [link](https://www.pyimagesearch.com/2020/03/16/detecting-covid-19-in-x-ray-images-with-keras-tensorflow-and-deep-learning/))
 
 
 ## Available Datasets  For  Multiclass or multinomial classification
