@@ -82,6 +82,7 @@ These  networks include:
  - VGG16  
  - miniVGG as defined  in this [link](https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning)
  - DPN as defined  in this [link](https://github.com/titu1994/Keras-DualPathNetworks)
+ - net3 ad defined in this [link](https://ermlab.com/en/blog/nlp/cifar-10-classification-using-keras-tutorial/)
  
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
