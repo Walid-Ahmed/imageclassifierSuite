@@ -20,7 +20,7 @@
 
 #python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
 
-
+#python trainClassifer_flow_from_directory.py --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID DPN --EPOCHS 20 --width 112 --height 112 --BS 32 --ResultsFolder Results/r1_FacialExpression --labelSmoothing 0.1
 
 
 import os

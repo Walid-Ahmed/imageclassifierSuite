@@ -5,6 +5,15 @@ import tensorflow as tf
 from  tensorflow.keras.applications import  ResNet50
 from tensorflow.keras.applications.vgg16 import VGG16
 import matplotlib
+import os
+import sys
+
+
+sys.path.append('..')
+
+
+from modelsRepo.dual_path_network import  DPN92
+
 class  ModelCreator:
 
 
@@ -77,6 +86,15 @@ class  ModelCreator:
 			self.imgHeight=height
 			self.model=self.defineVGG16()
 			print("[INFO]  VGG16 created")	
+
+
+
+
+		elif networkID=="DPN":
+			self.imgWidth=width
+			self.imgHeight=height
+			self.model=self.defineDPN()
+			print("[INFO]  DPN created")	
 
 	def defineLenetModel(self):   #can work with 28*28 
 
@@ -330,12 +348,19 @@ class  ModelCreator:
 		return model	
 			 
 
+	def defineDPN(self):   
+	    model = DPN92((self.imgWidth,self.imgHeight, self.channels),classes=self.numOfOutputs, finalActivation=self.finalActivation)
+	    return     model 
+
+
+
 
 
 
 if __name__ == "__main__":
 
-	allNetIds=["net1","net2","net3","net4","net5","LenetModel","Resnet50","net3","MiniVGG","VGG16"]
+	allNetIds=["net1","net2","net3","net4","net5","LenetModel","Resnet50","net3","MiniVGG","VGG16","DPN"]
+
 	netDic=dict()
 	for netID in  allNetIds:
 		modelCreator=ModelCreator(networkID=netID)
