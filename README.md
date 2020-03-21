@@ -73,7 +73,9 @@ The following tree structure represents the current datasets structure in repo
 
 ## Available network structures 
 
-A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. These  networks include 
+A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks,  each given a special id that  you can pass when you start training. 
+
+These  networks include:
 
  - Resnet50   
  - Lenet
@@ -83,6 +85,10 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
  
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
+
+```
+python modelsRepo/modelsFactory.py
+```
 
 {'net1': 918,178, 'net2': 22,176,290, 'net3': 103,050,530, 'net4': 1,246,754, 'net5': 489,506, 'LenetModel': 78,428,072 , 'Resnet50': 24,637,826, 'MiniVGG': 102,830,370, 'VGG16': 14,747,650, 'DPN': 35,087,008}
 
