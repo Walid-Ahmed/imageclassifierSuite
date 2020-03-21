@@ -82,8 +82,10 @@ These  networks include:
  - VGG16  
  - miniVGG as defined  in this [link](https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning)
  - DPN as defined  in this [link](https://github.com/titu1994/Keras-DualPathNetworks)
+ - net2 as defined in this [link](https://www.coursera.org/lecture/convolutional-neural-networks-tensorflow/training-with-  the-cats-vs-dogs-dataset-jV6tw)
  - net3 ad defined in this [link](https://ermlab.com/en/blog/nlp/cifar-10-classification-using-keras-tutorial/)
  - net4 as defined in this [link]( https://github.com/dribnet/kerosene/blob/master/examples/cifar100.py)
+ - net5 as defined in this [link](https://appliedmachinelearning.blog/2018/03/24/achieving-90-accuracy-in-object-recognition-task-on-cifar-10-dataset-with-keras-convolutional-neural-networks/)
  
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
