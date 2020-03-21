@@ -445,7 +445,7 @@ def _create_dpn(nb_classes, img_input, include_top, initial_conv_filters,
 
     # remaining blocks
     for k in range(1, len(N)):
-        print("BLOCK %d" % (k + 1))
+        #print("BLOCK %d" % (k + 1))
         filter_inc = filter_increment[k]
         filters *= 2
         base_filters *= 2

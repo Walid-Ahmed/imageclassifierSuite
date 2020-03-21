@@ -137,16 +137,6 @@ if __name__ == '__main__':
 
 
 
-    '''
-    
-
-    if(applyAugmentation=="True") or  (applyAugmentation=="True"):
-        applyAugmentation=True
-    else:
-        applyAugmentation=False
-
-    '''
-
     if(continueTraining=="True") :
         continueTraining=True
     else:
@@ -251,11 +241,6 @@ if __name__ == '__main__':
     if(networkID  in ["Resnet50","VGG16"]):   
         colorMode="rgb"
         channels=3
-
-
-
-
-
 
 
 
@@ -418,13 +403,6 @@ if __name__ == '__main__':
     folderNameToSaveModel="{}_Classifier".format(datasetDir)
     folderNameToSaveModel=os.path.join(ResultsFolder,folderNameToSaveModel)
     model.save(folderNameToSaveModel,save_format='tf') #model is saved in TF2 format (default)
-
-
-
-
-
-
-    
 
 
 

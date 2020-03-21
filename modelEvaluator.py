@@ -23,7 +23,6 @@ from util import helper
 #modelEvaluator.evaluate2()  #without using sklearn & testGenerator
 #modelEvaluator.evaluate3()  #using sklearn
 
-BS=32
 
 class   ModelEvaluator:
 
@@ -98,22 +97,9 @@ class   ModelEvaluator:
 	def calculatePrecisionRecall(self,probs,y_true,y_pred):
 		print("[INFO] Evaluating  Precision-Recall curve")
 
-
 		precision, recall, thresholds = precision_recall_curve(y_true, probs) #y_score    probabilities between 0 and 1
-
-
-
-
-		
-			
-
 		average_precision = average_precision_score(y_true, probs)
-
-
-		#predictions = [numpy.round(x) for x in predictions]    #0 or 1 
-
 		precision_value=precision_score(y_true, y_pred, average='macro')  
-
 		print("[INFO] precision_value at threshold 0.5=".format(precision_value) )
 
 
@@ -134,8 +120,6 @@ class   ModelEvaluator:
 		return precision, recall, thresholds
 
 		          
-
-
 
 
 
@@ -244,18 +228,6 @@ class   ModelEvaluator:
 		    else:
 		      FP_LABEL1=FP_LABEL1+1  
 		      FN_LABEL2=FN_LABEL2+1
-		      #print("False Prediction")
-
-		  '''
-		  datasets/test_images_cats_and_dogs/cats/cat.585.jpg belongs to dogs
-		  Class cats  TP=40,FP=0,TN=1951,FN=0
-		  Class dogs  TP=1951,FP=0,TN=40,FN=0
-		  '''
-
-		  #print("Class {}  TP={},FP={},TN={},FN={}".format(labels[0],TP_LABEL1,FP_LABEL1,TN_LABEL1,FN_LABEL1))
-		  #print("Class {}  TP={},FP={},TN={},FN={}".format(labels[1],TP_LABEL2,FP_LABEL2,TN_LABEL2,FN_LABEL2))
-		  #input("Press any key")
-
 
 
 
@@ -269,18 +241,8 @@ class   ModelEvaluator:
 
 		print("Class {}  TP={},FP={},TN={},FN={}".format(labels[0],TP_LABEL1,FP_LABEL1,TN_LABEL1,FN_LABEL1))
 		print("Class {}  TP={},FP={},TN={},FN={}".format(labels[1],TP_LABEL2,FP_LABEL2,TN_LABEL2,FN_LABEL2))
-
-
-
-
 		print("Class {}  Accuracy={:.2f},Precision={:.2f},Recall={:.2f}".format(labels[0],accuracy_LABEL1,precision_LABEL1,recall_LABEL1))
-
-
-
-
-
 		print("Class {}  Accuracy={:.2f},Precision={:.2f},Recall={:.2f}".format(labels[1],accuracy_LABEL2,precision_LABEL2,recall_LABEL2))
-
 		print("*************************************************************************************************************")
 
 
@@ -337,11 +299,9 @@ class   ModelEvaluator:
 			for  predIdx in probs:
 
 			  if predIdx[0]>0.5:     #1  is a labels[1]
-			      #print(" belongs to {}".format(labels[1]))
 			      y_pred.append(1)
 			      
 			  else:
-			      #print( " belongs to  {}".format(labels[0]))
 			      y_pred.append(0)
 		else:
 			y_pred=probs.argmax(axis=1)

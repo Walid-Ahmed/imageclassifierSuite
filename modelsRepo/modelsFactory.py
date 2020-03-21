@@ -1,5 +1,5 @@
 #to view all model 
-#python modelsFactory.py
+#python modelsRepo/modelsFactory.py
 
 import tensorflow as tf
 from  tensorflow.keras.applications import  ResNet50
@@ -7,10 +7,13 @@ from tensorflow.keras.applications.vgg16 import VGG16
 import matplotlib
 import os
 import sys
+import matplotlib.pyplot as plt
+from tensorflow.keras.utils import plot_model
+
 
 
 sys.path.append('..')
-
+sys.path.append('.')
 
 from modelsRepo.dual_path_network import  DPN92
 
@@ -360,17 +363,34 @@ class  ModelCreator:
 if __name__ == "__main__":
 
 	allNetIds=["net1","net2","net3","net4","net5","LenetModel","Resnet50","net3","MiniVGG","VGG16","DPN"]
+	folderToSaveAllPlots="modelsPlots"
+	if not os.path.exists(folderToSaveAllPlots):
+		os.makedirs(folderToSaveAllPlots)
 
 	netDic=dict()
 	for netID in  allNetIds:
 		modelCreator=ModelCreator(networkID=netID)
 		model=modelCreator.model
 		model.summary()
+		pathToSavePlot=os.path.join(folderToSaveAllPlots,netID+"_"+"model.png")
+		plot_model(model, to_file=pathToSavePlot, show_shapes=True)
+
+
+
 		numOfparmeters=model.count_params()
 		netDic[netID]=numOfparmeters
 
 		print("[INFO] Model  with i.d. {} is created sucessfully".format(netID))
+	
+
+
 	print(netDic)	
+
+	for k, v in netDic.items():
+		print("[INFO] Network with id {} has {} parameters".format(k, v))
+	
+
+
 	import matplotlib.pylab as plt
 
 	lists = sorted(netDic.items()) # sorted by key, return a list of tuples
@@ -388,6 +408,10 @@ if __name__ == "__main__":
 
 	plt.plot(x, y,'ro')
 	plt.show()
+
+	print("*************************************************************************************************************")      
+	print("[INFO] Plots of all models saved to folder {}  ".format(folderToSaveAllPlots))
+
 
 
 
