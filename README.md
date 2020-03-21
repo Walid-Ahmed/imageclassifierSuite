@@ -90,7 +90,17 @@ More and more networks will be added soon, however you can still define your own
 python modelsRepo/modelsFactory.py
 ```
 
-{'net1': 918,178, 'net2': 22,176,290, 'net3': 103,050,530, 'net4': 1,246,754, 'net5': 489,506, 'LenetModel': 78,428,072 , 'Resnet50': 24,637,826, 'MiniVGG': 102,830,370, 'VGG16': 14,747,650, 'DPN': 35,087,008}
+[INFO] Network with id net1 has 918178 parameters
+[INFO] Network with id net2 has 22176290 parameters
+[INFO] Network with id net3 has 103050530 parameters
+[INFO] Network with id net4 has 1246754 parameters
+[INFO] Network with id net5 has 489506 parameters
+[INFO] Network with id LenetModel has 78428072 parameters
+[INFO] Network with id Resnet50 has 24637826 parameters
+[INFO] Network with id MiniVGG has 102830370 parameters
+[INFO] Network with id VGG16 has 14747650 parameters
+[INFO] Network with id DPN has 35087008 parameters
+[INFO] Plots of all models saved to folder modelsPlots 
 
 
  ![Network parameters](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/numOfParametersPerNetwork.png)
