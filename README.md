@@ -95,6 +95,7 @@ python modelsRepo/modelsFactory.py
 
  ![Network parameters](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/numOfParametersPerNetwork.png)
 
+ ![Model Plots](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/modelsPlots.gif)
 
 ## Training and Testing Scripts 
 
