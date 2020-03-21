@@ -54,6 +54,7 @@ dataset containing 2,500 food and 2,500 non-food images, originally from this [l
  6. NIH malaria dataset:
  The dataset consists of 27,588 images belonging to two separate classes: Parasitized/ Uninfected.
 The number of images per class i 13,794 images per each. The dataset is  originally from this [link](https://lhncbc.nlm.nih.gov/publication/pub9932))
+7. CoronaVirus (pos_covid vs ned_covid) he dataset is  originally from this [link](https://www.pyimagesearch.com/2020/03/16/detecting-covid-19-in-x-ray-images-with-keras-tensorflow-and-deep-learning/))
 
 
 ## Available Datasets  For  Multiclass or multinomial classification
@@ -63,6 +64,7 @@ The number of images per class i 13,794 images per each. The dataset is  origina
 9. Cyclone_Wildfire_Flood_Earthquake_Database
 10. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The type of sports are Swimming
 ,Badminton,Wrestling,Olympic Shooting,Cricket,Football,Tennis,Hockey,Ice Hockey,Kabaddi,WWE,Gymnasium,Weight lifting,Volleyball,Table tennis,Baseball,Formula 1,Moto GP,Chess,Boxing,FencingBasketbal]
+
 
 The following tree structure represents the current datasets structure in repo 
 
