@@ -73,7 +73,7 @@ The following tree structure represents the current datasets structure in repo
 
 ## Available network structures 
 
-A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks,  each given a special id that  you can pass when you start training. 
+A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks,  each given a special id that  you can pass when you start training. Plots of all models are saved to folder modelsPlots  
 
 These  networks include:
 
