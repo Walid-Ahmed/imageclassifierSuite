@@ -138,10 +138,17 @@ tensorboard --logdir Results
 ```
 and then browsing the following url http://localhost:6008/
 
+Here are the basic scripts for training and testing
+
+
  [I-Train a CIFAR10/MNIST dataset](#TRAINcIFAR)  </br>
+ 
  [II-Train an image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
+ 
  [III-Train a binary/multiclass image classifier](#multiclassimageclassifier) </br>
+ 
  [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)</br>
+ 
  [V-Test a Binary Model](#TestBinaryModels)
 
 
