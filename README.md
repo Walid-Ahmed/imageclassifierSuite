@@ -9,10 +9,10 @@ This Repo can be used to train an image  classifier   on user defined dataset or
 
 Training parmeters that can be set are:
 - Batch size, 
-- type of optimizer, 
-- image input size, 
-- early stopping, 
-- data augmentation, 
+- Type of optimizer, 
+- Image input size, 
+- Early stopping, 
+- Data augmentation, 
 - Label smoothing, 
 - Learning rate schedule
  
@@ -54,15 +54,17 @@ dataset containing 2,500 food and 2,500 non-food images, originally from this [l
  6. NIH malaria dataset:
  The dataset consists of 27,588 images belonging to two separate classes: Parasitized/ Uninfected.
 The number of images per class i 13,794 images per each. The dataset is  originally from this [link](https://lhncbc.nlm.nih.gov/publication/pub9932))
+7. CoronaVirus (pos_covid vs ned_covid) the dataset is  originally from this [link](https://www.pyimagesearch.com/2020/03/16/detecting-covid-19-in-x-ray-images-with-keras-tensorflow-and-deep-learning/))
 
 
 ## Available Datasets  For  Multiclass or multinomial classification
 
-7. FacialExpression
-8. spatial_envelope_256x256_static_8outdoorcategories
-9. Cyclone_Wildfire_Flood_Earthquake_Database
-10. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The type of sports are Swimming
+8. FacialExpression
+9. spatial_envelope_256x256_static_8outdoorcategories
+10. Cyclone_Wildfire_Flood_Earthquake_Database
+11. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The type of sports are Swimming
 ,Badminton,Wrestling,Olympic Shooting,Cricket,Football,Tennis,Hockey,Ice Hockey,Kabaddi,WWE,Gymnasium,Weight lifting,Volleyball,Table tennis,Baseball,Formula 1,Moto GP,Chess,Boxing,FencingBasketbal]
+
 
 The following tree structure represents the current datasets structure in repo 
 
@@ -71,7 +73,9 @@ The following tree structure represents the current datasets structure in repo
 
 ## Available network structures 
 
-A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks  each given a special id that can you pass when you start training. These  networks include 
+A very importnat file is modelsRepo.modelsFactory.py this file includes the definition of more than 5 deep neural networks,  each given a special id that  you can pass when you start training. Plots of all models are saved to folder modelsPlots  
+
+These  networks include:
 
  - Resnet50   
  - Lenet
@@ -82,9 +86,27 @@ A very importnat file is modelsRepo.modelsFactory.py this file includes the defi
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
+```
+python modelsRepo/modelsFactory.py
+```
+
+| Network I.D. | Number of Parmeters |
+|--------------|---------------------|
+| net1         | 918,178              |
+| net2         | 22,176,290            |
+| net3         | 103,050,530           |
+| net4         | 1,246,754             |
+| net5         | 489,506              |
+| LenetModel   | 78,428,072            |
+| Resnet50     | 24,637,826            |
+| MiniVGG      | 102,830,370           |
+| VGG16        | 14,747,650            |
+| DPN          | 35,087,008            |
+
 
  ![Network parameters](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/numOfParametersPerNetwork.png)
 
+ ![Model Plots](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/modelsPlots.gif)
 
 ## Training and Testing Scripts 
 
@@ -268,5 +290,6 @@ python util/split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Datab
 ```
 
 
-# credits
+# Credits
 The animated gif was made using  Animated GIF Maker available at https://ezgif.com/maker
+Tables in readme  file created withhelp from https://www.tablesgenerator.com/markdown_tables#
