@@ -145,7 +145,7 @@ Here are the basic scripts for training and testing
  
  [II-Train an image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
  
- [III-Train a binary/multiclass image classifier](#multiclassimageclassifier) </br>
+ [III-Train a binary/multiclass image classifier using flow from data](#multiclassimageclassifier) </br>
  
  [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)</br>
  
