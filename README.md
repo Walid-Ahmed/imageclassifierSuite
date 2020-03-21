@@ -59,10 +59,10 @@ The number of images per class i 13,794 images per each. The dataset is  origina
 
 ## Available Datasets  For  Multiclass or multinomial classification
 
-7. FacialExpression
-8. spatial_envelope_256x256_static_8outdoorcategories
-9. Cyclone_Wildfire_Flood_Earthquake_Database
-10. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The type of sports are Swimming
+8. FacialExpression
+9. spatial_envelope_256x256_static_8outdoorcategories
+10. Cyclone_Wildfire_Flood_Earthquake_Database
+11. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The type of sports are Swimming
 ,Badminton,Wrestling,Olympic Shooting,Cricket,Football,Tennis,Hockey,Ice Hockey,Kabaddi,WWE,Gymnasium,Weight lifting,Volleyball,Table tennis,Baseball,Formula 1,Moto GP,Chess,Boxing,FencingBasketbal]
 
 
