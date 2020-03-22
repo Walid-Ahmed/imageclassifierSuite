@@ -94,8 +94,8 @@ More and more networks will be added soon, however you can still define your own
 python modelsRepo/modelsFactory.py
 ```
 
-| Network I.D. | Number of Parmeters |
-|--------------|---------------------|
+| Network I.D. | Number of Parmeters |Size of Input
+|--------------|---------------------|---------------------|
 | net1         | 1704610             |
 | net2         | 9495074           |
 | net3         | 2395434            |
