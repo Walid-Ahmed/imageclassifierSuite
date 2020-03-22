@@ -90,6 +90,7 @@ These  networks include:
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
+Yoi can run the folllowing command to explore the available models
 ```
 python modelsRepo/modelsFactory.py
 ```
