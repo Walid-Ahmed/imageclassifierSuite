@@ -94,18 +94,18 @@ More and more networks will be added soon, however you can still define your own
 python modelsRepo/modelsFactory.py
 ```
 
-| Network I.D. | Number of Parmeters |Size of Input
+| Network I.D. | Number of Parmeters |Size of Input(H,W,C)|
 |--------------|---------------------|------------|
-| net1         | 1704610             |(300,300,3)
-| net2         | 9495074             |(150,150,3)
-| net3         | 2395434             |(32,32,3)
-| net4         | 150148              |(32,32,3)
-| net5         | 309290              |(32,32,3)
-| LenetModel   | 1631080             |(32,32,1)
-| Resnet50     | 25149800            |(224,224,3)
-| MiniVGG      | 18945829            |(96,96,3)
-| VGG16        | 14812520            |(224,224,3)
-| DPN          | 37769632            |(224,224,3)
+| net1         | 1704610             |(300,300,3)|
+| net2         | 9495074             |(150,150,3)|
+| net3         | 2395434             |(32,32,3)|
+| net4         | 150148              |(32,32,3)|
+| net5         | 309290              |(32,32,3)|
+| LenetModel   | 1631080             |(32,32,1)|
+| Resnet50     | 25149800            |(224,224,3)|
+| MiniVGG      | 18945829            |(96,96,3)|
+| VGG16        | 14812520            |(224,224,3)|
+| DPN          | 37769632            |(224,224,3)|
 
 
 
