@@ -96,16 +96,18 @@ python modelsRepo/modelsFactory.py
 
 | Network I.D. | Number of Parmeters |
 |--------------|---------------------|
-| net1         | 918,178              |
-| net2         | 22,176,290            |
-| net3         | 103,050,530           |
-| net4         | 1,246,754             |
-| net5         | 489,506              |
-| LenetModel   | 78,428,072            |
-| Resnet50     | 24,637,826            |
-| MiniVGG      | 102,830,370           |
-| VGG16        | 14,747,650            |
-| DPN          | 35,087,008            |
+| net1         | 1704610             |
+| net2         | 9495074           |
+| net3         | 2395434            |
+| net4         | 150148             |
+| net5         | 309290        |
+| LenetModel   | 1631080           |
+| Resnet50     | 25149800           |
+| MiniVGG      | 18945829          |
+| VGG16        | 14812520            |
+| DPN          | 37769632           |
+
+
 
 
  ![Network parameters](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/numOfParametersPerNetwork.png)
