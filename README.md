@@ -208,13 +208,10 @@ To start  training  using this file on "Facial Expression" dataset you can run t
 ```
 python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
 ```
-To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
+To train your dataset using this script, it is is super easy, just add the folder of your images to the folder "datasets".
 Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have 2 subfolders, each labeled with the name of the class. 
+if your datas is not splitted already, you can use  util/split_dataset.py   to split it
  
-
-
-
-
 
 
 
