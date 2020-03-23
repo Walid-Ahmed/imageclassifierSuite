@@ -117,6 +117,10 @@ python modelsRepo/modelsFactory.py
 
 ## Training and Testing Scripts 
 
+
+For binary classifier, you can choose if the last layer will have a single neuron and in this case  probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".  
+For mutlti class classisifier,the last layer will have a number of neurons as the number of outputs, The activation  function in  last layer will be changed from Sigmoid to Softmax accordingly.
+
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
 You do not need to worry about whether your are training with color images or gray scale images as the number of channels is detected automatically.
 
@@ -138,15 +142,14 @@ After finishing training, the following files are automatically saved to a  "Res
 
 
  
- When training starts, it will show a thumbnail image  for sample images from training dataset  Also training and validation losses and accuray curves are  plotted to tensorboard, you can view them during training by running the command 
+Also when training starts, it will show a thumbnail image  for sample images from training dataset  Also training and validation losses and accuray curves are  plotted to tensorboard, you can view them during training by running the command 
 ```
 
 tensorboard --logdir Results
 ```
 and then browsing the following url http://localhost:6008/
 
-For binary classifier, you can choose if the last layer will have a single neuron and in this case  probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".  
-For mutlti class classisifier,the last layer will have a number of neurons as the number of outputs, The activation  function in  last layer will be changed from Sigmoid to Softmax accordingly.
+
 
 
 
