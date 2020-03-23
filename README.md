@@ -82,26 +82,33 @@ These  networks include:
  - VGG16  
  - miniVGG as defined  in this [link](https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning)
  - DPN as defined  in this [link](https://github.com/titu1994/Keras-DualPathNetworks)
+ - net2 as defined in this [link](https://www.coursera.org/lecture/convolutional-neural-networks-tensorflow/training-with-  the-cats-vs-dogs-dataset-jV6tw)
+ - net3 ad defined in this [link](https://ermlab.com/en/blog/nlp/cifar-10-classification-using-keras-tutorial/)
+ - net4 as defined in this [link]( https://github.com/dribnet/kerosene/blob/master/examples/cifar100.py)
+ - net5 as defined in this [link](https://appliedmachinelearning.blog/2018/03/24/achieving-90-accuracy-in-object-recognition-task-on-cifar-10-dataset-with-keras-convolutional-neural-networks/)
  
 Beside these networks, the modelsFactory defines some usefull neural networks that can be used  in classification.
 More and more networks will be added soon, however you can still define your own, add to this file and start training with it!
 
+Yoi can run the folllowing command to explore the available models
 ```
 python modelsRepo/modelsFactory.py
 ```
 
-| Network I.D. | Number of Parmeters |
-|--------------|---------------------|
-| net1         | 918,178              |
-| net2         | 22,176,290            |
-| net3         | 103,050,530           |
-| net4         | 1,246,754             |
-| net5         | 489,506              |
-| LenetModel   | 78,428,072            |
-| Resnet50     | 24,637,826            |
-| MiniVGG      | 102,830,370           |
-| VGG16        | 14,747,650            |
-| DPN          | 35,087,008            |
+| Network I.D. | Number of Parmeters |Size of Input(H,W,C)|
+|--------------|---------------------|------------|
+| net1         | 1704610             |(300,300,3)|
+| net2         | 9495074             |(150,150,3)|
+| net3         | 2395434             |(32,32,3)|
+| net4         | 150148              |(32,32,3)|
+| net5         | 309290              |(32,32,3)|
+| LenetModel   | 1631080             |(32,32,1)|
+| Resnet50     | 25149800            |(224,224,3)|
+| MiniVGG      | 18945829            |(96,96,3)|
+| VGG16        | 14812520            |(224,224,3)|
+| DPN          | 37769632            |(224,224,3)|
+
+
 
 
  ![Network parameters](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/numOfParametersPerNetwork.png)
@@ -138,10 +145,17 @@ tensorboard --logdir Results
 ```
 and then browsing the following url http://localhost:6008/
 
+Here are the basic scripts for training and testing
+
+
  [I-Train a CIFAR10/MNIST dataset](#TRAINcIFAR)  </br>
+ 
  [II-Train an image classifier using flow from directory](#binaryimageclassifierusingflowfromdirectory)</br>
- [III-Train a binary/multiclass image classifier](#multiclassimageclassifier) </br>
+ 
+ [III-Train a binary/multiclass image classifier using flow from data](#multiclassimageclassifier) </br>
+ 
  [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)</br>
+ 
  [V-Test a Binary Model](#TestBinaryModels)
 
 
@@ -292,4 +306,5 @@ python util/split_dataset.py   --dataset Cyclone_Wildfire_Flood_Earthquake_Datab
 
 # Credits
 The animated gif was made using  Animated GIF Maker available at https://ezgif.com/maker
+
 Tables in readme  file created withhelp from https://www.tablesgenerator.com/markdown_tables#
