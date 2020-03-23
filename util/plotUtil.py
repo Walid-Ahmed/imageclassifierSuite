@@ -16,7 +16,7 @@ matplotlib.use("Qt5Agg")
 print("[INFO] matplotlib BACKEND IS {}".format(matplotlib.get_backend())) #[INFO] matplotlib BACKEND IS agg
 info=""
 
-def plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurve,fileToSaveLossCurve):
+def plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurve,fileToSaveLossCurve, display=True):
 
   info=""
     #Let's plot the training/validation accuracy and loss as collected during training:
@@ -70,11 +70,12 @@ def plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurv
   plt.savefig(fileToSaveLossCurve)
   plt.legend(loc="upper left")
 
-  plt.show()
+  if(display):
+    plt.show()
 
 
 
-def plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve):
+def plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve , display=True):
 
     # construct a plot that plots and saves the training history
 
@@ -111,7 +112,9 @@ def plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve):
   #fileToSaveLossAccCurve=os.path.join(ResultsFolder,title+"plot_loss_accu.png")
   #info=info+"[INFO] Loss curve saved to {}".format(fileToSaveLossAccCurve)
   plt.savefig(fileToSaveLossAccCurve)
-  plt.show()
+
+  if(display):
+    plt.show()
   #return info
 
    
@@ -119,7 +122,7 @@ def plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve):
 
 
 #def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None,channels=3):
-def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None):
+def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None, display=True):
 
 
   info=""
@@ -173,10 +176,12 @@ def drarwGridOfImages(dataSetDir,fileNameToSaveImage=None):
 
   if(fileNameToSaveImage != None):
     plt.savefig(fileNameToSaveImage)
-  plt.show()
+
+  if(display):  
+    plt.show()
   return info,channels
 
-def drarwGridOfImagesFromImagesData(images,fileNameToSaveImage=None):
+def drarwGridOfImagesFromImagesData(images,fileNameToSaveImage=None, display=True):
 
  
   info=""
@@ -206,6 +211,8 @@ def drarwGridOfImagesFromImagesData(images,fileNameToSaveImage=None):
  
   if(fileNameToSaveImage != None):
     plt.savefig(fileNameToSaveImage)
-  plt.show()
+
+  if(display):  
+    plt.show()
   return info
 

@@ -3,8 +3,11 @@
 
 
 # USAGE
-#python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --applyAugmentation True
-#python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 25  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r2_FacialExpression   --applyAugmentation True
+#python trainClassifier_flow_from_data.py    --EPOCHS 15   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --augmentationLevel 2 --useOneNeuronForBinaryClassification True   --opt Adam
+#python trainClassifier_flow_from_data.py    --EPOCHS 15   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --augmentationLevel 2 --useOneNeuronForBinaryClassification False   --opt Adam
+#python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 25  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r29_FacialExpression   --augmentationLevel 1 --opt Adam
+#python trainClassifier_flow_from_data.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID Resnet50  --EPOCHS 25  --width  224 --height  224  --BS 32  --ResultsFolder  Results/r22_Cyclone_Wildfire_Flood_Earthquake_Database  --augmentationLevel 1 --opt Adam
+
 
 
 
@@ -25,9 +28,15 @@ import argparse
 import random
 import cv2
 import os
+
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import average_precision_score
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import precision_score
+from sklearn.metrics import f1_score
+
 from keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
@@ -44,6 +53,52 @@ from callbacks   import EpochCheckpoint
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers import SGD
+
+
+from tensorflow.keras.losses import CategoricalCrossentropy
+from tensorflow.keras.losses import BinaryCrossentropy
+from tensorflow.keras.utils import to_categorical
+
+
+
+
+import matplotlib.pyplot as plt
+
+
+def changeStringLabelToInt(labels,labeles_dictionary):
+	intLabels=[]
+	for label in labels:
+		intLabels.append(labeles_dictionary[label])
+
+
+	labels=	intLabels
+	return labels
+
+
+def calculatePrecisionRecall(probs,y_true,y_pred,labels,ResultsFolder):
+		print("[INFO] Evaluating  Precision-Recall curve")
+
+		precision, recall, thresholds = precision_recall_curve(y_true, probs) #y_score    probabilities between 0 and 1
+		average_precision = average_precision_score(y_true, probs)
+		precision_value=precision_score(y_true, y_pred, average='macro')  
+		print("[INFO] precision_value at threshold 0.5=".format(precision_value) )
+
+
+		plt.step(recall, precision, color='b', alpha=0.2, where='post')
+		plt.fill_between(recall, precision, step='post', alpha=0.2,color='b')
+		plt.xlabel('Recall')
+		plt.ylabel('Precision')
+		plt.ylim([0.0, 1.05])
+		plt.xlim([0.0, 1.0])
+		plt.title(' Precision-Recall curve for class {0}'.format(labels[1] +" vs " + labels[0]))
+		fileName="Precision_Recall_curve_"+labels[1]+".png"
+		fileName=os.path.join(ResultsFolder,fileName)
+
+		plt.savefig(fileName)
+		print("[INFO] Precision_Recall_curve_  plot is saved to {}" .format(fileName) )
+
+		plt.show()
+		return precision, recall, thresholds
 
 
 
@@ -86,6 +141,8 @@ if __name__ == '__main__':
     ap.add_argument("--opt", type=str, default="SGD", help="Type of optimizer")
     ap.add_argument("--augmentationLevel", type=int, default=0,help="turn on  Augmentation")
     ap.add_argument("--useOneNeuronForBinaryClassification", type=str, default="True",help="turn on  Augmentation")
+    ap.add_argument("--display", type=str, default="True",help="turn on/off  display of plots")
+
 
 
 
@@ -109,7 +166,6 @@ if __name__ == '__main__':
     learningRate=args["lr"]
     new_lr=args["new_lr"]
     labelSmoothing=args["labelSmoothing"]
-    applyAugmentation=args["applyAugmentation"]
     continueTraining=args["continueTraining"]
     modelcheckpoint=args["modelcheckpoint"]    
     startepoch=args["startepoch"]
@@ -117,6 +173,7 @@ if __name__ == '__main__':
     opt=args['opt']
     augmentationLevel=args["augmentationLevel"]
     useOneNeuronForBinaryClassification=args['useOneNeuronForBinaryClassification']
+    display=args['display']
 
 
     verbose=args["verbose"]
@@ -128,19 +185,23 @@ if __name__ == '__main__':
 
 
 
-
-
-
-    if(applyAugmentation=="True") or  (applyAugmentation=="True"):
-	        applyAugmentation=True
-    else:
-	        applyAugmentation=False
-
-    if(continueTraining=="True") or  (continueTraining=="True"):
+    if(continueTraining=="True") or  (continueTraining=="true"):
 	        continueTraining=True
     else:
-	        continueTraining=False
+    		continueTraining=False
         
+
+
+    if(useOneNeuronForBinaryClassification=="True") :
+        useOneNeuronForBinaryClassification=True
+    else:
+        useOneNeuronForBinaryClassification=False
+
+
+    if(display=="True") :
+        display=True
+    else:
+        display=False
 
 
 
@@ -167,31 +228,30 @@ if __name__ == '__main__':
                   rescale=1./255,   #All images will be rescaled by 1./255
                   )
 
-
-	test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
+    test_datagen  = ImageDataGenerator( rescale = 1.0/255. )
 
 	 
 
 
-	if os.path.exists(ResultsFolder):
-		print("[Warning]  Folder {} aready exists, All files in folder will be deleted".format(ResultsFolder))
-		input("[msg]  Press any key to continue")
-		shutil.rmtree(ResultsFolder)
-	os.mkdir(ResultsFolder)	
+    if os.path.exists(ResultsFolder):
+        print("[Warning]  Folder {} aready exists, All files in folder will be deleted".format(ResultsFolder))
+        input("[msg]  Press any key to continue")
+        shutil.rmtree(ResultsFolder)
+    os.mkdir(ResultsFolder)	
 
 
-	folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
-	folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
-	folderNameToSaveModelCheckPoints=os.path.join(ResultsFolder,"checkPoints")
-	os.mkdir(folderNameToSaveModelCheckPoints)
-	plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
-	jsonPath=os.path.join(ResultsFolder,"history.json")
+    folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
+    folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
+    folderNameToSaveModelCheckPoints=os.path.join(ResultsFolder,"checkPoints")
+    os.mkdir(folderNameToSaveModelCheckPoints)
+    plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
+    jsonPath=os.path.join(ResultsFolder,"history.json")
 
-	earlyStopping = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
-	modelCheckpoint = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
-	tensorboard_callback = TensorBoard(log_dir=ResultsFolder)
-	epochCheckpoint=EpochCheckpoint(folderNameToSaveModelCheckPoints, every=saveEpochRate,startAt=startepoch)
-	trainingMonitor=TrainingMonitor(plotPath,jsonPath=jsonPath,startAt=startepoch)
+    earlyStopping = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
+    modelCheckpoint = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
+    tensorboard_callback = TensorBoard(log_dir=ResultsFolder)
+    epochCheckpoint=EpochCheckpoint(folderNameToSaveModelCheckPoints, every=saveEpochRate,startAt=startepoch)
+    trainingMonitor=TrainingMonitor(plotPath,jsonPath=jsonPath,startAt=startepoch)
 
 
 def predictBinaryValue(probs,threshold=0.5):
@@ -236,7 +296,7 @@ folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 
 
 fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
-info,channels=plotUtil.drarwGridOfImages(base_dir,fileNameToSaveImage=fileToSaveSampleImage)
+info,channels=plotUtil.drarwGridOfImages(base_dir,fileNameToSaveImage=fileToSaveSampleImage,display=display)
 
 paths.getTrainStatistics2(base_dir)
 
@@ -275,32 +335,21 @@ for imagePath in imagePaths:
 	data.append(image)
 
 
-# scale the raw pixel intensities to the range [0, 1]
 
 
 
-#data = np.array(data, dtype="float") / 255.0
 data = np.array(data, dtype="float")
 
 labels = np.array(labels)
-print(data.shape)  #(922, 28, 28, 3)
 
 
 
 #lb.classes_  will be  the labels with the same order in one hot vector--->. label = lb.classes_[i]
 lb = LabelBinarizer() 
-labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels
+#labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels even if there are only 2 classes but deal with it as categorical
+lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels even if there are only 2 classes but deal with it as categorical
+
 numOfOutputs=len(lb.classes_)
-#print(lb.classes_)
-print("__________________________________________________________________________________________________________")
-
-
-print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   
-
-
-
-if (numOfOutputs==2):  #Binary problem
-	numOfOutputs=1  # use only 1 neuron in last layer
 
 
 
@@ -316,6 +365,44 @@ for item in lb.classes_:
 f.write(pickle.dumps(labeles_dictionary))   #['not_santa' 'santa']
 f.close()
 print("[INFO] Labels saved  to file {} as {}".format(fileNameToSaveLabels,labeles_dictionary))
+
+
+print("[INFO] Training with the following labels".format(lb.classes_))
+print("__________________________________________________________________________________________________________")
+
+# convert the labels from integers to vectors
+
+print("[INFO] Training with the following {} classes {}".format(numOfOutputs ,lb.classes_ ))   
+
+
+targetNames=lb.classes_
+
+
+if (numOfOutputs==2) and useOneNeuronForBinaryClassification:  #Binary problem
+	numOfOutputs=1  # use only 1 neuron in last layer
+	lossFun=BinaryCrossentropy(label_smoothing=labelSmoothing)
+	labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels even if there are only 2 classes but deal with it as categorical
+
+else:
+	labels=changeStringLabelToInt(labels,labeles_dictionary)  # change labels from String to int
+	labels = to_categorical(labels, num_classes=numOfOutputs)    #np_utils.to_categorical takes y of datatype int
+	
+	#labels = lb.fit_transform(labels)  #Binary targets transform to a column vector. otherwise one hot vector, you can also use from keras.utils.to_categorical to  perform one-hot encoding on the labels even if there are only 2 classes but deal with it as categorical
+	
+	lossFun = CategoricalCrossentropy(label_smoothing=labelSmoothing) 
+
+
+
+
+
+
+print("[INFO] lossFun is  {} ".format(lossFun))
+
+
+
+
+
+
 
 
 
@@ -337,7 +424,6 @@ print("[INFO] Dataset of test Data shape {}".format(trainY.shape))
 print("[INFO] Dataset of test Labels shape {}".format(testY.shape))
 print("__________________________________________________________________________________________________________")
 
-
 # construct the image generator for data augmentation
 
 
@@ -355,15 +441,14 @@ model.summary()
 if (opt=="RMSprop"):
 	opt=RMSprop(learning_rate=learningRate, rho=0.9)
 elif(opt=="Adam"):
-	opt=Adam(learning_rate=learningRate, beta_1=0.9, beta_2=0.999, amsgrad=False)
+	opt=Adam(learning_rate=learningRate, beta_1=0.9, beta_2=0.999, amsgrad=False,decay=learningRate / EPOCHS)
 elif(opt=="SGD"):
 	opt=SGD(learning_rate=learningRate, momentum=0.0, nesterov=False)
 
-if(numOfOutputs==1):
-	model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
-else:
-	model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
-# train the network
+
+
+model.compile(loss=lossFun, optimizer=opt, metrics=["accuracy"])
+
 
 
 
@@ -403,19 +488,19 @@ model.save(fileNameToSaveModel,save_format='h5') #model is saved in h5 format
 print("[INFO] evaluating network...")
 testX = testX.astype("float32") / 255.0
 
-predictions = model.predict(testX, batch_size=32)
+probs = model.predict(testX, batch_size=32)
 if (numOfOutputs==1):
 	y_true=testY
-	y_pred=predictBinaryValue(predictions)
+	y_pred=predictBinaryValue(probs)
 else:	
 	y_true=testY.argmax(axis=1)
-	y_pred=predictions.argmax(axis=1)
+	y_pred=probs.argmax(axis=1)
 
 
 #print classfication report
-print(classification_report(y_true,y_pred, target_names=lb.classes_))
+print(classification_report(y_true,y_pred, target_names=targetNames))
 print("*************************************************************************************************************")      
-
+#exit()
 
 #cm=confusion_matrix(y_true, y_pred)
 #helper.print_cm(cm,lb.classes_)
@@ -427,19 +512,23 @@ print("*************************************************************************
 title=datasetDir
 
 fileToSaveLossAccCurve=os.path.join(ResultsFolder,title+"plot_loss_accu.png")
-plotUtil.plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve)
+plotUtil.plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve,display=display)
 
 fileToSaveAccuracyCurve=os.path.join(ResultsFolder,title+"plot_acc.png")
 fileToSaveLossCurve=os.path.join("Results",title+"plot_loss.png")
-plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurve,fileToSaveLossCurve)
-#print(info1)
+plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurve,fileToSaveLossCurve,display=display)
+
+
 
 
 
 
 # Plot non-normalized confusion matrix
-helper.plot_print_confusion_matrix(y_true, y_pred, ResultsFolder,classes=lb.classes_,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
+helper.plot_print_confusion_matrix(y_true, y_pred, ResultsFolder,classes=targetNames,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
 
+#calculate precision recall
+if(numOfOutputs==1):  #binary classification
+	calculatePrecisionRecall(probs,y_true,y_pred,targetNames,ResultsFolder)
 
 
 print("[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve))

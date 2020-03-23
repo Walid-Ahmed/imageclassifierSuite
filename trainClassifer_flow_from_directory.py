@@ -5,7 +5,7 @@
 
 #python trainClassifer_flow_from_directory.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID net2  --EPOCHS 20  --width  150 --height  150  --BS 32  --ResultsFolder  Results/r1_disaster
 
-#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression   --labelSmoothing 0.1
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1a_FacialExpression   --labelSmoothing 0.1
 
 
 
@@ -21,6 +21,13 @@
 #python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
 
 #python trainClassifer_flow_from_directory.py --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID DPN --EPOCHS 20 --width 112 --height 112 --BS 32 --ResultsFolder Results/r1_FacialExpression --labelSmoothing 0.1
+
+
+#python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID LenetModel  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/r1_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1  --useOneNeuronForBinaryClassification False
+#python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID Resnet50  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/r2_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
+#python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID net1  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/r3_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
+#python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID net2  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/r4_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
+
 
 
 import os
@@ -105,6 +112,8 @@ if __name__ == '__main__':
     ap.add_argument("--opt", type=str, default="SGD", help="Type of optimizer")
     ap.add_argument("--augmentationLevel", type=int, default=0,help="turn on  Augmentation")
     ap.add_argument("--useOneNeuronForBinaryClassification", type=str, default="True",help="turn on  Augmentation")
+    ap.add_argument("--display", type=str, default="True",help="turn on/off  display of plots")
+
 
 
 
@@ -134,6 +143,7 @@ if __name__ == '__main__':
     opt=args['opt']
     augmentationLevel=args["augmentationLevel"]
     useOneNeuronForBinaryClassification=args["useOneNeuronForBinaryClassification"]
+    display=args["display"]
 
 
 
@@ -149,6 +159,15 @@ if __name__ == '__main__':
         useOneNeuronForBinaryClassification=False
 
 
+
+
+    if(display=="True") :
+        display=True
+    else:
+        display=False
+
+
+        
 
     input_shape=width,height
     parameters="[INFO]  Data Set Directory".format(datasetDir) +"\n"
@@ -215,7 +234,7 @@ if __name__ == '__main__':
     fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
 
     #info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,channels)
-    info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage)
+    info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,display=display)
     print("[INFO] Number of input channels is {}".format(channels))
 
 
@@ -248,10 +267,7 @@ if __name__ == '__main__':
     if modelcheckpoint is None:
         #build the model
         model=modelsFactory.ModelCreator(numOfOutputs,width,height,networkID=networkID,channels=channels).model
-        #print model structure 
-        
-        #modelFileName=os.path.join(ResultsFolder,"model.h5")
-        #model = load_model(modelFileName)
+
 
         #setup optimizer
         if (opt=="RMSprop"):
@@ -412,11 +428,11 @@ if __name__ == '__main__':
     title=datasetDir
 
     fileToSaveLossAccCurve=os.path.join(ResultsFolder,title+"plot_loss_accu.png")
-    plotUtil.plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve)
+    plotUtil.plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve,display=display)
 
     fileToSaveAccuracyCurve=os.path.join(ResultsFolder,title+"plot_acc.png")
     fileToSaveLossCurve=os.path.join("Results",title+"plot_loss.png")
-    plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurve,fileToSaveLossCurve)
+    plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurve,fileToSaveLossCurve,display=display)
    
 
 

@@ -363,13 +363,54 @@ class  ModelCreator:
 if __name__ == "__main__":
 
 	allNetIds=["net1","net2","net3","net4","net5","LenetModel","Resnet50","net3","MiniVGG","VGG16","DPN"]
+
+
+	defaultInputSize=dict()
+	defaultOutputSize=dict()
+	
+	defaultInputSize["LenetModel"]=(32,32,1)
+	defaultOutputSize["LenetModel"]=10
+	
+	defaultInputSize["net1"]=(300,300,3)
+	defaultOutputSize["net1"]=2
+
+	defaultInputSize["net2"]=(150,150,3)
+	defaultOutputSize["net2"]=2
+	
+	defaultInputSize["net3"]=(32,32,3)
+	defaultOutputSize["net3"]=10
+
+	defaultInputSize["net4"]=(32,32,3)
+	defaultOutputSize["net4"]=100
+
+	defaultInputSize["net5"]=(32,32,3)
+	defaultOutputSize["net5"]=10
+	
+	defaultInputSize["VGG16"]=(224,224,3)
+	defaultOutputSize["VGG16"]=1000
+
+	defaultInputSize["DPN"]=(224,224,3)
+	defaultOutputSize["DPN"]=1000
+
+	defaultInputSize["Resnet50"]=(224,224,3)
+	defaultOutputSize["Resnet50"]=1000
+
+	defaultInputSize["MiniVGG"]=(96,96,3)
+	defaultOutputSize["MiniVGG"]=5
+
+	
+
 	folderToSaveAllPlots="modelsPlots"
 	if not os.path.exists(folderToSaveAllPlots):
 		os.makedirs(folderToSaveAllPlots)
 
 	netDic=dict()
+
 	for netID in  allNetIds:
-		modelCreator=ModelCreator(networkID=netID)
+		height,width,channels=defaultInputSize[netID]
+		numOfOutputs=defaultOutputSize[netID]
+		defaultOutputSize[netID]
+		modelCreator=ModelCreator(numOfOutputs=numOfOutputs,width=width,height=height,channels=channels,networkID=netID)
 		model=modelCreator.model
 		model.summary()
 		pathToSavePlot=os.path.join(folderToSaveAllPlots,netID+"_"+"model.png")
