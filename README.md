@@ -117,6 +117,10 @@ python modelsRepo/modelsFactory.py
 
 ## Training and Testing Scripts 
 
+
+For binary classifier, you can choose if the last layer will have a single neuron and in this case  probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".  
+For mutlti class classisifier,the last layer will have a number of neurons as the number of outputs, The activation  function in  last layer will be changed from Sigmoid to Softmax accordingly.
+
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
 You do not need to worry about whether your are training with color images or gray scale images as the number of channels is detected automatically.
 
@@ -138,12 +142,17 @@ After finishing training, the following files are automatically saved to a  "Res
 
 
  
- When training starts, it will show a thumbnail image  for sample images from training dataset  Also training and validation losses and accuray curves are  plotted to tensorboard, you can view them during training by running the command 
+Also when training starts, it will show a thumbnail image  for sample images from training dataset  Also training and validation losses and accuray curves are  plotted to tensorboard, you can view them during training by running the command 
 ```
 
 tensorboard --logdir Results
 ```
 and then browsing the following url http://localhost:6008/
+
+
+
+
+
 
 Here are the basic scripts for training and testing
 
@@ -199,10 +208,10 @@ To start  training  using this file on "Facial Expression" dataset you can run t
 ```
 python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
 ```
-To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
+To train your dataset using this script, it is is super easy, just add the folder of your images to the folder "datasets".
 Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have 2 subfolders, each labeled with the name of the class. 
+if your datas is not splitted already, you can use  util/split_dataset.py   to split it
  
-A probabilty more than 0.5 means that the output is the second  class when they are sorted aphabitically. For example  predicting  the class from "cats" and "dogs" labels, the probabilty of more than 0.5  means a prediction of "dog".
 
 
 
@@ -218,14 +227,28 @@ The script   trainClassifier_flow_from_data.py   can be used to train a binary c
 You can run it as follows
 
 ```
-python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --applyAugmentation True
+
+python trainClassifier_flow_from_data.py    --EPOCHS 15   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --augmentationLevel 2 --useOneNeuronForBinaryClassification True   --opt Adam
 ```
 
-```
-python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r2_FacialExpression   --applyAugmentation True
+
 ```
 
-In case of binary classifier, the last layer will have only one neuron, otherwise  the last laye will have a number of neurons as the number of outputs, The activation  function in  last layer will be changed from Sigmoid to Softmax accordingly
+python trainClassifier_flow_from_data.py    --EPOCHS 15   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --augmentationLevel 2 --useOneNeuronForBinaryClassification False   --opt Adam
+```
+
+
+```
+
+python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 25  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r29_FacialExpression   --augmentationLevel 1 --opt Adam
+```
+
+
+```
+
+python trainClassifier_flow_from_data.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID Resnet50  --EPOCHS 25  --width  224 --height  224  --BS 32  --ResultsFolder  Results/r22_Cyclone_Wildfire_Flood_Earthquake_Database  --augmentationLevel 1 --opt Adam
+```
+
 
 You do not have to enter your labels or to split your data into train/eval, all what you have to do is to arrange your images so that each class in a folder with its label and all theses folders within a single folder as the following, the name of this single folder is what you should pass as argument when training. The folder should be in folder datasetes.
  ![Sample Arrangment of dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/classArrang.png)
@@ -275,10 +298,6 @@ python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --he
 jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
 
 
-# VIII-Train with your own dataset
-
-To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
-Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have  subfolders, each labeled with the name of the class. 
 
 
 
