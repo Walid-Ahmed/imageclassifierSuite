@@ -218,11 +218,26 @@ The script   trainClassifier_flow_from_data.py   can be used to train a binary c
 You can run it as follows
 
 ```
-python trainClassifier_flow_from_data.py    --EPOCHS 25   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --applyAugmentation True
+
+python trainClassifier_flow_from_data.py    --EPOCHS 15   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --augmentationLevel 2 --useOneNeuronForBinaryClassification True   --opt Adam
 ```
 
+
 ```
-python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r2_FacialExpression   --applyAugmentation True
+
+python trainClassifier_flow_from_data.py    --EPOCHS 15   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --augmentationLevel 2 --useOneNeuronForBinaryClassification False   --opt Adam
+```
+
+
+```
+
+python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 25  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r29_FacialExpression   --augmentationLevel 1 --opt Adam
+```
+
+
+```
+
+python trainClassifier_flow_from_data.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID Resnet50  --EPOCHS 25  --width  224 --height  224  --BS 32  --ResultsFolder  Results/r22_Cyclone_Wildfire_Flood_Earthquake_Database  --augmentationLevel 1 --opt Adam
 ```
 
 In case of binary classifier, the last layer will have only one neuron, otherwise  the last laye will have a number of neurons as the number of outputs, The activation  function in  last layer will be changed from Sigmoid to Softmax accordingly
