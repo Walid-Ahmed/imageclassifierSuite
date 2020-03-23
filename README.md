@@ -298,10 +298,6 @@ python trainClassifier_flow_from_large_data.py    --EPOCHS 25   --width 224 --he
 jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
 
 
-# VIII-Train with your own dataset
-
-To train your dataset, it is is super easy, just add the folder of your images to the folder "datasets".
-Your folder of images  should have two sub folders "train" and "eval". In each of the "train" and "eval" folder, you should have  subfolders, each labeled with the name of the class. 
 
 
 
