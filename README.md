@@ -130,7 +130,7 @@ After finishing training, the following files are automatically saved to a  "Res
 
  1. Loss and accuracy curves
  2. The model as a .h5 file and .pb file in a folder with same name as dataset 
- 3. The best model (highest accuracy) during training
+ 3. The best model (highest accuracy) during training as .h5 file
  4. The labels in dictionary stored as a pickle file
  5. Confusion matrix as image
  6. Precision Recal curve (for binary classification only )
