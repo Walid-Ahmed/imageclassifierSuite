@@ -247,8 +247,12 @@ if __name__ == '__main__':
     plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
     jsonPath=os.path.join(ResultsFolder,"history.json")
 
+    os.mkdir(folderNameToSaveBestModel)	
+    fileNameToSaveBestModel=os.path.join(folderNameToSaveBestModel,"best_classifier_"+datasetDir+".h5")
+
+
     earlyStopping = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
-    modelCheckpoint = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
+    modelCheckpoint = ModelCheckpoint(fileNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
     tensorboard_callback = TensorBoard(log_dir=ResultsFolder)
     epochCheckpoint=EpochCheckpoint(folderNameToSaveModelCheckPoints, every=saveEpochRate,startAt=startepoch)
     trainingMonitor=TrainingMonitor(plotPath,jsonPath=jsonPath,startAt=startepoch)
@@ -534,7 +538,7 @@ if(numOfOutputs==1):  #binary classification
 print("[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve))
 print("[INFO] Loss curve saved to {}".format(fileToSaveLossCurve))
 print("[INFO] Accuracy  curve saved to {}".format(fileToSaveAccuracyCurve))
-print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
+print("[INFO] Best Model saved   as h5 file:  {}".format(fileNameToSaveBestModel))
 print("[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate))
 print("[INFO] Final model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
 print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))

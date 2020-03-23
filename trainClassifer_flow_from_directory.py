@@ -11,12 +11,12 @@
 
 #python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r2_FacialExpression  --modelcheckpoint Results/r1_FacialExpression/checkPoints/epoch_30.h5  --startepoch 30 
 
-#python trainClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 2  --width  300 --height  300 --testDir test_horses_or_Human
+#python trainClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 15  --width  300 --height  300  --augmentationLevel 1  --ResultsFolder  Results/r1_horse-or-human
 
 #python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
 
 
-#python trainClassifer_flow_from_directory.py  --datasetDir SportsClassification  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_SportsClassification --labelSmoothing 0.1       
+#python trainClassifer_flow_from_directory.py  --datasetDir SportsClassification  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_SportsClassification --labelSmoothing 0.1     --opt Adam  
 
 #python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
 
@@ -103,7 +103,6 @@ if __name__ == '__main__':
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--new_lr", required=False, type=float, default=1e-4,help="restarting Learning rate")
     ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
-    #ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
     ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
     ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
     ap.add_argument("--modelcheckpoint", type=str, default=None ,help="path to *specific* model checkpoint to load")
@@ -113,10 +112,6 @@ if __name__ == '__main__':
     ap.add_argument("--augmentationLevel", type=int, default=0,help="turn on  Augmentation")
     ap.add_argument("--useOneNeuronForBinaryClassification", type=str, default="True",help="turn on  Augmentation")
     ap.add_argument("--display", type=str, default="True",help="turn on/off  display of plots")
-
-
-
-
 
 
 
@@ -167,7 +162,7 @@ if __name__ == '__main__':
         display=False
 
 
-        
+
 
     input_shape=width,height
     parameters="[INFO]  Data Set Directory".format(datasetDir) +"\n"
@@ -244,6 +239,7 @@ if __name__ == '__main__':
     folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
     folderNameToSaveModelCheckPoints=os.path.join(ResultsFolder,"checkPoints")
     os.mkdir(folderNameToSaveModelCheckPoints)
+    os.mkdir(folderNameToSaveBestModel)
     plotPath=os.path.join(ResultsFolder,"onlineLossAccPlot.png")
     jsonPath=os.path.join(ResultsFolder,"history.json")
 
@@ -309,10 +305,10 @@ if __name__ == '__main__':
     model.summary()
 
 
-
+    fileNameToSaveBestModel=os.path.join(folderNameToSaveBestModel,"best_classifier_"+datasetDir+".h5")
 
     earlyStopping = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
-    modelCheckpoint = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)
+    modelCheckpoint = ModelCheckpoint(fileNameToSaveBestModel, monitor='val_accuracy', mode='max', save_best_only=True, verbose=1)   #The format is inferred from the file extension you provide: if it is ".h5" or ".keras", the framework uses the Keras HDF5 format
     tensorboard_callback = TensorBoard(log_dir=ResultsFolder,profile_batch=0)
     epochCheckpoint=EpochCheckpoint(folderNameToSaveModelCheckPoints, every=saveEpochRate,startAt=startepoch)
     trainingMonitor=TrainingMonitor(plotPath,jsonPath=jsonPath,startAt=startepoch)
@@ -461,7 +457,7 @@ if __name__ == '__main__':
     print("[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve))
     print("[INFO] Loss curve saved to {}".format(fileToSaveLossCurve))
     print("[INFO] Accuracy  curve saved to {}".format(fileToSaveAccuracyCurve))
-    print("[INFO] Best Model saved  to folder {}".format(folderNameToSaveBestModel))
+    print("[INFO] Best Model saved  to  {} as h5 file".format(fileNameToSaveBestModel))
     print("[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate))
     print("[INFO] Final model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
     print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
