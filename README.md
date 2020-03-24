@@ -304,10 +304,13 @@ jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
 <h2 id="TestBinaryModels">V-Test Binary Models</h2>
 
 
-You can test the binary model using the script in test_network_binary.py. The results will be displayed as an image with the predicted label typed on it. It will also be   saved with the name as file precceded with "prediction_"  in Results folder
+You can test the binary classifier modelwith one neuron at last layer  using the script in test_network_binary.py. The results will be displayed as an image with the predicted label typed on it. It will also be   saved with the name as file precceded with "prediction_"  in "Results" folder
 
 ```
-python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
+#python test_network_binary.py --model Results/r2_santa/Santa_Classifier.h5  --image TestImages/test_images_Santa_and_noSanta/santa_01.png  --width  28 --height  28 --labelPKL Results/r2_santa/Santa_labels.pkl 
+```
+```
+#python test_network_binary.py --model Results/r2_santa/Santa_Classifier.h5  --image TestImages/test_images_Santa_and_noSanta/night_sky.png  --width  28 --height  28 --labelPKL Results/r2_santa/Santa_labels.pkl 
 ```
 
 
