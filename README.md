@@ -314,7 +314,7 @@ You can test the binary classifier modelwith one neuron at last layer  using the
 ```
 
 
-Note the pkl file is the one created for you by trainClassifier_flow_from_data.py. It contains a dictionary like this  {'cats': 0, 'dogs': 1}
+Note the pkl file is the one created for you by trainClassifier_flow_from_data.py. It contains a dictionary like this  ['not_santa' , 'santa']
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
 
