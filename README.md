@@ -165,7 +165,7 @@ Here are the basic scripts for training and testing
  
  [IV-Train a multiclass image classifier using satandard dataset](#Trainmulticlassimageclassifierusingsatandarddataset)</br>
  
- [V-Test a Binary Model](#TestBinaryModels)
+ [V-Predict using a Model](#TestBinaryModels)
 
 
 <h2 id="TRAINcIFAR">I-Train on CIFAR10/MNIST dataset</h2>
@@ -301,7 +301,7 @@ jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
 
 
 
-<h2 id="TestBinaryModels">V-Test  Models</h2>
+<h2 id="TestBinaryModels">V-Predict using a Model </h2>
 
 
 You can test the binary classifier mode lwith one neuron at last layer  using the script in **test_network_binary.py**. 
