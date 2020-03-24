@@ -321,11 +321,11 @@ Note the pkl file is the one created for you by trainClassifier_flow_from_data.p
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
 
-![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/prediction_earthquake_175.jpg)
+
 ```
 python test_network_multiClassifier.py  --model  Results/r1_disaster/Cyclone_Wildfire_Flood_Earthquake_Database_Classifier.h5  --image TestImages/test_Cyclone_Wildfire_Flood_Earthquake/earthquake_175.jpg --labelPKL    Results/r1_disaster/Cyclone_Wildfire_Flood_Earthquake_Database_labels.pkl    --width 150 --height 150
 ```
-
+![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/prediction_earthquake_175.jpg)
 
 # IX-Utilities
 
