@@ -124,6 +124,7 @@ For mutlti class classisifier,the last layer will have a number of neurons as th
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
 You do not need to worry about whether your are training with color images or gray scale images as the number of channels is detected automatically.
 
+```
 optional arguments:
   -h, --help            show this help message and exit
   --datasetDir DATASETDIR
@@ -158,7 +159,7 @@ optional arguments:
                         turn on Augmentation
   --display DISPLAY     turn on/off display of plots
   
-  
+  ```
 
 After finishing training, the following files are automatically saved to a  "Results" folder you pass as argument when you start training.
 
