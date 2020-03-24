@@ -153,8 +153,8 @@ optional arguments:
   --saveEpochRate SAVEEPOCHRATE
                         Frequency to save checkpoints
   --opt OPT             Type of optimizer
-  --augmentationLevel AUGMENTATIONLEVEL
-                        turn on Augmentation
+  --augmentationLevel AUGMENTATION LEVEL
+                        can be either  0 or 1 or 2
   --useOneNeuronForBinaryClassification USEONENEURONFORBINARYCLASSIFICATION
                         turn on Augmentation
   --display DISPLAY     turn on/off display of plots
