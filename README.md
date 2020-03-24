@@ -7,7 +7,7 @@
  
 This Repo can be used to train an image  classifier   on user defined dataset or on standard  datasets with different network structures. I tried  to include most of the nice features I learned in my deep journey for image classification. 
 
-[lINK](https://www.pyimagesearch.com/)
+I owe a lot of what I learened to Adrian Rosebrock [blog](https://www.pyimagesearch.com/)
 
 Training parmeters that can be set are:
 - Batch size, 
