@@ -1,11 +1,14 @@
 
 
-#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 13  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1 --augmentationLevel 1
+#python trainClassifer_flow_from_directory.py  --datasetDir cats_and_dogs --networkID net2  --EPOCHS 80  --width  150 --height  150  --ResultsFolder  Results/r1_cats_dogs --labelSmoothing 0.1 --augmentationLevel 1
 
 
 #python trainClassifer_flow_from_directory.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID net2  --EPOCHS 20  --width  150 --height  150  --BS 32  --ResultsFolder  Results/r1_disaster
 
-#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1a_FacialExpression   --labelSmoothing 0.1
+
+#FacialExpression
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1a_FacialExpression   --labelSmoothing 0.1   --opt Adam 
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 20  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1b_FacialExpression   --labelSmoothing 0.1   --opt Adam    --modelcheckpoint Results/r1a_FacialExpression/FacialExpression_Classifier.h5   --startepoch 20   --new_lr  0.0001
 
 
 
@@ -103,7 +106,6 @@ if __name__ == '__main__':
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--new_lr", required=False, type=float, default=1e-4,help="restarting Learning rate")
     ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
-    ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
     ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
     ap.add_argument("--modelcheckpoint", type=str, default=None ,help="path to *specific* model checkpoint to load")
     ap.add_argument("--startepoch", type=int, default=0, help="epoch to restart training at")
@@ -130,8 +132,6 @@ if __name__ == '__main__':
     learningRate=args["lr"]
     new_lr=args["new_lr"]
     labelSmoothing=args["labelSmoothing"]
-    #applyAugmentation=args["applyAugmentation"]
-    continueTraining=args["continueTraining"]
     modelcheckpoint=args["modelcheckpoint"]    
     startepoch=args["startepoch"]
     saveEpochRate=args['saveEpochRate']
@@ -142,10 +142,6 @@ if __name__ == '__main__':
 
 
 
-    if(continueTraining=="True") :
-        continueTraining=True
-    else:
-        continueTraining=False
         
 
     if(useOneNeuronForBinaryClassification=="True") :
@@ -282,17 +278,18 @@ if __name__ == '__main__':
         model.compile(optimizer=opt,loss=lossFun,metrics = ['accuracy'])
 
 
-        # otherwise, we're using a checkpoint model
-    else:
+        
+    else:   # otherwise, we're using a checkpoint model
     # load the checkpoint from disk
         print("[INFO] loading {}".format(modelcheckpoint))
-        print(modelcheckpoint)
         model = load_model(modelcheckpoint)
         # update the learning rate
         print("[INFO] old learning rate: {}".format(K.get_value(model.optimizer.lr)))
         K.set_value(model.optimizer.lr, new_lr)
         print("[INFO] new learning rate: {}".format(K.get_value(model.optimizer.lr)))
         print("[INFO] Model loaded  sucessfully from checkpoint")
+        input("[MSG] Press any key to continue")
+
         #copy previous histort data of val and accuracy
         folderOfPerviousCheckPoint=os.path.dirname(modelcheckpoint)
         dst=ResultsFolder
@@ -459,7 +456,7 @@ if __name__ == '__main__':
     print("[INFO] Accuracy  curve saved to {}".format(fileToSaveAccuracyCurve))
     print("[INFO] Best Model saved  to  {} as h5 file".format(fileNameToSaveBestModel))
     print("[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate))
-    print("[INFO] Final model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
+    print("[INFO] Final model saved  to folder {} in both .h5  as {} and TF2 format".format(folderNameToSaveModel,fileNameToSaveModel))
     print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
     print("[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath))
     print("*************************************************************************************************************")      

@@ -1,9 +1,21 @@
+''''
+You can test the binary classifier modelwith one neuron 
+at last layer using the script in test_network_binary.py. 
+The results will be displayed as an image with the predicted label typed on it. 
+It will also be saved with the name as file precceded with "prediction_" in "Results" folder
+
+'''
+
+
+
 # USAGE
-# python test_network_binary.py --model Results/Santa_binaryClassifier.keras2  --image TestImages/test_images_Santa_and_noSanta/santa_01.png --labelPKL Results/Santa_labels.pkl --width  28 --height 28
 
-#python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/cats/cat_44.jpeg  --width  150 --height  150 --labelPKL Results/cats_and_dogs_labels.pkl 
 
-#python test_network_binary.py --model Results/cats_dogs_binaryClassifier.keras2 --image TestImages/test_images_cats_and_dogs/dogs/dog_23.jpeg --labelPKL Results/cats_and_dogs_labels.pkl --width  150 --height  150
+#python test_network_binary.py --model Results/r2_santa/Santa_Classifier.h5  --image TestImages/test_images_Santa_and_noSanta/santa_01.png  --width  28 --height  28 --labelPKL Results/r2_santa/Santa_labels.pkl 
+#python test_network_binary.py --model Results/r2_santa/Santa_Classifier.h5  --image TestImages/test_images_Santa_and_noSanta/night_sky.png  --width  28 --height  28 --labelPKL Results/r2_santa/Santa_labels.pkl 
+
+
+
 
 # import the necessary packages
 from keras.preprocessing.image import img_to_array
@@ -41,7 +53,7 @@ height=int(args["height"])
 
 
 labels = pickle.loads(open(args["labelPKL"], "rb").read())
-print(labels) #for example {'cats': 0, 'dogs': 1}
+print("[INFO]  labels are {}".format(labels)) #for example {'cats': 0, 'dogs': 1}
 
 
 # load the image
@@ -57,6 +69,8 @@ image = np.expand_dims(image, axis=0)
 # load the trained convolutional neural network
 print("[INFO] loading network...")
 model = tf.keras.models.load_model(args["model"])
+model.summary()
+
 print("[INFO] Model loaded succesfully from {}".format(args["model"]))
 
 # classify the input image
@@ -88,5 +102,6 @@ cv2.imshow("Output", output)
 fileNameToSaveImageWithPrediction="prediction_"+os.path.basename(args["image"])
 fileNameToSaveImageWithPrediction=os.path.join("Results",fileNameToSaveImageWithPrediction)
 cv2.imwrite(fileNameToSaveImageWithPrediction,output)
+print("[INFO]  labels are {}".format(labels)) #for example {'cats': 0, 'dogs': 1}
 print("[INFO] Image with prediction saved to  {}".format(fileNameToSaveImageWithPrediction))
 cv2.waitKey(0)

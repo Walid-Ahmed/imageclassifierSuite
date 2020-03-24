@@ -5,6 +5,7 @@
 # USAGE
 #python trainClassifier_flow_from_data.py    --EPOCHS 15   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --augmentationLevel 2 --useOneNeuronForBinaryClassification True   --opt Adam
 #python trainClassifier_flow_from_data.py    --EPOCHS 15   --width 28 --height 28  --datasetDir Santa --networkID LenetModel --verbose False --ResultsFolder  Results/r2_santa --augmentationLevel 2 --useOneNeuronForBinaryClassification False   --opt Adam
+
 #python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 25  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r29_FacialExpression   --augmentationLevel 1 --opt Adam
 #python trainClassifier_flow_from_data.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID Resnet50  --EPOCHS 25  --width  224 --height  224  --BS 32  --ResultsFolder  Results/r22_Cyclone_Wildfire_Flood_Earthquake_Database  --augmentationLevel 1 --opt Adam
 
@@ -480,7 +481,7 @@ model.save(folderNameToSaveModel,save_format='tf') #model is saved in TF2 format
 
 
 fileNameToSaveModel="{}_Classifier.h5".format(datasetDir)
-fileNameToSaveModel=os.path.join(folderNameToSaveModel,fileNameToSaveModel)
+fileNameToSaveModel=os.path.join(ResultsFolder,fileNameToSaveModel)
 model.save(fileNameToSaveModel,save_format='h5') #model is saved in h5 format
 
 
@@ -540,9 +541,10 @@ print("[INFO] Loss curve saved to {}".format(fileToSaveLossCurve))
 print("[INFO] Accuracy  curve saved to {}".format(fileToSaveAccuracyCurve))
 print("[INFO] Best Model saved   as h5 file:  {}".format(fileNameToSaveBestModel))
 print("[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate))
-print("[INFO] Final model saved  to folder {} in both .h5 and TF2 format".format(folderNameToSaveModel))
+print("[INFO] Final model saved  to folder {} in both .h5  as {} and TF2 format".format(folderNameToSaveModel,fileNameToSaveModel))
 print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
 print("[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath))
+print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
 print("*************************************************************************************************************")      
 
 
