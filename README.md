@@ -301,10 +301,10 @@ jupyter notebook catsVsDog_imageClassification_K_Nearest_Neighbourhood.ipynb
 
 
 
-<h2 id="TestBinaryModels">V-Test Binary Models</h2>
+<h2 id="TestBinaryModels">V-Test  Models</h2>
 
 
-You can test the binary classifier modelwith one neuron at last layer  using the script in test_network_binary.py. The results will be displayed as an image with the predicted label typed on it. It will also be   saved with the name as file precceded with "prediction_"  in "Results" folder
+You can test the binary classifier mode lwith one neuron at last layer  using the script in **test_network_binary.py**. The results will be displayed as an image with the predicted label typed on it. It will also be   saved with the name as file precceded with "prediction_"  in "Results" folder
 
 ```
 #python test_network_binary.py --model Results/r2_santa/Santa_Classifier.h5  --image TestImages/test_images_Santa_and_noSanta/santa_01.png  --width  28 --height  28 --labelPKL Results/r2_santa/Santa_labels.pkl 
@@ -317,6 +317,11 @@ You can test the binary classifier modelwith one neuron at last layer  using the
 Note the pkl file is the one created for you by trainClassifier_flow_from_data.py. It contains a dictionary like this {'not_santa': 0, 'santa': 1}
 
 ![Sample curve output from training cats vs dogs dataset](https://github.com/Walid-Ahmed/imageclassifierSuite/blob/master/sampleImages/result_cat.png)
+
+```
+python test_network_multiClassifier.py  --model  Results/r1_disaster/Cyclone_Wildfire_Flood_Earthquake_Database_Classifier.h5  --image TestImages/test_Cyclone_Wildfire_Flood_Earthquake/earthquake_175.jpg --labelPKL    Results/r1_disaster/Cyclone_Wildfire_Flood_Earthquake_Database_labels.pkl    --width 150 --height 150
+```
+
 
 # IX-Utilities
 
