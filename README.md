@@ -124,6 +124,41 @@ For mutlti class classisifier,the last layer will have a number of neurons as th
 When the training starts, it will show sample of images and print  statistics about the dataset.  The training  script will stop automatically if the  validation accuracy is not improving after a patience number of epochs(default 50).
 You do not need to worry about whether your are training with color images or gray scale images as the number of channels is detected automatically.
 
+optional arguments:
+  -h, --help            show this help message and exit
+  --datasetDir DATASETDIR
+                        path to dataset directory with train and validation
+                        images
+  --testDir TESTDIR     path to test directory with test images
+  --networkID NETWORKID
+                        I.D. of the network, it can be any of [net1,net2,net3,
+                        net4,net5,LenetModel,Resnet50,net3,MiniVGG,VGG16]
+  --EPOCHS EPOCHS       Number of maximum epochs to train
+  --BS BS               Batch size
+  --width WIDTH         width of image
+  --height HEIGHT       height of image
+  --patience PATIENCE   Number of epochs to wait without accuracy improvment
+  --ResultsFolder RESULTSFOLDER
+                        Folder to save Results
+  --lr LR               Initial Learning rate
+  --new_lr NEW_LR       restarting Learning rate
+  --labelSmoothing LABELSMOOTHING
+                        turn on label smoothing
+  --verbose VERBOSE     Print extra data
+  --modelcheckpoint MODELCHECKPOINT
+                        path to *specific* model checkpoint to load
+  --startepoch STARTEPOCH
+                        epoch to restart training at
+  --saveEpochRate SAVEEPOCHRATE
+                        Frequency to save checkpoints
+  --opt OPT             Type of optimizer
+  --augmentationLevel AUGMENTATIONLEVEL
+                        turn on Augmentation
+  --useOneNeuronForBinaryClassification USEONENEURONFORBINARYCLASSIFICATION
+                        turn on Augmentation
+  --display DISPLAY     turn on/off display of plots
+  
+  
 
 After finishing training, the following files are automatically saved to a  "Results" folder you pass as argument when you start training.
 
