@@ -42,6 +42,7 @@ Here is the list of libraries you need to install to execute the code:
 - scikit-image
 - jupyter
 - pickle
+- scipy-1.1.0
 
 ## Available Datasets  For Binary classification
 
