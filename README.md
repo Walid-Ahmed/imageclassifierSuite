@@ -67,7 +67,7 @@ The number of images per class i 13,794 images per each. The dataset is  origina
 11. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The type of sports are Swimming
 ,Badminton,Wrestling,Olympic Shooting,Cricket,Football,Tennis,Hockey,Ice Hockey,Kabaddi,WWE,Gymnasium,Weight lifting,Volleyball,Table tennis,Baseball,Formula 1,Moto GP,Chess,Boxing,FencingBasketbal]
 12. Food-11
-This is a dataset containing 16643 food images grouped in 11 major categories, from this plink](https://www.kaggle.com/vermaavi/food11/data#)
+This is a dataset containing 16643 food images grouped in 11 major categories, from this link](https://www.kaggle.com/vermaavi/food11/data#)
 
 
 The following tree structure represents the current datasets structure in repo 
