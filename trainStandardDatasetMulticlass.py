@@ -111,7 +111,13 @@ if __name__ == '__main__':
 	#get original img width , hight and number of channels
 	try:
 		numPfSamples,imgWidth,imgHeight,numOfchannels=trainX.shape
-
+    
+    '''
+	consider the architecture of a CNN. We need to specify the number of channels and our input data must have the shape HxWxD where “H” is the height, 
+	“W” is the width, and “D” is the depth. We add in that “D” channel dimension (setting D=1) in order to make the dataset compatible with our architecture. 
+	If you used RGB images then D=3.  ref:https://www.pyimagesearch.com/2020/03/02/anomaly-detection-with-keras-tensorflow-and-deep-learning/
+    '''
+	
 	except:   #dataset is single channe;
 		numPfSamples,imgWidth,imgHeight=trainX.shape
 		numOfchannels=1

@@ -99,6 +99,9 @@ class  ModelCreator:
 			self.model=self.defineDPN()
 			print("[INFO]  DPN created")	
 
+		self.model.name=networkID
+	
+
 	def defineLenetModel(self):   #can work with 28*28 
 
 		model = tf.keras.models.Sequential()
@@ -337,12 +340,13 @@ class  ModelCreator:
 			layer.trainable = False
 		# add new classifier layers
 		#flat1 = tf.keras.layers.Flatten()(model.layers[-1].output)
-		headModel = baseModel.output
-		headModel =  tf.keras.layers.AveragePooling2D(pool_size=(4, 4))(headModel)
-		headModel = tf.keras.layers.Flatten()(headModel)
 
-		#headModel = tf.keras.layers.Dense(128, activation='relu', kernel_initializer='he_uniform')(headModel)
-		headModel = tf.keras.layers.Dense(64, activation='relu', kernel_initializer='he_uniform')(headModel)
+
+
+		headModel = baseModel.output
+		#headModel =  tf.keras.layers.AveragePooling2D(pool_size=(4, 4))(headModel)
+		headModel = tf.keras.layers.Flatten()(headModel)
+		headModel = tf.keras.layers.Dense(512, activation='relu', kernel_initializer='he_uniform')(headModel)
 		headModel = tf.keras.layers.Dropout(0.5)(headModel)
 		output = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(headModel)
 		# define new model

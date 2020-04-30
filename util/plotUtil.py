@@ -10,7 +10,9 @@ from PIL import Image
 import matplotlib.cm as cm
 import numpy as np
 import cv2
-from scipy.ndimage import imread
+from  imageio import  imread
+
+#from scipy.ndimage import imread
 
 matplotlib.use("Qt5Agg")
 print("[INFO] matplotlib BACKEND IS {}".format(matplotlib.get_backend())) #[INFO] matplotlib BACKEND IS agg

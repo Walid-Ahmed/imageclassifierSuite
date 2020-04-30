@@ -16,7 +16,7 @@
 
 #python trainClassifer_flow_from_directory.py  --datasetDir horse-or-human --networkID net1  --EPOCHS 15  --width  300 --height  300  --augmentationLevel 1  --ResultsFolder  Results/r1_horse-or-human
 
-#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 80  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
+#python trainClassifer_flow_from_directory.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 2  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r1_FacialExpression 
 
 
 #python trainClassifer_flow_from_directory.py  --datasetDir SportsClassification  --networkID Resnet50  --EPOCHS 80  --width  224 --height  224  --ResultsFolder  Results/r1_SportsClassification --labelSmoothing 0.1     --opt Adam  
@@ -30,6 +30,9 @@
 #python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID Resnet50  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/r2_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
 #python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID net1  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/r3_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
 #python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID net2  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/r4_coronaVirus  --labelSmoothing 0.1 --augmentationLevel 1
+
+
+#python trainClassifer_flow_from_directory.py  --datasetDir Food-11  --networkID VGG16  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/food11  --labelSmoothing 0.0 --augmentationLevel 2
 
 
 
@@ -372,6 +375,8 @@ if __name__ == '__main__':
     #Write   labels encoding to pickle file,they are sorted by default alphabetically
     labeles_dictionary = train_generator.class_indices
     print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
+
+
     f_pickle=os.path.join(ResultsFolder,datasetDir+"_labels.pkl")
     pickle.dump(labeles_dictionary, open(f_pickle, 'wb'))
     print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
@@ -459,6 +464,8 @@ if __name__ == '__main__':
     print("[INFO] Final model saved  to folder {} in both .h5  as {} and TF2 format".format(folderNameToSaveModel,fileNameToSaveModel))
     print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
     print("[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath))
+    print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
+
     print("*************************************************************************************************************")      
 
 
