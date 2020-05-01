@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
 	ResultsFolder=os.path.join("Results","CIFAR10")
 	if os.path.exists(ResultsFolder):
-		print("[Warning]  Folder aready exists, All files in folder will be deleted")
+		print("[Warning]  {} folder aready exists, All files in folder will be deleted".format(ResultsFolder))
 		input("[msg]  Press any key to continue")
 		shutil.rmtree(ResultsFolder)
 	os.mkdir(ResultsFolder)
@@ -174,8 +174,10 @@ if __name__ == '__main__':
 	folderNameToSaveBestModel=os.path.join(ResultsFolder,folderNameToSaveBestModel)
 	
 
-    es = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
-    mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_acc', mode='auto', save_best_only=True, verbose=1)
+
+	patience=50   #how many epochs  to wait without improvment in val_loss
+	es = EarlyStopping(monitor='val_loss', mode='auto', min_delta=0 ,  patience=patience , verbose=1)
+	mc = ModelCheckpoint(folderNameToSaveBestModel, monitor='val_acc', mode='auto', save_best_only=True, verbose=1)
 	tensorboard_callback = TensorBoard(log_dir=ResultsFolder,profile_batch=0)
 	
 
