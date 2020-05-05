@@ -9,7 +9,7 @@
 #python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 25  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r29_FacialExpression   --augmentationLevel 1 --opt Adam
 #python trainClassifier_flow_from_data.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID Resnet50  --EPOCHS 25  --width  224 --height  224  --BS 32  --ResultsFolder  Results/r22_Cyclone_Wildfire_Flood_Earthquake_Database  --augmentationLevel 1 --opt Adam
 
-
+#python trainClassifier_flow_from_data.py  --datasetDir faceMasks --networkID MobilNetV2  --EPOCHS 20  --width  224 --height  224  --BS 32  --ResultsFolder  Results/faceMasks  --augmentationLevel 1 --opt Adam     --useOneNeuronForBinaryClassification  False
 
 
 
@@ -46,7 +46,8 @@ import shutil
 
 from util import paths
 from tensorflow.keras.utils import plot_model
-from scipy.ndimage import imread
+from imageio import imread
+
 from callbacks  import  TrainingMonitor
 from callbacks   import EpochCheckpoint
 
@@ -544,7 +545,9 @@ print("[INFO] Model check points saved to folder  {}  each  {} epochs ".format(f
 print("[INFO] Final model saved  to folder {} in both .h5  as {} and TF2 format".format(folderNameToSaveModel,fileNameToSaveModel))
 print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
 print("[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath))
-print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
+print("[INFO] Labels  are saved to pickle file {}  ".format(fileNameToSaveLabels))
+print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
+
 print("*************************************************************************************************************")      
 
 

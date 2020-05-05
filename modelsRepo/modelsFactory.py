@@ -9,6 +9,9 @@ import os
 import sys
 import matplotlib.pyplot as plt
 from tensorflow.keras.utils import plot_model
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.layers import AveragePooling2D
+
 
 
 
@@ -99,8 +102,50 @@ class  ModelCreator:
 			self.model=self.defineDPN()
 			print("[INFO]  DPN created")	
 
-		self.model.name=networkID
+		elif networkID=="MobilNetV2":
+			self.imgWidth=width
+			self.imgHeight=height
+			self.model=self.defineMobilNetV2Model()
+			print("[INFO]  DPN created")	
+
+
+
+
+		self.model._name=networkID
 	
+
+	def defineMobilNetV2Model(self):
+
+		# load the MobileNetV2 network, ensuring the head FC layer sets are
+		# left off
+		baseModel = MobileNetV2(weights="imagenet", include_top=False,input_tensor=tf.keras.layers.Input(shape=(self.imgWidth,self.imgHeight, self.channels)))
+
+		# construct the head of the model that will be placed on top of the
+		# the base model
+		headModel = baseModel.output
+		headModel = tf.keras.layers.AveragePooling2D(pool_size=(7, 7))(headModel)
+		headModel = tf.keras.layers.Flatten(name="flatten")(headModel)
+		headModel = tf.keras.layers.Dense(128, activation="relu")(headModel)
+		headModel = tf.keras.layers.Dropout(0.5)(headModel)
+		headModel = tf.keras.layers.Dense(self.numOfOutputs, activation=self.finalActivation)(headModel)
+
+
+		# place the head FC model on top of the base model (this will become
+		# the actual model we will train)
+		model = tf.keras.models.Model(inputs=baseModel.input, outputs=headModel)
+
+
+		# loop over all layers in the base model and freeze them so they will
+		# *not* be updated during the first training process
+		for layer in baseModel.layers:
+			layer.trainable = False
+
+
+		return model	
+
+
+
+
 
 	def defineLenetModel(self):   #can work with 28*28 
 
@@ -366,7 +411,7 @@ class  ModelCreator:
 
 if __name__ == "__main__":
 
-	allNetIds=["net1","net2","net3","net4","net5","LenetModel","Resnet50","net3","MiniVGG","VGG16","DPN"]
+	allNetIds=["net1","net2","net3","net4","net5","LenetModel","Resnet50","net3","MiniVGG","VGG16","DPN","MobilNetV2"]
 
 
 	defaultInputSize=dict()
@@ -402,6 +447,8 @@ if __name__ == "__main__":
 	defaultInputSize["MiniVGG"]=(96,96,3)
 	defaultOutputSize["MiniVGG"]=5
 
+	defaultInputSize["MobilNetV2"]=(224,224,3)
+	defaultOutputSize["MobilNetV2"]=2
 	
 
 	folderToSaveAllPlots="modelsPlots"
