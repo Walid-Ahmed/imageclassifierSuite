@@ -58,16 +58,18 @@ dataset containing 2,500 food and 2,500 non-food images, originally from this [l
  The dataset consists of 27,588 images belonging to two separate classes: Parasitized/ Uninfected.
 The number of images per class i 13,794 images per each. The dataset is  originally from this [link](https://lhncbc.nlm.nih.gov/publication/pub9932))
 7. CoronaVirus (pos_covid vs ned_covid) the dataset is  originally from this [link](https://www.pyimagesearch.com/2020/03/16/detecting-covid-19-in-x-ray-images-with-keras-tensorflow-and-deep-learning/))
+8. FaceMasks (mask vs no mask):the dataset is from this [link] (https://github.com/prajnasb/observations)
+
 
 
 ## Available Datasets  For  Multiclass or multinomial classification
 
-8. FacialExpression
-9. spatial_envelope_256x256_static_8outdoorcategories
-10. Cyclone_Wildfire_Flood_Earthquake_Database
-11. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The types of sports are Swimming
+1. FacialExpression
+2. spatial_envelope_256x256_static_8outdoorcategories
+3. Cyclone_Wildfire_Flood_Earthquake_Database
+4. SportsClassification:22 types of sports in a total of 14,405 images , originally from this [link](https://github.com/anubhavmaity/Sports-Type-Classifier)). The types of sports are Swimming
 ,Badminton,Wrestling,Olympic Shooting,Cricket,Football,Tennis,Hockey,Ice Hockey,Kabaddi,WWE,Gymnasium,Weight lifting,Volleyball,Table tennis,Baseball,Formula 1,Moto GP,Chess,Boxing,FencingBasketbal]
-12. Food-11
+5. Food-11
 This is a dataset containing 16643 food images grouped in 11 major categories, from this [link] (https://www.kaggle.com/vermaavi/food11/data#).  The types of  food  are  {'Bread': 0, 'Dairy product': 1, 'Dessert': 2, 'Egg': 3, 'Fried food': 4, 'Meat': 5, 'Noodles': 6, 'Rice': 7, 'Seafood': 8, 'Soup': 9, 'Vegetable': 10}
 
 
