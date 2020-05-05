@@ -114,6 +114,8 @@ python modelsRepo/modelsFactory.py
 | MiniVGG      | 18945829            |(96,96,3)|
 | VGG16        | 14812520            |(224,224,3)|
 | DPN          | 37769632            |(224,224,3)|
+| MobilNetV2   | 2422210             |(224,224,3)|
+
 
 
 
