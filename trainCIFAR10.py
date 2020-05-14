@@ -224,6 +224,15 @@ if __name__ == '__main__':
 	model.summary()
 
 
+
+	filenameToSaveModelSummary=os.path.join(ResultsFolder,"modelSummary.txt")
+
+    # Save summary to txt file
+	with open(filenameToSaveModelSummary,'w') as fh:
+		# Pass the file handle in as a lambda function to make it callable
+		model.summary(print_fn=lambda x: fh.write(x + '\n'))
+
+
     #compile model
 	opt = tf.keras.optimizers.Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 	model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
@@ -292,6 +301,15 @@ if __name__ == '__main__':
 	fileToSaveLossAccCurve=os.path.join(ResultsFolder,"CIFAR10_"+"plot_loss_accu.png")
 	print("[INFO] Loss curve saved to {}".format(fileToSaveLossAccCurve))
 	plt.savefig(fileToSaveLossAccCurve)
+
+
+	print("[INFO] Final  training accuracy {}".format(acc[EPOCHS-1]))
+	print("[INFO] Final  val accuracy {}".format(val_acc[EPOCHS-1]))	
+	print("[INFO] Final  training loss {}".format(loss[EPOCHS-1]))	
+	print("[INFO] Final  val loss {}".format(val_loss[EPOCHS-1]))	
+	print("[INFO] Model summary  written to file {}".format(filenameToSaveModelSummary))  
+
+	
 
 
 

@@ -304,6 +304,12 @@ if __name__ == '__main__':
 
     model.summary()
 
+    filenameToSaveModelSummary=os.path.join(ResultsFolder,networkID+"_modelSummary.txt")
+    # Save summary to txt file
+    with open(filenameToSaveModelSummary,'w') as fh:
+     # Pass the file handle in as a lambda function to make it callable
+        model.summary(print_fn=lambda x: fh.write(x + '\n'))
+
 
     fileNameToSaveBestModel=os.path.join(folderNameToSaveBestModel,"best_classifier_"+datasetDir+".h5")
 
@@ -453,8 +459,20 @@ if __name__ == '__main__':
     modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,ResultsFolder,path_test,datasetDir,channels)
     modelEvaluator.evaluateGenerator()  #using sklearn & testGenerator
 
+
+
+    acc      = history.history[     'accuracy' ]
+    val_acc  = history.history[ 'val_accuracy' ]
+    loss     = history.history[    'loss' ]
+    val_loss = history.history['val_loss' ]
+
     print("[INFO] Evaluation finished. Confusion matrix plot is now shown")
     print("*************************************************************************************************************")      
+
+
+
+
+
 
     print("[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve))
     print("[INFO] Loss curve saved to {}".format(fileToSaveLossCurve))
@@ -465,6 +483,14 @@ if __name__ == '__main__':
     print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage))
     print("[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath))
     print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
+    print("[INFO] Model Summary  written to file {}".format(filenameToSaveModelSummary))  
+    print("[INFO] Final  training accuracy {}".format(acc[EPOCHS-1]))
+    print("[INFO] Final  val accuracy {}".format(val_acc[EPOCHS-1]))    
+    print("[INFO] Final  training loss {}".format(loss[EPOCHS-1]))  
+    print("[INFO] Final  val loss {}".format(val_loss[EPOCHS-1]))   
+    print("[INFO] Model summary  written to file {}".format(filenameToSaveModelSummary))  
+
+
 
     print("*************************************************************************************************************")      
 

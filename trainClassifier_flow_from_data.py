@@ -440,6 +440,12 @@ print("[INFO] compiling model...")
 model=modelsFactory.ModelCreator(numOfOutputs,width,height,channels=channels,networkID=networkID).model
 model.summary()
 
+filenameToSaveModelSummary=os.path.join(ResultsFolder,networkID+"_modelSummary.txt")
+# Save summary to txt file
+with open(filenameToSaveModelSummary,'w') as fh:
+    # Pass the file handle in as a lambda function to make it callable
+    model.summary(print_fn=lambda x: fh.write(x + '\n'))
+
 
 
 
@@ -537,6 +543,12 @@ if(numOfOutputs==1):  #binary classification
 	calculatePrecisionRecall(probs,y_true,y_pred,targetNames,ResultsFolder)
 
 
+
+acc      = history.history[     'accuracy' ]
+val_acc  = history.history[ 'val_accuracy' ]
+loss     = history.history[    'loss' ]
+val_loss = history.history['val_loss' ]
+
 print("[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve))
 print("[INFO] Loss curve saved to {}".format(fileToSaveLossCurve))
 print("[INFO] Accuracy  curve saved to {}".format(fileToSaveAccuracyCurve))
@@ -547,7 +559,11 @@ print("[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSa
 print("[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath))
 print("[INFO] Labels  are saved to pickle file {}  ".format(fileNameToSaveLabels))
 print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
-
+print("[INFO] Final  training accuracy {}".format(acc[EPOCHS-1]))
+print("[INFO] Final  val accuracy {}".format(val_acc[EPOCHS-1]))    
+print("[INFO] Final  training loss {}".format(loss[EPOCHS-1]))  
+print("[INFO] Final  val loss {}".format(val_loss[EPOCHS-1]))   
+print("[INFO] Model summary  written to file {}".format(filenameToSaveModelSummary)) 
 print("*************************************************************************************************************")      
 
 
