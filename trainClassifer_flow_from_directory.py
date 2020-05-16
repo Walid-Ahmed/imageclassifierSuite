@@ -34,6 +34,7 @@
 
 #python trainClassifer_flow_from_directory.py  --datasetDir Food-11  --networkID VGG16  --EPOCHS 15  --width  224 --height  224  --ResultsFolder  Results/food11  --labelSmoothing 0.0 --augmentationLevel 2
 
+#python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID DPN  --EPOCHS 1  --width  224 --height  224  --ResultsFolder  Results/dpn  --labelSmoothing 0.0 --augmentationLevel 0
 
 
 import os
