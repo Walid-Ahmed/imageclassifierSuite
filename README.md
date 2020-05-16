@@ -89,8 +89,8 @@ These  networks include:
  - VGG16  
  - miniVGG as defined  in this [link](https://www.pyimagesearch.com/2019/02/11/fashion-mnist-with-keras-and-deep-learning)
  - DPN as defined  in this [link](https://github.com/titu1994/Keras-DualPathNetworks)
- - net2 as defined in this [link](https://www.coursera.org/lecture/convolutional-neural-networks-tensorflow/training-with-  the-cats-vs-dogs-dataset-jV6tw)
- - net3 ad defined in this [link](https://ermlab.com/en/blog/nlp/cifar-10-classification-using-keras-tutorial/)
+ - net2 as defined in this [link](https://www.coursera.org/lecture/convolutional-neural-networks-tensorflow/training-with the-cats-vs-dogs-dataset-jV6tw)
+ - net3 as defined in this [link](https://ermlab.com/en/blog/nlp/cifar-10-classification-using-keras-tutorial/)
  - net4 as defined in this [link]( https://github.com/dribnet/kerosene/blob/master/examples/cifar100.py)
  - net5 as defined in this [link](https://appliedmachinelearning.blog/2018/03/24/achieving-90-accuracy-in-object-recognition-task-on-cifar-10-dataset-with-keras-convolutional-neural-networks/)
  - MobilNetV2
@@ -184,6 +184,8 @@ After finishing training, the following files are automatically saved to a  "Res
  8. History of accuracy and loss for training and valisation as a json file (history.json)
  9. A plot for acc and accuracy that is being updated each epoch (onlineLossAccPlot.png), this will also take into account any training done before when training starts from a previous checkpoint.
  10. Checkpoints of model as .h5 saved each 5 epochs(You can change this value) 
+ 11. Model summary saved in a txt file for example modelName_modelSummary.txt 
+ 12. Model architecture plot in model.png file
  
 
 
