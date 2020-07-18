@@ -37,35 +37,58 @@
 #python trainClassifer_flow_from_directory.py  --datasetDir coronaVirus  --networkID DPN  --EPOCHS 1  --width  224 --height  224  --ResultsFolder  Results/dpn  --labelSmoothing 0.0 --augmentationLevel 0
 
 
-import os
-from imutils import paths
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.metrics import classification_report
+import tensorflow as tf
+import pickle
+from  util import  plotUtil
 from modelsRepo import modelsFactory
 from modelEvaluator import ModelEvaluator
-from  util import     plotUtil
-import pickle
-import argparse
-from util import paths
-import tensorflow as tf
+from  util import  helper  
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.preprocessing.image import img_to_array
+from imutils import paths
+import numpy as np
+import argparse
+import random
+import cv2
+import os
+
+from sklearn.preprocessing import LabelBinarizer
+#from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import average_precision_score
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import precision_score
+from sklearn.metrics import f1_score
+
+from keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import TensorBoard
 import shutil
+
+from util import paths
 from tensorflow.keras.utils import plot_model
-from tensorflow.keras.losses import CategoricalCrossentropy
-from tensorflow.keras.losses import BinaryCrossentropy
-import tensorflow.keras.backend as K
+from imageio import imread
+
 from callbacks  import  TrainingMonitor
 from callbacks   import EpochCheckpoint
-from tensorflow.keras.models import load_model
+
 
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers import SGD
+
+
+from tensorflow.keras.losses import CategoricalCrossentropy
+from tensorflow.keras.losses import BinaryCrossentropy
+from tensorflow.keras.utils import to_categorical
+
+
+from tqdm import tqdm
+
+
+import matplotlib.pyplot as plt
 
 
 
@@ -93,9 +116,6 @@ if __name__ == '__main__':
 
 
 
-
-
-
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("--datasetDir", required=True, help="path to dataset directory with train and validation images")
@@ -118,6 +138,7 @@ if __name__ == '__main__':
     ap.add_argument("--augmentationLevel", type=int, default=0,help="turn on  Augmentation")
     ap.add_argument("--useOneNeuronForBinaryClassification", type=str, default="True",help="turn on  Augmentation")
     ap.add_argument("--display", type=str, default="True",help="turn on/off  display of plots")
+    ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
 
 
 
@@ -143,6 +164,7 @@ if __name__ == '__main__':
     augmentationLevel=args["augmentationLevel"]
     useOneNeuronForBinaryClassification=args["useOneNeuronForBinaryClassification"]
     display=args["display"]
+    continueTraining=args["continueTraining"]
 
 
 
@@ -188,15 +210,53 @@ if __name__ == '__main__':
         input("[msg]  Press any key to continue")
         shutil.rmtree(ResultsFolder)
     os.mkdir(ResultsFolder)
+    fileNameToSaveReport=os.path.join(ResultsFolder,"report.txt")
+    fReport= open(fileNameToSaveReport,"w+")
 
 
 
+    info="\n\n\n"
+    info=info+"\t\t\t\t\t\t\tSetting Parameters\n\n\n"
+
+    info=info+"[INFO] datasetDir={}".format(datasetDir)+"\n"
+    #info=info+"[INFO] test_size={}".format(test_size)+"\n"
+    info=info+"[INFO] networkID={}".format(networkID)+"\n"
+    info=info+"[INFO] EPOCHS={}".format(EPOCHS)+"\n"
+    info=info+"[INFO] width={}".format(width)+"\n"
+    info=info+"[INFO] height={}".format(height)+"\n"
+    info=info+"[INFO] BS={}".format(BS)+"\n"
+    info=info+"[INFO] patience={}".format(patience)+"\n"
+    info=info+"[INFO] ResultsFolder={}".format(ResultsFolder)+"\n"
+    info=info+"[INFO] learningRate={}".format(learningRate)+"\n"
+    if(continueTraining):
+        info=info+"[INFO] new_lr={}".format(new_lr)+"\n"
+        info=info+"[INFO] continueTraining={}".format(continueTraining)+"\n"
+        info=info+"[INFO] modelcheckpoint={}".format(modelcheckpoint)+"\n"
+        info=info+"[INFO] startepoch={}".format(startepoch)+"\n"
+    info=info+"[INFO] saveEpochRate={}".format(saveEpochRate)+"\n"
+    info=info+"[INFO] opt={}".format(opt)+"\n"
+    info=info+"[INFO] augmentationLevel={}".format(augmentationLevel)+"\n"
+    info=info+"[INFO] useOneNeuronForBinaryClassification={}".format(useOneNeuronForBinaryClassification)+"\n"
+    info=info+"[INFO] display={}".format(display)+"\n"
+    fReport.write(info)
+    fReport.flush()
 
 
     #Always have training image folders in folder 'train' and validation images  folders in folder 'validation'. both  folders should be in  datasetDir in root_dir.  root_dir is always "datasets"
     base_dir = os.path.join(root_dir,datasetDir)       
     train_dir = os.path.join(base_dir, 'train')
     validation_dir = os.path.join(base_dir, 'validation')
+
+
+    #draw sample images for training and  validation datasets 
+    fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
+
+    print("[INFO]  Drawing grid of images")
+    info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,display=display)
+
+
+
+
 
     #Read the labels as the name of folders, since this is a binary classifier it is expected to have a total of 2 folders. A folder for each class
     labels=paths.get_immediate_subdirectories(train_dir)
@@ -222,14 +282,14 @@ if __name__ == '__main__':
 
 
     #get statistics about your dataset
-    NUM_TRAIN_IMAGES,NUM_TEST_IMAGES=paths.getTrainStatistics(datasetDir,train_dir,validation_dir)
+    NUM_TRAIN_IMAGES,NUM_TEST_IMAGES,info=paths.getTrainStatistics(datasetDir,train_dir,validation_dir)
 
 
-    #draw sample images for training and  validation datasets 
-    fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
+
 
     #info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,channels)
-    info,channels=plotUtil.drarwGridOfImages(base_dir,fileToSaveSampleImage,display=display)
+
+    
     print("[INFO] Number of input channels is {}".format(channels))
 
 
@@ -383,10 +443,11 @@ if __name__ == '__main__':
     labeles_dictionary = train_generator.class_indices
     print("[INFO] Class labels encoded  as follows {}".format(labeles_dictionary))  
 
-
-    f_pickle=os.path.join(ResultsFolder,datasetDir+"_labels.pkl")
-    pickle.dump(labeles_dictionary, open(f_pickle, 'wb'))
-    print("[INFO] Labels  are saved to pickle file {}  ".format(f_pickle))
+    fileNameToSaveLabels=datasetDir+"_labels.pkl"
+    fileNameToSaveLabels=os.path.join(ResultsFolder,fileNameToSaveLabels)
+    #f_pickle=os.path.join(ResultsFolder,datasetDir+"_labels.pkl")
+    pickle.dump(labeles_dictionary, open(fileNameToSaveLabels, 'wb'))
+    print("[INFO] Labels  are saved to pickle file {}  ".format(fileNameToSaveLabels))
     print("*************************************************************************************************************")      
 
     print("[INFO] Training will start now ")
@@ -458,7 +519,7 @@ if __name__ == '__main__':
         path_test=validation_dir
     
     modelEvaluator=ModelEvaluator(modelFile,labels,input_shape,ResultsFolder,path_test,datasetDir,channels)
-    modelEvaluator.evaluateGenerator()  #using sklearn & testGenerator
+    classification_report,ax,cm,classes=modelEvaluator.evaluateGenerator()  #using sklearn & testGenerator
 
 
 
@@ -493,7 +554,43 @@ if __name__ == '__main__':
 
 
 
-    print("*************************************************************************************************************")      
+    print("*************************************************************************************************************")    
+
+
+
+    info=info+("*************************************************************************************************************\n\n")  
+    info=info+"\n\n\n"
+    info=info+"\t\t\t\t\t\t\tResults\n\n\n"
+
+    info=info+"[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve)+"\n"
+    info=info+"[INFO] Loss curve saved to {}".format(fileToSaveLossCurve)+"\n"
+    info=info+"[INFO] Accuracy  curve saved to {}".format(fileToSaveAccuracyCurve)+"\n"
+    info=info+"[INFO] Best Model saved   as h5 file:  {}".format(fileNameToSaveBestModel)+"\n"
+    info=info+"[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate)+"\n"
+    info=info+"[INFO] Final model saved  to folder {} in both .h5  as {} and TF2 format".format(folderNameToSaveModel,fileNameToSaveModel)+"\n"
+    info=info+"[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage)+"\n"
+    info=info+"[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath)+"\n"
+    info=info+"[INFO] Labels  are saved to pickle file {}  ".format(fileNameToSaveLabels)+"\n"
+    info=info+"[INFO] Class labels encoded  as follows {}".format(labeles_dictionary) +"\n" 
+    info=info+"[INFO] Final  training accuracy {}".format(acc[EPOCHS-1])+"\n"
+    info=info+"[INFO] Final  val accuracy {}".format(val_acc[EPOCHS-1]) +"\n"   
+    info=info+"[INFO] Final  training loss {}".format(loss[EPOCHS-1])  +"\n"
+    info=info+"[INFO] Final  val loss {}".format(val_loss[EPOCHS-1])+"\n"
+    info=info+"[INFO] Model summary  written to file {}".format(filenameToSaveModelSummary)+"\n"
+    info=info+"\n"+"\n"+classification_report
+    info=info+"\n"+"\n"+"Confusion Matrix"+"\n"
+
+    info=info+str(classes)+"\n"
+    info=info+str(cm)
+
+
+
+    fReport.write(info)
+    fReport.flush()
+    fReport.close()
+
+
+    print("[INFO] Report  written to file {}".format(fileNameToSaveReport))   
 
 
 

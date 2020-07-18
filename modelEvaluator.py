@@ -310,11 +310,12 @@ class   ModelEvaluator:
 
 		#sklearn.metrics.classification_report(y_true, y_pred, labels=None, target_names=None, sample_weight=None, digits=2, output_dict=False, zero_division='warn')
 		print(classification_report(y_true, y_pred,target_names=test_generator.class_indices.keys()))
+		classificationReport=(classification_report(y_true, y_pred,target_names=test_generator.class_indices.keys()))
 		y_true=test_generator.classes
 		#y_pred=predictedLabels
 		labels=test_generator.class_indices.keys()
 
-		helper.plot_print_confusion_matrix(y_true, y_pred, self.ResultsFolder,classes=labels,dataset=self.datasetDir ,title=self.datasetDir+ "_Confusion matrix, without normalization") 
+		ax,cm,classes=helper.plot_print_confusion_matrix(y_true, y_pred, self.ResultsFolder,classes=labels,dataset=self.datasetDir ,title=self.datasetDir+ "_Confusion matrix, without normalization") 
 
 		print("*************************************************************************************************************")     
 
@@ -323,7 +324,7 @@ class   ModelEvaluator:
 			precision, recall, thresholds=self.calculatePrecisionRecall(probs,y_true,y_pred) 
 			self.calculateF1_score(y_true,y_pred,precision, recall, thresholds)
 
-
+		return classificationReport,ax,cm,classes	
 
 
 

@@ -9,7 +9,9 @@
 #python trainClassifier_flow_from_data.py  --datasetDir FacialExpression --networkID net2  --EPOCHS 25  --width  48 --height  48  --BS 32  --ResultsFolder  Results/r29_FacialExpression   --augmentationLevel 1 --opt Adam
 #python trainClassifier_flow_from_data.py  --datasetDir Cyclone_Wildfire_Flood_Earthquake_Database --networkID Resnet50  --EPOCHS 25  --width  224 --height  224  --BS 32  --ResultsFolder  Results/r22_Cyclone_Wildfire_Flood_Earthquake_Database  --augmentationLevel 1 --opt Adam
 
-#python trainClassifier_flow_from_data.py  --datasetDir faceMasks --networkID MobilNetV2  --EPOCHS 20  --width  224 --height  224  --BS 32  --ResultsFolder  Results/faceMasks  --augmentationLevel 1 --opt Adam     --useOneNeuronForBinaryClassification  False
+#python trainClassifier_flow_from_data.py  --datasetDir soccer --networkID MobilNetV2  --EPOCHS 20  --width  64 --height  64  --BS  16  --ResultsFolder  Results/Soccer  --augmentationLevel 1 --opt Adam     --useOneNeuronForBinaryClassification  False
+
+#python trainClassifier_flow_from_data.py  --datasetDir soccer --networkID net2  --EPOCHS 7  --width  32 --height  32  --BS  16  --ResultsFolder  Results/Soccer2  --augmentationLevel 1 --opt Adam     --useOneNeuronForBinaryClassification  False  --verbose False
 
 
 
@@ -62,6 +64,7 @@ from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.utils import to_categorical
 
 
+from tqdm import tqdm
 
 
 import matplotlib.pyplot as plt
@@ -121,6 +124,8 @@ ap = argparse.ArgumentParser()
 
 if __name__ == '__main__':
 
+
+
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("--datasetDir", required=True, help="path to dataset directory with train and validation images")
@@ -135,7 +140,6 @@ if __name__ == '__main__':
     ap.add_argument("--lr", required=False, type=float, default=0.001,help="Initial Learning rate")
     ap.add_argument("--new_lr", required=False, type=float, default=1e-4,help="restarting Learning rate")
     ap.add_argument("--labelSmoothing", type=float, default=0, help="turn on label smoothing")
-    #ap.add_argument("--applyAugmentation",  default="False",help="turn on apply Augmentation")
     ap.add_argument("--continueTraining",  default="False",help="continue training a previous trained model")
     ap.add_argument("--modelcheckpoint", type=str, default=None ,help="path to *specific* model checkpoint to load")
     ap.add_argument("--startepoch", type=int, default=0, help="epoch to restart training at")
@@ -144,12 +148,8 @@ if __name__ == '__main__':
     ap.add_argument("--augmentationLevel", type=int, default=0,help="turn on  Augmentation")
     ap.add_argument("--useOneNeuronForBinaryClassification", type=str, default="True",help="turn on  Augmentation")
     ap.add_argument("--display", type=str, default="True",help="turn on/off  display of plots")
-
-
-
-
-
-    ap.add_argument("--verbose", default="True",type=str,help="Print extra data")
+    ap.add_argument("--test_size", type=float, default=0.25,help="test split ratio")
+    ap.add_argument("--verbose", default="False",type=str,help="Print extra data")
 
 
 
@@ -176,6 +176,17 @@ if __name__ == '__main__':
     augmentationLevel=args["augmentationLevel"]
     useOneNeuronForBinaryClassification=args['useOneNeuronForBinaryClassification']
     display=args['display']
+    test_size=args['test_size']
+
+
+    if os.path.exists(ResultsFolder):
+        print("[Warning]  Folder {} aready exists, All files in folder will be deleted".format(ResultsFolder))
+        input("[msg]  Press any key to continue")
+        shutil.rmtree(ResultsFolder)
+    os.mkdir(ResultsFolder) 
+
+
+
 
 
     verbose=args["verbose"]
@@ -235,11 +246,44 @@ if __name__ == '__main__':
 	 
 
 
-    if os.path.exists(ResultsFolder):
-        print("[Warning]  Folder {} aready exists, All files in folder will be deleted".format(ResultsFolder))
-        input("[msg]  Press any key to continue")
-        shutil.rmtree(ResultsFolder)
-    os.mkdir(ResultsFolder)	
+
+
+
+
+    ##################################################################################################
+    fileNameToSaveReport=os.path.join(ResultsFolder,"report.txt")
+    fReport= open(fileNameToSaveReport,"w+")
+    info="\n\n\n"
+    info="\t\t\t\t\t\t\tSetting Parameters\n\n\n"
+
+    info=info+"[INFO] datasetDir={}".format(datasetDir)+"\n"
+    info=info+"[INFO] test_size={}".format(test_size)+"\n"
+    info=info+"[INFO] networkID={}".format(networkID)+"\n"
+    info=info+"[INFO] EPOCHS={}".format(EPOCHS)+"\n"
+    info=info+"[INFO] width={}".format(width)+"\n"
+    info=info+"[INFO] height={}".format(height)+"\n"
+    info=info+"[INFO] BS={}".format(BS)+"\n"
+    info=info+"[INFO] patience={}".format(patience)+"\n"
+    info=info+"[INFO] ResultsFolder={}".format(ResultsFolder)+"\n"
+    info=info+"[INFO] learningRate={}".format(learningRate)+"\n"
+    if(continueTraining):
+        info=info+"[INFO] new_lr={}".format(new_lr)+"\n"
+        info=info+"[INFO] continueTraining={}".format(continueTraining)+"\n"
+        info=info+"[INFO] modelcheckpoint={}".format(modelcheckpoint)+"\n"
+        info=info+"[INFO] startepoch={}".format(startepoch)+"\n"
+    info=info+"[INFO] saveEpochRate={}".format(saveEpochRate)+"\n"
+    info=info+"[INFO] opt={}".format(opt)+"\n"
+    info=info+"[INFO] augmentationLevel={}".format(augmentationLevel)+"\n"
+    info=info+"[INFO] useOneNeuronForBinaryClassification={}".format(useOneNeuronForBinaryClassification)+"\n"
+    info=info+"[INFO] display={}".format(display)+"\n"
+    fReport.write(info)
+    fReport.flush()
+
+
+
+
+
+    ##################################################################################################
 
 
     folderNameToSaveBestModel="{}_Best_classifier".format(datasetDir)
@@ -284,6 +328,9 @@ def get_immediate_subdirectories(a_dir):
 root_dir="datasets"
 base_dir = os.path.join(root_dir,datasetDir)
 
+fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
+info,channels=plotUtil.drarwGridOfImages(base_dir,fileNameToSaveImage=fileToSaveSampleImage,display=display)
+
 
 # initial learning rate, and batch size
 
@@ -301,10 +348,14 @@ folders=get_immediate_subdirectories(os.path.join(root_dir,datasetDir))
 
 
 
-fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
-info,channels=plotUtil.drarwGridOfImages(base_dir,fileNameToSaveImage=fileToSaveSampleImage,display=display)
+#fileToSaveSampleImage=os.path.join(ResultsFolder,"sample_"+datasetDir+".png")
+#info,channels=plotUtil.drarwGridOfImages(base_dir,fileNameToSaveImage=fileToSaveSampleImage,display=display)
 
 paths.getTrainStatistics2(base_dir)
+
+#fReport.write(infoStatistics)
+#fReport.flush()
+#input("press any key to continue")
 
 # grab the image paths and randomly shuffle them
 imagePaths = sorted(list(paths.list_images(base_dir)))
@@ -319,7 +370,9 @@ if (channels==2):
     channels=1
 
 # loop over the input images
-for imagePath in imagePaths:
+for imagePath in tqdm(imagePaths):
+#for imagePath in (imagePaths):
+
 
 	# extract the class label from the image path and update the labels list
 	label = imagePath.split(os.path.sep)[-2]
@@ -430,6 +483,14 @@ print("[INFO] Dataset of test Data shape {}".format(trainY.shape))
 print("[INFO] Dataset of test Labels shape {}".format(testY.shape))
 print("__________________________________________________________________________________________________________")
 
+
+infoStatistics=""
+infoStatistics=infoStatistics+("[INFO] Number of images in the training dataset {}".format(trainX.shape[0]))+"\n"
+infoStatistics=infoStatistics+("[INFO] Number of images in the testing  dataset {}".format(testX.shape[0]))+"\n"
+fReport.write(infoStatistics)
+fReport.flush()
+
+
 # construct the image generator for data augmentation
 
 
@@ -511,6 +572,7 @@ else:
 
 #print classfication report
 print(classification_report(y_true,y_pred, target_names=targetNames))
+classificationReport=classification_report(y_true,y_pred, target_names=targetNames)
 print("*************************************************************************************************************")      
 #exit()
 
@@ -527,7 +589,7 @@ fileToSaveLossAccCurve=os.path.join(ResultsFolder,title+"plot_loss_accu.png")
 plotUtil.plotAccuracyAndLossesonSameCurve(history,title,fileToSaveLossAccCurve,display=display)
 
 fileToSaveAccuracyCurve=os.path.join(ResultsFolder,title+"plot_acc.png")
-fileToSaveLossCurve=os.path.join("Results",title+"plot_loss.png")
+fileToSaveLossCurve=os.path.join(ResultsFolder,title+"plot_loss.png")
 plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccuracyCurve,fileToSaveLossCurve,display=display)
 
 
@@ -536,7 +598,8 @@ plotUtil.plotAccuracyAndLossesonSDifferentCurves(history,title,fileToSaveAccurac
 
 
 # Plot non-normalized confusion matrix
-helper.plot_print_confusion_matrix(y_true, y_pred, ResultsFolder,classes=targetNames,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
+ax,cm,classes=helper.plot_print_confusion_matrix(y_true, y_pred, ResultsFolder,classes=targetNames,dataset=datasetDir,title=datasetDir+ '_Confusion matrix, without normalization') 
+fileToSaveConfusionMatrix=os.path.join(ResultsFolder,datasetDir+'_ConfusionMatrix.png')
 
 #calculate precision recall
 if(numOfOutputs==1):  #binary classification
@@ -548,6 +611,9 @@ acc      = history.history[     'accuracy' ]
 val_acc  = history.history[ 'val_accuracy' ]
 loss     = history.history[    'loss' ]
 val_loss = history.history['val_loss' ]
+
+
+
 
 print("[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve))
 print("[INFO] Loss curve saved to {}".format(fileToSaveLossCurve))
@@ -564,7 +630,48 @@ print("[INFO] Final  val accuracy {}".format(val_acc[EPOCHS-1]))
 print("[INFO] Final  training loss {}".format(loss[EPOCHS-1]))  
 print("[INFO] Final  val loss {}".format(val_loss[EPOCHS-1]))   
 print("[INFO] Model summary  written to file {}".format(filenameToSaveModelSummary)) 
+print("[INFO] Confusion matrix   written to file {}".format(fileToSaveConfusionMatrix)) 
+
+
 print("*************************************************************************************************************")      
+
+
+info=info+("*************************************************************************************************************\n\n")  
+info=info+"\n\n\n"
+
+info=info+"\t\t\t\t\t\t\tResults\n\n\n"
+
+info=info+"[INFO] Loss and accuracy  curve saved to {}".format(fileToSaveLossAccCurve)+"\n"
+info=info+"[INFO] Loss curve saved to {}".format(fileToSaveLossCurve)+"\n"
+info=info+"[INFO] Accuracy  curve saved to {}".format(fileToSaveAccuracyCurve)+"\n"
+info=info+"[INFO] Best Model saved   as h5 file:  {}".format(fileNameToSaveBestModel)+"\n"
+info=info+"[INFO] Model check points saved to folder  {}  each  {} epochs ".format(folderNameToSaveModelCheckPoints,saveEpochRate)+"\n"
+info=info+"[INFO] Final model saved  to folder {} in both .h5  as {} and TF2 format".format(folderNameToSaveModel,fileNameToSaveModel)+"\n"
+info=info+"[INFO] Sample images from dataset saved to file  {} ".format(fileToSaveSampleImage)+"\n"
+info=info+"[INFO] History of loss and accuracy  saved to file  {} ".format(jsonPath)+"\n"
+info=info+"[INFO] Labels  are saved to pickle file {}  ".format(fileNameToSaveLabels)+"\n"
+info=info+"[INFO] Class labels encoded  as follows {}".format(labeles_dictionary) +"\n" 
+info=info+"[INFO] Final  training accuracy {}".format(acc[EPOCHS-1])+"\n"
+info=info+"[INFO] Final  val accuracy {}".format(val_acc[EPOCHS-1]) +"\n"   
+info=info+"[INFO] Final  training loss {}".format(loss[EPOCHS-1])  +"\n"
+info=info+"[INFO] Final  val loss {}".format(val_loss[EPOCHS-1])+"\n"
+info=info+"[INFO] Model summary  written to file {}".format(filenameToSaveModelSummary)+"\n"
+info=info+"\n"+"\n"+classificationReport
+info=info+"\n"+"\n"+"Confusion Matrix"+"\n"
+
+info=info+str(classes)+"\n"
+info=info+str(cm)
+
+
+
+fReport.write(info)
+fReport.flush()
+fReport.close()
+
+
+print("[INFO] Report  written to file {}".format(fileNameToSaveReport)) 
+#print(classes)
+#print(cm)
 
 
 
