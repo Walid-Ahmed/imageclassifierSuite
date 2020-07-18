@@ -38,6 +38,7 @@ def getTrainStatistics(datasetDir,train_dir,validation_dir):
 
     labels=get_immediate_subdirectories(train_dir)
     labels.sort()
+    info="\n"
 
 
 
@@ -61,19 +62,35 @@ def getTrainStatistics(datasetDir,train_dir,validation_dir):
     """Let's find out the total number of cat and dog images in the `train` and `validation` directories:"""
     totalImages = len(os.listdir(train_label1_dir ) )+ len(os.listdir(train_label2_dir ) )+len(os.listdir( validation_label1_dir ) )+len(os.listdir( validation_label2_dir ) )
     print('[INFO] Total images in dataset '+datasetDir+ 'images :', totalImages)
+    info=info+('[INFO] Total images in dataset is {} '.format(totalImages))+"\n"
 
     print('[INFO] Total training '+labels[0]+ ' images :', len(os.listdir(train_label1_dir ) ))
     print('[INFO] Total training ' + labels[1]+ ' images :', len(os.listdir(train_label2_dir ) ))
+    x=len(os.listdir(train_label1_dir ) )
+    y=len(os.listdir(train_label2_dir ) )
+    #print(x,y)
+    info=info+('[INFO] Total training {}  images : {}'.format(labels[0],x )) +"\n"
+    info=info+('[INFO] Total training {}  images : {}'.format(labels[1], y)) +"\n"
+
+
+
+
     NUM_TRAIN_IMAGES= len(os.listdir(train_label1_dir ))+len(os.listdir(train_label2_dir ) )
 
     print('[INFO] Total validation '+labels[0]+ ' images :', len(os.listdir( validation_label1_dir ) ))
     print('[INFO] Total validation '+ labels[1]+ ' images :', len(os.listdir( validation_label2_dir ) ))
     NUM_TEST_IMAGES=len(os.listdir( validation_label1_dir ) )+len(os.listdir( validation_label2_dir ) )
+    info=info+('[INFO] Total validation {}  images : {}'.format(labels[0], len(os.listdir(validation_label1_dir ) ))) +"\n"
+    info=info+('[INFO] Total validation {}  images : {}'.format(labels[1], len(os.listdir(validation_label2_dir ) ))) +"\n"
+
+
 
     print('[INFO] Total  training images in dataset: {} '.format(NUM_TRAIN_IMAGES))
-    print('[INFO] Total validation images in dataset  {}'.format( NUM_TEST_IMAGES))                 
+    print('[INFO] Total validation images in dataset  {}'.format( NUM_TEST_IMAGES))  
+    info=info+('[INFO] Total  training images in dataset: {}'.format(NUM_TRAIN_IMAGES)) +"\n"
+    info=info+('[INFO] Total validation images in dataset : {}'.format(NUM_TEST_IMAGES)) +"\n"               
 
-    return NUM_TRAIN_IMAGES,NUM_TEST_IMAGES
+    return NUM_TRAIN_IMAGES,NUM_TEST_IMAGES,info
 
 def getTrainStatistics2(datasetDir):
 

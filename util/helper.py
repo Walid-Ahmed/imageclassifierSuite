@@ -101,5 +101,5 @@ def plot_print_confusion_matrix(y_true, y_pred, ResultsFolder,classes,dataset,
     plt.show()
 
 
-    return ax
+    return ax,cm,classes
 
